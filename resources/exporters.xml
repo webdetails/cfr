@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exporters>
+  <exporter label="Dynamic R" id="dynamicR" class="pt.webdetails.cdb.exporters.DynamicRExporter">
+    <modes>
+      <mode type="attachment"/>
+      <mode type="inline"/>
+    </modes>
+  </exporter>
+  <exporter label="Static R" id="staticR" class="pt.webdetails.cdb.exporters.StaticRExporter">
+    <modes>
+      <mode type="attachment"/>
+      <mode type="inline"/>
+    </modes>
+  </exporter>
+  <exporter label="Dynamic Python" id="dynamicPython" class="pt.webdetails.cdb.exporters.DynamicPythonExporter">
+    <modes>
+      <mode type="attachment"/>
+      <mode type="inline"/>
+    </modes>
+  </exporter>
+  <exporter label="Static Python" id="staticPython" class="pt.webdetails.cdb.exporters.StaticPythonExporter">
+    <modes>
+      <mode type="attachment"/>
+      <mode type="inline"/>
+    </modes>
+  </exporter>
+  <exporter label="CSV Exporter" id="csv" class="pt.webdetails.cdb.exporters.CsvExporter">
+    <modes>
+      <mode type="attachment"/>
+      <mode type="inline"/>
+    </modes>
+  </exporter>
+</exporters>

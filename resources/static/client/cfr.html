@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+    <head>
+      <script src='../../../pentaho-cdf/js/jquery.js'></script>
+      <script src='patch.js'></script>
+      <script src='cdb.js'></script>
+      <script src='support/persistence.js'></script>
+      <script src='connectors/connectors.js'></script>
+      <script src='connectors/saiku-connector.js'></script>
+      <script src='query.js'></script>
+      <script src='saiku-interface.js'></script>
+      <!--<script src='ui/query-viewer.js'></script>-->
+
+    </head>
+    <body>
+    <div id='saiku'></div>
+    </body>
+    <script>
+        wd.ctools.utils.getOlapCubes();
+        wd.cdb.QueryManager.loadGroup("myGroup",function(){
+          var group = wd.cdb.QueryManager.getGroup("myGroup"),
+              query = group.getQuery("myQuery");
+          wd.cdb.connectors.ConnectorEngine.editQuery($("#saiku"),query,function(query){
+            group.save();
+          });
+        });
+    </script>
+</html>

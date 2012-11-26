@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin title="cfr" loader="OVERRIDING">
+     <lifecycle-listener class="pt.webdetails.cfr.CfrLifeCycleListener"/>
+  <static-paths>
+    <static-path url="/cfr/static" localFolder="static"/>
+    <static-path url="/cfr/overlay" localFolder="overlay"/>
+    <static-path url="/cfr/lang" localFolder="lang"/>
+  </static-paths>
+  <content-types />
+  <content-generator scope="local" id="cfr" type="graphicsGenerator" url="">
+    <classname>pt.webdetails.cfr.CfrContentGenerator</classname>
+    <title>CFR</title>
+  </content-generator>
+  <!-- Menu entry -->
+  <menu-items/>
+  
+  <!--
+  <overlays>
+    <overlay id="startup.dashboardToolbar"  resourcebundle="../content/cdb/lang/messages">
+      <overlay id="startup.dashboardToolbar" resourcebundle="../content/cdb/lang/messages">
+        <toolbarbutton id="newAnalysisButton" removeelement="false"/>
+        <toolbar id="mainToolbar">
+          <toolbarbutton id="newCDB" image="../content/cdb/overlay/cdb_toolbar_icon.png" onclick="mainToolbarHandler.openUrl('${tabName}','${tabName}','content/cdb/home')" tooltiptext="${openNewCDB}" insertafter="newCDBButton"/>
+        </toolbar>
+      </overlay>
+    </overlay>
+  </overlays>
+  -->
+</plugin>
