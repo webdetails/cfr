@@ -200,6 +200,17 @@ public class CfrContentGenerator extends SimpleContentGenerator {
             getRequestParameters().getStringParameter("endDate", "")));
   }
   
+
+  
+  @Exposed(accessLevel = AccessLevel.PUBLIC)
+  public void listUploadsFlat(OutputStream out) throws IOException, JSONException {
+    MetadataReader reader = new MetadataReader();
+    writeOut(out, reader.listFilesFlat(getRequestParameters().getStringParameter("fileName", ""), 
+            getRequestParameters().getStringParameter("user", ""),
+            getRequestParameters().getStringParameter("startDate", ""), 
+            getRequestParameters().getStringParameter("endDate", "")).toString(2));
+  }
+  
   
 
   

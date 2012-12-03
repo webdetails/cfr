@@ -20,8 +20,8 @@ public class MetadataReader {
 
   private static Log logger = LogFactory.getLog(MetadataReader.class); 
   
-  public JsonSerializable listFiles(String fileName, String user, String startDate, String endDate) {
-            
+  
+  public JSONArray listFilesFlat(String fileName, String user, String startDate, String endDate) {
     Map<String,Object> params = new HashMap<String, Object>();
     String query = "select * from UploadedFiles ";
     String where = "";
@@ -60,7 +60,14 @@ public class MetadataReader {
     for(ODocument doc : getPersistenceEngine().executeQuery(query + where, params)){
       array.put(getJson(doc));
     }
-    return Result.getOK(array);    
+    
+    return array;
+    
+  }
+  
+  public JsonSerializable listFiles(String fileName, String user, String startDate, String endDate) {
+            
+    return Result.getOK(listFilesFlat(fileName, user, startDate, endDate));    
     
   }
 
