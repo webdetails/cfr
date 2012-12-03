@@ -43,7 +43,7 @@ public class FileStorer {
     try {
       obj.put("user", user);
       obj.put("file", path + File.separator + fileName);
-      obj.put("uploadDate", new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss").format(new Date()) );
+      obj.put("uploadDate", new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()) );
     } catch (JSONException jse) {
       logger.error("An error ocurred while creating json object representing the upload.", jse);
       return false;
