@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import org.pentaho.platform.api.engine.IParameterProvider;
 import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.FileStorer;
+import pt.webdetails.cfr.file.IFile;
 import pt.webdetails.cfr.file.MetadataReader;
 import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.InterPluginCall;
@@ -66,7 +67,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC)
-  public void xpto(OutputStream out) throws IOException {
+  public void home(OutputStream out) throws IOException {
 
     IParameterProvider requestParams = getRequestParameters();
 //    IParameterProvider pathParams = getPathParameters();
@@ -100,6 +101,31 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
   }
 
+  @Exposed(accessLevel = AccessLevel.PUBLIC)
+  public void createFolder(OutputStream out) throws Exception {
+    String path = getRequestParameters().getStringParameter("path", "");
+    
+    if (path == null || StringUtils.isBlank(path))
+      throw new Exception("path is null or empty");
+    
+    boolean createResult = getRepository().createFolder(path);    
+    writeOut(out, "{result: " + createResult + "}");    
+  }  
+  
+
+  @Exposed(accessLevel = AccessLevel.PUBLIC)
+  public void remove(OutputStream out) throws Exception {
+    String fullFileName = getRequestParameters().getStringParameter("fileName", null);
+    
+    if (fullFileName == null || StringUtils.isBlank(fullFileName))
+      throw new Exception("fileName is null or empty");
+    
+    boolean createResult = getRepository().deleteFile(fullFileName);    
+    writeOut(out, "{result: " + createResult + "}");    
+  }  
+  
+  
+  
   @Exposed(accessLevel = AccessLevel.PUBLIC)
   public void store(OutputStream out) throws IOException, InvalidOperationException, Exception {
         
@@ -138,16 +164,21 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     FileStorer fileStorer = new FileStorer(getRepository());
     
     boolean result = fileStorer.storeFile(fileName, savePath, contents, userSession.getName());
-    writeOut(out, "<result>" + result + "</result>");
+    writeOut(out, "{result: " + result + "}");
   }
 
   
   @Exposed(accessLevel = AccessLevel.PUBLIC)
   public void listFiles(OutputStream out) throws IOException {
-    String baseDir = getRequestParameters().getStringParameter("path", "");
-    File[] files = getRepository().listFiles(baseDir);
+    String baseDir = getRequestParameters().getStringParameter("dir", "");
+    IFile[] files = getRepository().listFiles(baseDir);
     
-    writeOut(out, toJQueryFileTree(baseDir, files));
+    String extensions = getRequestParameters().getStringParameter("fileExtensions", "");
+    
+    String[] exts = null;
+    if (!StringUtils.isBlank(extensions))
+      exts = extensions.split(" "); 
+    writeOut(out, toJQueryFileTree(baseDir, files, exts));
     
   }
   
@@ -173,10 +204,10 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
   @Exposed(accessLevel = AccessLevel.PUBLIC)
   public void listFilesJSON(OutputStream out) throws IOException, JSONException {
-    String baseDir = getRequestParameters().getStringParameter("path", "");
-    File[] files = getRepository().listFiles(baseDir);
+    String baseDir = getRequestParameters().getStringParameter("dir", "");
+    IFile[] files = getRepository().listFiles(baseDir);
     JSONArray arr = new JSONArray();
-    for (File file : files) {
+    for (IFile file : files) {
       JSONObject obj = new JSONObject();
       obj.put("fileName", file.getName());
       obj.put("isDirectory", file.isDirectory());
@@ -214,21 +245,35 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   
 
   
-  private static String toJQueryFileTree(String baseDir, File[] files) {
+  private static String toJQueryFileTree(String baseDir, IFile[] files, String[] extensions) {
 	  StringBuilder out = new StringBuilder();
       out.append("<ul class=\"jqueryFileTree\" style=\"display: none;\">");
       
-      for (File file : files) {
+      for (IFile file : files) {
           if (file.isDirectory()) {
               out.append("<li class=\"directory collapsed\"><a href=\"#\" rel=\"" + baseDir + file.getName() + "/\">"+ file.getName() + "</a></li>");
           }
       }
       
-      for (File file : files) {
+      for (IFile file : files) {
           if (!file.isDirectory()) {
               int dotIndex = file.getName().lastIndexOf('.');
               String ext = dotIndex > 0 ? file.getName().substring(dotIndex + 1) : "";
-              out.append("<li class=\"file ext_" + ext + "\"><a href=\"#\" rel=\"" + baseDir + file.getName() + "\">"+ file.getName() + "</a></li>");
+              boolean accepted = ext.equals("");
+              if (!ext.equals("")) {
+                if (extensions == null || extensions.length == 0)
+                  accepted = true;
+                else {                         
+                  for (String acceptedExtension : extensions) {
+                    if (ext.equals(acceptedExtension)) {
+                      accepted = true;
+                      break;
+                    }
+                  }
+                }
+              }
+              if (accepted)
+                out.append("<li class=\"file ext_" + ext + "\"><a href=\"#\" rel=\"" + baseDir + file.getName() + "\">"+ file.getName() + "</a></li>");
           }
       }
       out.append("</ul>");

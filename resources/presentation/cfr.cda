@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDADescriptor>
+   <DataSources>
+      <Connection id="uploadsQuery" type="scripting.scripting">
+         <Initscript></Initscript>
+         <Language>beanshell</Language>
+      </Connection>
+   </DataSources>
+   <DataAccess access="public" cache="false" cacheDuration="3600" connection="uploadsQuery"
+               id="uploadsQuery"
+               type="scriptable">
+      <Columns>
+         <Column idx="2">
+            <Name>Files</Name>
+         </Column>
+      </Columns>
+      <Output indexes="1,0,3" mode="include"/>
+      <Parameters/>
+      <Query>import org.pentaho.reporting.engine.classic.core.util.TypedTableModel;
+import pt.webdetails.cda.utils.InterPluginUtils;
+
+HashMap params = new HashMap();
+params.put("columns", new String[]{
+"file", "userid", "user", "uploadDate"
+});
+
+TypedTableModel model = InterPluginUtils.getTableModelFromJsonPluginCall("cfr", "listUploadsFlat", params);
+return model;</Query>
+   </DataAccess>
+</CDADescriptor>

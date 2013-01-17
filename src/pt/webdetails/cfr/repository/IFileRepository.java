@@ -6,6 +6,7 @@ package pt.webdetails.cfr.repository;
 import java.io.File;
 import java.util.List;
 import pt.webdetails.cfr.file.CfrFile;
+import pt.webdetails.cfr.file.IFile;
 
 public interface IFileRepository {
   
@@ -14,11 +15,14 @@ public interface IFileRepository {
   
   public boolean storeFile(byte[] content, String fileName, String relativePath);
   
-  public File[] listFiles(String startPath);
+  public IFile[] listFiles(String startPath);
   
   
   public CfrFile getFile(String fullName);
   
+  public boolean createFolder(String fullPathName);
+  
+  public boolean deleteFile(String fullName);
   
   public void shutdown();
   

@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.fs.BufferedFSInputStream;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import pt.webdetails.cfr.file.CfrFile;
+import pt.webdetails.cfr.file.IFile;
 
 
 /***
@@ -47,6 +48,10 @@ static Log logger = LogFactory.getLog(DefaultFileRepository.class);
   
   @Override
   public boolean storeFile(byte[] content, String fileName, String relativePath) {
+    
+    if (!checkPath(relativePath))
+      return false;
+    
     String fullPath = getBasePath() + File.separator + relativePath;
     File f = new File(fullPath, fileName);
     
@@ -73,14 +78,81 @@ static Log logger = LogFactory.getLog(DefaultFileRepository.class);
   }
 
   @Override
-  public File[] listFiles(String startPath) {
+  public boolean createFolder(String fullPathName) {
+    
+    if (!checkPath(fullPathName))
+      return false;
+    
+    
+    File f = new File(getBasePath() + File.separator + fullPathName);
+    if (!f.exists())
+      return f.mkdirs();
+    
+    return true;
+  }
+  
+  @Override
+  public boolean deleteFile(String fullName) {
+    
+    if (!checkPath(fullName))
+      return false;
+    
+    
+    File f = new File(getBasePath() + File.separator + fullName);    
+    return f.delete();
+  }
+  
+  
+  @Override
+  public IFile[] listFiles(String startPath) {
+    
+    if (!checkPath(startPath))
+      return null;
+    
+    
     File f = new File(getBasePath() + File.separator + startPath);
-    return f.listFiles();
+    File[] files =  f.listFiles();
+    IFile[] result = new IFile[files.length];
+    for (int i=0; i < files.length; i++) {
+      final File listedFile = files[i];
+      result[i] = new IFile() {
+
+        @Override
+        public String getFullPath() {
+          return listedFile.getPath();
+        }
+
+        @Override
+        public String getName() {
+          return listedFile.getName();
+        }
+
+        @Override
+        public boolean isDirectory() {
+          return listedFile.isDirectory();
+        }
+        
+        @Override
+        public boolean isFile() {
+          return listedFile.isFile();
+        }
+        
+        
+      };
+    }
+    
+    return result;
   }
   
   
   @Override 
   public CfrFile getFile(String fullName) {
+
+    if (!checkPath(fullName))
+      return null;
+    
+    
+    
     File f = new File(getBasePath() + File.separator + fullName);
     if (!f.exists()) {
       logger.error("File not found for " + fullName + ". Returning null.");
@@ -104,6 +176,20 @@ static Log logger = LogFactory.getLog(DefaultFileRepository.class);
     
     return result;
     
+  }
+  
+  
+  /**
+   * Checks if path contains ../ - we won't allow any back tracking in paths,
+   * even if they might be valid
+   * @param path
+   * @return <i>true</i> if path does not contain bactracking info
+   */
+  private boolean checkPath(String path) {
+    boolean result = !path.contains("..");
+    if (!result)
+      logger.warn("Path parameter contains unsupported back tracking path element: " + path);
+    return false;
   }
   
 }

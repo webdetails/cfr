@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
 import pt.webdetails.cfr.file.CfrFile;
+import pt.webdetails.cfr.file.IFile;
 
 
 public class DefaultFileRepositoryTest {
@@ -60,6 +61,48 @@ public class DefaultFileRepositoryTest {
     
   }
   
+  
+  
+  
+  @Test
+  public void testFolderCreation() {
+    DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
+    
+    Assert.assertTrue(fileRep.createFolder("my_tests/created_folder"));
+    
+    //Second create should return true - nothing to do
+    Assert.assertTrue(fileRep.createFolder("my_tests/created_folder"));    
+  }
+
+
+  
+  
+  
+  @Test
+  public void testFileDeletion() {
+    DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
+    Assert.assertTrue(fileRep.storeFile(new byte[2], "t.txt", "my_tests"));  
+
+    Assert.assertTrue(fileRep.deleteFile("my_tests/t.txt"));
+  }
+  
+  @Test
+  public void testFolderDeletion() {
+    DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
+    Assert.assertTrue(fileRep.createFolder("my_tests/created_folder_2"));
+
+    Assert.assertTrue(fileRep.deleteFile("my_tests/created_folder_2"));
+  }
+  
+  @Test
+  public void testNonExistentFileDeletion() {
+    DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
+
+    Assert.assertFalse(fileRep.deleteFile("my_tests/does_not_exist.dne"));
+  }
+
+  
+  
   @Test
   public void testFileCreation() {
     DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
@@ -108,6 +151,16 @@ public class DefaultFileRepositoryTest {
     Assert.assertNull(f);    
   }
   
+
+  @Test
+  public void testListFilesWithInvalidPath() {
+    DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
+    
+    Assert.assertNull(fileRep.listFiles("../teste"));
+    
+    Assert.assertNull(fileRep.listFiles("test/../teste"));
+  }
+  
   
   
   @Test
@@ -122,7 +175,7 @@ public class DefaultFileRepositoryTest {
     Assert.assertTrue(fileRep.storeFile(content, "third.txt", "list_tests/newLevel"));
     
     
-    File[] files = fileRep.listFiles("list_tests");
+    IFile[] files = fileRep.listFiles("list_tests");
     
     Assert.assertEquals(2, files.length);
     

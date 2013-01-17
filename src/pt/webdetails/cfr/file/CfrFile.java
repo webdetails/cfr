@@ -3,8 +3,10 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 package pt.webdetails.cfr.file;
 
+import java.io.File;
 
-public class CfrFile {       
+
+public class CfrFile implements IFile {       
 
   private String fileName;
   private byte[] content;
@@ -37,6 +39,26 @@ public class CfrFile {
    */
   public String getDownloadPath() {
     return downloadPath;
+  }
+
+  @Override
+  public String getFullPath() {
+    return downloadPath + File.pathSeparator + fileName;
+  }
+
+  @Override
+  public String getName() {
+    return fileName;
+  }
+
+  @Override
+  public boolean isDirectory() {
+    return false;
+  }
+
+  @Override
+  public boolean isFile() {
+    return true;
   }
      
     
