@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
-  <repositoryClass>pt.webdetails.cfr.repository.PentahoRepositoryFileRepository</repositoryClass>
+  <repositoryClass>pt.webdetails.cfr.repository.DefaultFileRepository</repositoryClass>
   
   
   <cde-components>

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import pt.webdetails.cpf.annotations.AccessLevel;
 import pt.webdetails.cpf.annotations.Exposed;
 import pt.webdetails.cpf.olap.OlapUtils;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
+import pt.webdetails.cpf.utils.PluginUtils;
 
 /**
  *
@@ -83,7 +85,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     params.put("root", root);
 
     //add request parameters
-    copyParametersFromProvider(params, requestParams);
+    PluginUtils.getInstance().copyParametersFromProvider(params, requestParams);
 
     if (requestParams.hasParameter("mode") && requestParams.getStringParameter("mode", "Render").equals("edit")) {
 
@@ -170,7 +172,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   
   @Exposed(accessLevel = AccessLevel.PUBLIC)
   public void listFiles(OutputStream out) throws IOException {
-    String baseDir = getRequestParameters().getStringParameter("dir", "");
+    String baseDir = URLDecoder.decode(getRequestParameters().getStringParameter("dir", ""), "ISO-8859-1");
     IFile[] files = getRepository().listFiles(baseDir);
     
     String extensions = getRequestParameters().getStringParameter("fileExtensions", "");
@@ -194,7 +196,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     
     CfrFile file = getRepository().getFile(fullFileName);
     
-    setResponseHeaders(getMimeType(file.getFileName()), -1, null);
+    setResponseHeaders(getMimeType(file.getFileName()), -1, file.getFileName());
     ByteArrayInputStream bais = new ByteArrayInputStream(file.getContent());
     IOUtils.copy(bais, out);
     IOUtils.closeQuietly(bais);

@@ -189,7 +189,7 @@ static Log logger = LogFactory.getLog(DefaultFileRepository.class);
     boolean result = !path.contains("..");
     if (!result)
       logger.warn("Path parameter contains unsupported back tracking path element: " + path);
-    return false;
+    return result;
   }
   
 }
