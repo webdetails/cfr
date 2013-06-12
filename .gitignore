@@ -1,6 +1,18 @@
+.sass-cache
+.DS_Store
+override.properties
+
+# CTools Temporary Files
+*_tmp.cd*
+
+# Eclipse Project Files
+#.classpath
+
+# Source Files
 *.class
 
 # Package Files #
 *.jar
 *.war
 *.ear
+/bin

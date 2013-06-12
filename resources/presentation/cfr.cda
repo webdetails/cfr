@@ -14,7 +14,7 @@
             <Name>Files</Name>
          </Column>
       </Columns>
-      <Output indexes="1,0,3" mode="include"/>
+      <Output indexes="0,1,3" mode="include"/>
       <Parameters/>
       <Query>import org.pentaho.reporting.engine.classic.core.util.TypedTableModel;
 import pt.webdetails.cda.utils.InterPluginUtils;

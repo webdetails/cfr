@@ -1,0 +1,299 @@
+@import compass
+
+@import base
+
+@import alerts
+
+.componentHeader
+  padding-top: 60px 
+  background:
+    image: url('../images/webdetails_logo.png')
+    repeat: no-repeat
+    position: bottom left
+    size: 20px
+
+  p
+    margin: 0
+    float: right
+    padding-left: image-width('logo_small.png') + 4px
+    text-align: right
+    background:
+      image: url('../images/logo_small.png')
+      repeat: no-repeat
+      position: bottom left
+
+.greeting
+  border: 1px solid #848f95
+  margin-top: 4px
+  padding: 10px
+  background: #cad3d6
+  +background-image(linear-gradient(top, #cad3d6 0%, #a6b0b5 100%))
+
+  a
+    float: right
+
+.uploadButton
+  form
+    width: 100%
+    height: 100%
+    display: inline
+
+.uploadCtrl
+  background: none
+  background-color: #cad2d6
+  margin-top: 5px
+
+.fileSelect
+  position: relative
+  width: 100%
+  height: 60px
+  +box-sizing(border-box)
+
+  .uploadButton
+    height: inherit
+
+  form
+    width: inherit
+    height: inherit
+
+  .cabinet
+    margin: 10px
+    position: absolute
+    top: 0
+    left: 0
+    width: 400px
+
+    .file
+      position: absolute
+      top: 0
+      left: 0
+      +box-sizing(border-box)
+      border: none
+
+  .select
+    font-size: 16px
+    color: #cad2d6
+    position: absolute
+    top: 10px
+    left: 10px
+    width: 400px
+    height: 40px
+    z-index: 10
+    line-height: 40px
+    +border-radius(0)
+    border: none //1px solid #2d3a3f
+    text-indent: 15px
+
+    background:
+      image: url('../images/selector_3.png')
+      repeat: no-repeat
+      position: center right
+      color: white
+
+    &:hover
+      color: white
+      +transition(all 0.25s linear 0s)
+      background:
+        image: url('../images/selector_1.png')
+        repeat: no-repeat
+        position: center right
+        color: #2d3a3f
+
+  .fileTextRow
+    font-size: 16px
+    background:
+      image: url('../images/selector_3.png')
+      repeat: no-repeat
+      position: center right
+      color: white
+    width: 400px
+    height: 40px
+    margin: 0
+    top: 10px
+    left: 10px
+    position: absolute
+    border: none //1px solid #2d3a3f
+    +border-radius(0)
+    line-height: 40px
+    +box-sizing(border-box)
+
+  .cancelButton
+    position: absolute
+    right: 0
+    top: 0
+    margin: 10px
+    width: 100px
+
+    button
+      background: none
+      background-color: #2d3a3f
+      color: #cad2d6
+      font-size: 16px
+      height: 40px
+      +border-radius(0)
+      border: none //1px solid #2d3a3f
+
+      &:hover
+        background: none
+        background-color: white
+        color: #2d3a3f
+        border: none //1px solid #2d3a3f
+
+  .submitBtn
+    position: absolute
+    background:
+      image: url('../images/upload_normal.png')
+      repeat: no-repeat
+      position: center right
+    left: 415px
+    margin: 10px
+    height: 40px
+    background-color: #216dbf
+    width: 400px
+    color: #dee8ec
+    font-size: 16px
+    text-align: center
+    border: none //1px solid #2d3a3f
+    +border-radius(0)
+
+    &:hover
+      background-color: #4d94e0
+      color: white
+      background:
+        image: url('../images/upload_over.png')
+        repeat: no-repeat
+        position: center right
+      +transition(all 0.25s linear 0s)
+
+.fileListHeader
+  margin-top: 20px
+  margin-bottom: 10px
+  line-height: 26px
+  text-align: center
+  font-size: 14px 
+  font-weight: bold
+  border: 1px solid #848f95
+  background: #cad3d6
+  +background-image(linear-gradient(top, #cad3d6 0%, #a6b0b5 100%))
+
+  button
+    float: right
+    position: relative 
+    margin: 4px 10px
+
+    &:hover
+      background-color: #2d3a3f
+      color: white
+      +transition(all 0.25s linear 0s)
+
+.WDheader
+  background: url('../images/webdetails_banner.png') no-repeat scroll center
+
+  p
+    background: url('../images/logo_small.png') no-repeat left bottom
+    padding-left: image-width('logo_small.png') + 2px
+    text-align: right
+    vertical-align: bottom
+
+#uploadsTableObjTable
+  border: none
+  background-color: #DEE8EC
+  border-spacing: 0 6px
+
+  thead
+    display: none
+
+  tbody
+    font-size: 18px
+    color: black
+
+    tr
+      margin-top: 5px
+      width: 100%
+
+      &:hover
+        background-color: #c2cbcf
+        +transition(all 0.25s linear 0s)        
+
+    td
+      border-top: 1px solid #848f95
+      border-bottom: 1px solid #848f95
+
+    .odd
+      color: black
+      background-color: white
+
+    .even
+      color: black
+      background-color: white
+    
+    // filename column
+    .column0
+      width: 65%
+      border-left: 1px solid #848f95
+      text-align: left
+
+    // date column
+    .column2
+      float: right
+      text-align: right
+      border-right: 1px solid #848f95
+
+    .selected
+      background-color: #c2cbcf
+
+.dataTables_wrapper
+  min-height: 0
+
+
+#popup_title
+  text-align: left
+  text-indent: 15px
+  color: #2d3a3f
+  background: #cad3d6
+  +background-image(linear-gradient(top, #cad3d6 0%, #a6b0b5 100%))
+
+#popup_message
+  font-size: 14px
+  text-align: left
+
+#popup_prompt
+  background:
+    image: url('../images/copy_1.png')
+    repeat: no-repeat
+    position: center right
+    color: white
+  border: 1px solid #848f95
+  border-left: 1px solid #848f95
+  width: 100%
+  top: 0
+  left: 0
+  padding: 5px
+  height: auto
+  font-size: 14px
+
+#popup_open,#popup_save,#popup_cancel,#popup_ok
+  margin: 5px
+
+// TEXT FORMATTERS
+.text-center
+  text-align: center
+.text-left
+  text-align: left
+.text-right
+  text-align: right
+.text-big
+  font-size: 1.25em
+.text-bigger
+  font-size: 1.5em
+.text-huge
+  font-size: 2em
+.text-normal
+  font-size: 1em
+.text-small
+  font-size: 0.75em
+.text-smaller
+  font-size: 0.5em
+.text-tiny
+  font-size: 0.25em
+

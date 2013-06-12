@@ -1,0 +1,70 @@
+#popup_container {
+	font-family: Arial, sans-serif;
+	font-size: 12px;
+	min-width: 300px; /* Dialog will be no smaller than this */
+	max-width: 600px; /* Dialog will wrap after this width */
+	background: #FFF;
+	color: #000;
+	z-index: 1000;
+}
+
+#popup_title {
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 1.75em;
+	color: #666;
+	background: #04282c ;
+	border: solid 1px #848F95;
+	border-bottom: solid 1px #999;
+	cursor: default;
+	padding: 0em;
+	margin: 0em;
+	height: 28px;
+}
+
+#popup_content {
+	padding: 1em 1.75em;
+	margin: 0em;
+	background: #ffffff;
+	border: 1px solid #848F95;
+}
+
+#popup_message {
+	color: #04282C;
+   	font-family: Gudea;
+   	font-size: 20px;
+   	margin-top: 20px;
+   	text-align: center;
+}
+
+#popup_panel {
+	text-align: center;
+	margin: 10px;
+}
+
+#popup_panel input {
+	color: #0f1414;
+	height: 23px;
+	width: 86px;
+	border: 1px solid #829299;
+	font-size: 12px;
+	background-color: #ffffff;
+	top: 0;
+	left: 0;
+}
+#popup_panel input:hover {
+	border: 1px solid transparent;
+	background-color: #cad3d6;
+	color:  #0f1414;
+}
+
+#popup_panel input:active {
+	border: 1px solid #0f1414;
+	background-color: #cad3d6;
+	color: #0f1414;
+}
+
+#popup_prompt {
+	margin: .5em 0em;
+}
