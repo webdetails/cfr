@@ -16,3 +16,9 @@ override.properties
 *.war
 *.ear
 /bin
+
+# Eclipse files
+.classpath
+.project
+
+dist/
