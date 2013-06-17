@@ -18,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.fs.BufferedFSInputStream;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
+import pt.webdetails.cfr.CfrPluginSettings;
 import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.IFile;
 
@@ -31,8 +32,14 @@ public class DefaultFileRepository implements IFileRepository {
 
 static Log logger = LogFactory.getLog(DefaultFileRepository.class);
   
+  protected String basePath;
+
   protected String getBasePath() {
-    return PentahoSystem.getApplicationContext().getSolutionPath("/system/.cfr");
+    if (basePath == null) {
+      CfrPluginSettings settings = new CfrPluginSettings();
+      basePath = settings.getBasePath();
+    }
+    return basePath;
   }
   
   
