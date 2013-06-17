@@ -12,18 +12,18 @@
   	<Contents>
   		<Model>
       		<Property type="boolean">executeAtStart</Property>
-            <Property>rootFolder</Property>
+          <Property>rootFolder</Property>
       		<Property>htmlObject</Property>
       		<Property>preExecution</Property>
       		<Property>postExecution</Property>
       		<Property>tooltip</Property>
       		<Property>listeners</Property>
+          <Property>parameters</Property>
      	</Model>
     <Implementation>
       	<Code src="FileUploaderComponent.js"/>
       	<Styles>
-        
-          <Style version="1.0" src="component.css">FileUploaderComponent</Style>
+          <Style version="1.0" src="css/component.css">FileUploaderComponent</Style>
       	</Styles>
       	<Dependencies>
           <Dependency src="lib/si.files.js" version="1.0">si.files</Dependency>  

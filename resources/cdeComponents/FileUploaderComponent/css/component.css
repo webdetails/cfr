@@ -1,0 +1,376 @@
+/* line 1, ../_base.scss */
+.SI-FILES-STYLIZED label.cabinet {
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkYWRhZGEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, white 0%, #dadada 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(100%, #dadada));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, white 0%, #dadada 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, white 0%, #dadada 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, white 0%, #dadada 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #ffffff 0%, #dadada 100%);
+  /* W3C */
+  background-color: #DCDCDC;
+  width: 73%;
+  height: 25px;
+  display: block;
+  overflow: hidden;
+  margin-left: 20px;
+  float: left;
+  border-radius: 3px 3px 3px 3px;
+  -moz-border-radius: 3px 3px 3px 3px;
+  -webkit-border-radius: 3px 3px 3px 3px;
+}
+
+/* line 21, ../_base.scss */
+.SI-FILES-STYLIZED label.cabinet:hover {
+  color: #56ACF5;
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2RhZGFkYSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, #dadada 0%, white 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #dadada), color-stop(100%, white));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #dadada 0%, white 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #dadada 0%, white 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #dadada 0%, white 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #dadada 0%, #ffffff 100%);
+  /* W3C */
+  -moz-transition: all 0.25s linear 0s;
+  -webkit-transition: all 0.25s linear 0s;
+  -o-transition: all 0.25s linear 0s;
+}
+
+/* line 35, ../_base.scss */
+.SI-FILES-STYLIZED label.cabinet input.file {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  left: 0px !important;
+  top: 0px !important;
+  z-index: 10000;
+  opacity: 0;
+  -moz-opacity: 0;
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+}
+
+/* line 47, ../_base.scss */
+.zeroHeight {
+  height: 0px;
+}
+
+/* line 51, ../_base.scss */
+.select {
+  position: relative;
+  left: 35%;
+  top: 22px;
+}
+
+/* line 58, ../_base.scss */
+.cancelButton {
+  margin-left: 5px;
+  float: left;
+}
+
+/* line 63, ../_base.scss */
+.cancelButton button {
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkYWRhZGEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, white 0%, #dadada 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(100%, #dadada));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, white 0%, #dadada 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, white 0%, #dadada 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, white 0%, #dadada 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #ffffff 0%, #dadada 100%);
+  /* W3C */
+  background-color: #DCDCDC;
+  height: 25px;
+  width: 100px;
+  border: none;
+  border-radius: 3px 3px 3px 3px;
+  -moz-border-radius: 3px 3px 3px 3px;
+  -webkit-border-radius: 3px 3px 3px 3px;
+}
+
+/* line 80, ../_base.scss */
+.cancelButton button:hover {
+  cursor: pointer;
+  color: #56ACF5;
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2RhZGFkYSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, #dadada 0%, white 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #dadada), color-stop(100%, white));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #dadada 0%, white 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #dadada 0%, white 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #dadada 0%, white 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #dadada 0%, #ffffff 100%);
+  /* W3C */
+  -moz-transition: all 0.25s linear 0s;
+  -webkit-transition: all 0.25s linear 0s;
+  -o-transition: all 0.25s linear 0s;
+}
+
+/* line 95, ../_base.scss */
+.cancelButton button:hover {
+  cursor: pointer;
+}
+
+/* line 99, ../_base.scss */
+.hide {
+  display: none !important;
+}
+
+/* line 103, ../_base.scss */
+.fileName {
+  color: #DCDCDC;
+  margin-top: 17px;
+  text-indent: 20px;
+  width: 80px;
+}
+
+/* line 110, ../_base.scss */
+.fileTextRow {
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkYWRhZGEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, white 0%, #dadada 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(100%, #dadada));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, white 0%, #dadada 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, white 0%, #dadada 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, white 0%, #dadada 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #ffffff 0%, #dadada 100%);
+  /* W3C */
+  background-color: #DCDCDC;
+  display: block;
+  height: 25px;
+  margin-right: 20px;
+  overflow: hidden;
+  width: 73%;
+  float: left;
+  vertical-align: middle;
+  line-height: 25px;
+  text-indent: 15px;
+  border-radius: 3px 3px 3px 3px;
+  -moz-border-radius: 3px 3px 3px 3px;
+  -webkit-border-radius: 3px 3px 3px 3px;
+}
+
+/* line 134, ../_base.scss */
+.SI-FILES-STYLIZED input {
+  background: url("images/Upload.png") no-repeat scroll 0 0 #4f9adb;
+  height: 55px;
+  width: 170px;
+  border: none;
+  position: relative;
+  top: 35px;
+  left: 40%;
+}
+
+/* line 144, ../_base.scss */
+.SI-FILES-STYLIZED input:hover {
+  background: url("images/Upload.png") no-repeat scroll 0 -60px #4f9adb;
+  cursor: pointer;
+}
+
+/* line 149, ../_base.scss */
+.uploadButtonRow {
+  background-color: #4F9ADB;
+  /* Old browsers */
+  background-color: -moz-linear-gradient(top, #4f9adb 10%, #4587c0 90%);
+  /* FF3.6+ */
+  background-color: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #4f9adb), color-stop(90%, #4587c0));
+  /* Chrome,Safari4+ */
+  background-color: -webkit-linear-gradient(top, #4f9adb 10%, #4587c0 90%);
+  /* Chrome10+,Safari5.1+ */
+  background-color: -o-linear-gradient(top, #4f9adb 10%, #4587c0 90%);
+  /* Opera 11.10+ */
+  background-color: -ms-linear-gradient(top, #4f9adb 10%, #4587c0 90%);
+  /* IE10+ */
+  background-color: linear-gradient(to bottom, #4f9adb 10%, #4587c0 90%);
+  /* W3C */
+  border: none;
+  height: 50px;
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  width: 100%;
+  border-radius: 3px 3px 3px 3px;
+  -moz-border-radius: 3px 3px 3px 3px;
+  -webkit-border-radius: 3px 3px 3px 3px;
+}
+
+/* line 5, ../component.sass */
+.fileSelect {
+  position: relative;
+  width: 100%;
+  height: 60px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* line 11, ../component.sass */
+.fileSelect .uploadButton {
+  height: inherit;
+}
+/* line 14, ../component.sass */
+.fileSelect form {
+  width: inherit;
+  height: inherit;
+}
+/* line 18, ../component.sass */
+.fileSelect .cabinet {
+  margin: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400px;
+}
+/* line 25, ../component.sass */
+.fileSelect .cabinet .file {
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: none;
+}
+/* line 32, ../component.sass */
+.fileSelect .select {
+  font-size: 16px;
+  color: #cad2d6;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 400px;
+  height: 40px;
+  z-index: 100000;
+  line-height: 40px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  border: none;
+  text-indent: 15px;
+  background-image: url("../images/selector_3.png");
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-color: white;
+}
+/* line 52, ../component.sass */
+.fileSelect .select:hover {
+  color: white;
+  -webkit-transition: all 0.25s linear;
+  -webkit-transition-delay: 0s;
+  -moz-transition: all 0.25s linear 0s;
+  -o-transition: all 0.25s linear 0s;
+  transition: all 0.25s linear 0s;
+  background-image: url("../images/selector_1.png");
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-color: #2d3a3f;
+}
+/* line 61, ../component.sass */
+.fileSelect .fileTextRow {
+  font-size: 16px;
+  background-image: url("../images/selector_3.png");
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-color: white;
+  width: 400px;
+  height: 40px;
+  margin: 0;
+  top: 10px;
+  left: 10px;
+  position: absolute;
+  border: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  line-height: 40px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* line 79, ../component.sass */
+.fileSelect .cancelButton {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 10px;
+  width: 100px;
+}
+/* line 86, ../component.sass */
+.fileSelect .cancelButton button {
+  background: none;
+  background-color: #2d3a3f;
+  color: #cad2d6;
+  font-size: 16px;
+  height: 40px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+  border: none;
+}
+/* line 95, ../component.sass */
+.fileSelect .cancelButton button:hover {
+  background: none;
+  background-color: white;
+  color: #2d3a3f;
+  border: none;
+}
+/* line 101, ../component.sass */
+.fileSelect .submitBtn {
+  position: absolute;
+  background-image: url("../images/upload_normal.png");
+  background-repeat: no-repeat;
+  background-position: center right;
+  left: 415px;
+  margin: 10px;
+  height: 40px;
+  background-color: #216dbf;
+  width: 400px;
+  color: #dee8ec;
+  font-size: 16px;
+  text-align: center;
+  border: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+}
+/* line 118, ../component.sass */
+.fileSelect .submitBtn:hover {
+  background-color: #4d94e0;
+  color: white;
+  background-image: url("../images/upload_over.png");
+  background-repeat: no-repeat;
+  background-position: center right;
+  -webkit-transition: all 0.25s linear;
+  -webkit-transition-delay: 0s;
+  -moz-transition: all 0.25s linear 0s;
+  -o-transition: all 0.25s linear 0s;
+  transition: all 0.25s linear 0s;
+}

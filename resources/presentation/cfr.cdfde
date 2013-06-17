@@ -3,48 +3,25 @@
   "title": "CDF - Sample structure",
   "rows": [
    {
-    "id": "f5276812-de22-10be-b83d-8eddb8af8794",
-    "type": "LayoutResourceCode",
-    "typeDesc": "Resource",
-    "parent": "UnIqEiD",
-    "properties": [
-     {
-      "name": "name",
-      "value": "doStuff",
-      "type": "Id"
-     },
-     {
-      "name": "resourceType",
-      "value": "Javascript",
-      "type": "Label"
-     },
-     {
-      "name": "resourceCode",
-      "value": "function doStuff() {\n    if ( $('#file').val() !== \"\" ){\n        $('#selectFile').addClass('zeroHeight');\n        $('label').addClass('hide');\n        $('span.select').addClass('hide');\n        $('#fileObj').removeClass('hide');\n        $('#fileName').removeClass('hide');\n        $('#uploadButtonRow').removeClass('hide');\n        $('input').last().removeClass('hide');\n        render_fileText.update();\n    }\n} ",
-      "type": "Resource"
-     }
-    ]
-   },
-   {
-    "id": "0ed686bb-eb56-0369-4c45-6c7607e8c9a7",
+    "id": "a3a589dd-7114-aa6b-6228-14ffab791f8d",
     "type": "LayoutResourceFile",
     "typeDesc": "Resource",
     "parent": "UnIqEiD",
     "properties": [
      {
       "name": "name",
-      "value": "uploadFile",
+      "value": "jquery.alerts",
       "type": "Id"
+     },
+     {
+      "name": "resourceFile",
+      "value": "static/client/jquery.alerts.js",
+      "type": "ResourceFile"
      },
      {
       "name": "resourceType",
       "value": "Javascript",
       "type": "Label"
-     },
-     {
-      "name": "resourceFile",
-      "value": "static/client/si.files.js",
-      "type": "ResourceFile"
      }
     ]
    },
@@ -60,26 +37,26 @@
       "type": "Id"
      },
      {
+      "name": "resourceFile",
+      "value": "static/client/css/cfr.css",
+      "type": "ResourceFile"
+     },
+     {
       "name": "resourceType",
       "value": "Css",
       "type": "Label"
-     },
-     {
-      "name": "resourceFile",
-      "value": "static/client/cfr.css",
-      "type": "ResourceFile"
      }
     ]
    },
    {
-    "id": "e004e7c1-79db-55e7-09da-b2433ee5eef6",
+    "id": "df72fcb4-545e-b6dd-3270-063456da322d",
     "type": "LayoutRow",
     "typeDesc": "Row",
     "parent": "UnIqEiD",
     "properties": [
      {
       "name": "name",
-      "value": "Header",
+      "value": "header",
       "type": "Id"
      },
      {
@@ -98,31 +75,102 @@
       "type": "RoundCorners"
      },
      {
+      "name": "textAlign",
+      "value": "",
+      "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "componentHeader",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "5ee4f934-ebc8-1eba-7c39-4ff3f21c8f86",
+    "type": "LayoutHtml",
+    "typeDesc": "Html",
+    "parent": "df72fcb4-545e-b6dd-3270-063456da322d",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "html",
+      "value": "<p>.Community File Repository</p> ",
+      "type": "Html"
+     },
+     {
+      "name": "fontSize",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "color",
+      "value": "",
+      "type": "Color"
+     },
+     {
       "name": "cssClass",
       "value": "",
       "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "9b2f1628-d24b-5687-c9b7-9950947d6396",
+    "type": "LayoutRow",
+    "typeDesc": "Row",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "name",
+      "value": "greeting",
+      "type": "Id"
+     },
+     {
+      "name": "height",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "backgroundColor",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "roundCorners",
+      "value": "",
+      "type": "RoundCorners"
      },
      {
       "name": "textAlign",
       "value": "",
       "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "greeting",
+      "type": "String"
      }
     ]
    },
    {
-    "id": "80704619-8d31-d391-c05f-a19bab7296de",
+    "id": "60522dd2-26ad-eb0a-a2aa-c5aaa2a2d96d",
     "type": "LayoutColumn",
     "typeDesc": "Column",
-    "parent": "e004e7c1-79db-55e7-09da-b2433ee5eef6",
+    "parent": "9b2f1628-d24b-5687-c9b7-9950947d6396",
     "properties": [
      {
       "name": "name",
-      "value": "header",
+      "value": "greetingObj",
       "type": "Id"
      },
      {
       "name": "columnSpan",
-      "value": "24",
+      "value": "12",
       "type": "Integer"
      },
      {
@@ -156,44 +204,6 @@
       "type": "Boolean"
      },
      {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "47acf8ec-544b-3726-9ab6-947abed111b0",
-    "type": "LayoutRow",
-    "typeDesc": "Row",
-    "parent": "80704619-8d31-d391-c05f-a19bab7296de",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
       "name": "height",
       "value": "",
       "type": "Integer"
@@ -209,22 +219,22 @@
       "type": "RoundCorners"
      },
      {
-      "name": "cssClass",
-      "value": "header",
-      "type": "String"
-     },
-     {
       "name": "textAlign",
       "value": "",
       "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
      }
     ]
    },
    {
-    "id": "d58524f3-d07a-0e03-d763-d99e2e952d48",
+    "id": "2b7a5be2-6e74-e5c1-5355-08c296241ab4",
     "type": "LayoutColumn",
     "typeDesc": "Column",
-    "parent": "47acf8ec-544b-3726-9ab6-947abed111b0",
+    "parent": "9b2f1628-d24b-5687-c9b7-9950947d6396",
     "properties": [
      {
       "name": "name",
@@ -238,7 +248,7 @@
      },
      {
       "name": "columnPrepend",
-      "value": "",
+      "value": "10",
       "type": "Integer"
      },
      {
@@ -267,6 +277,11 @@
       "type": "Boolean"
      },
      {
+      "name": "height",
+      "value": "",
+      "type": "Integer"
+     },
+     {
       "name": "backgroundColor",
       "value": "",
       "type": "Color"
@@ -277,27 +292,22 @@
       "type": "RoundCorners"
      },
      {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "headerText dateText",
-      "type": "String"
-     },
-     {
       "name": "textAlign",
       "value": "",
       "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
      }
     ]
    },
    {
-    "id": "37a42dba-3f3c-5352-ca29-3dc1ccb23035",
+    "id": "01b163d1-77d4-272f-7477-701a5acb281b",
     "type": "LayoutHtml",
     "typeDesc": "Html",
-    "parent": "d58524f3-d07a-0e03-d763-d99e2e952d48",
+    "parent": "2b7a5be2-6e74-e5c1-5355-08c296241ab4",
     "properties": [
      {
       "name": "name",
@@ -306,13 +316,8 @@
      },
      {
       "name": "html",
-      "value": "Date ",
+      "value": "<a>About</a> ",
       "type": "Html"
-     },
-     {
-      "name": "color",
-      "value": "",
-      "type": "Color"
      },
      {
       "name": "fontSize",
@@ -320,185 +325,11 @@
       "type": "Integer"
      },
      {
-      "name": "cssClass",
-      "value": "",
-      "type": "String"
-     }
-    ]
-   },
-   {
-    "id": "f708b9ed-6558-96c3-7555-d4601afd8225",
-    "type": "LayoutColumn",
-    "typeDesc": "Column",
-    "parent": "47acf8ec-544b-3726-9ab6-947abed111b0",
-    "properties": [
-     {
-      "name": "name",
-      "value": "dateObj",
-      "type": "Id"
-     },
-     {
-      "name": "columnSpan",
-      "value": 5,
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnAppend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "headerText bold dateStringText",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "e336616d-3ee3-fd43-b5ac-fda7c4ed8636",
-    "type": "LayoutColumn",
-    "typeDesc": "Column",
-    "parent": "47acf8ec-544b-3726-9ab6-947abed111b0",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "columnSpan",
-      "value": "1",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
-      "value": "15",
-      "type": "Integer"
-     },
-     {
-      "name": "columnAppend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "headerText userText",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "62743f32-3c91-52ce-1040-0c35ab837966",
-    "type": "LayoutHtml",
-    "typeDesc": "Html",
-    "parent": "e336616d-3ee3-fd43-b5ac-fda7c4ed8636",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "html",
-      "value": "User ",
-      "type": "Html"
-     },
-     {
       "name": "color",
       "value": "",
       "type": "Color"
      },
      {
-      "name": "fontSize",
-      "value": "",
-      "type": "Integer"
-     },
-     {
       "name": "cssClass",
       "value": "",
       "type": "String"
@@ -506,87 +337,14 @@
     ]
    },
    {
-    "id": "98b8022a-74b4-0f1c-d43a-76fce6894044",
-    "type": "LayoutColumn",
-    "typeDesc": "Column",
-    "parent": "47acf8ec-544b-3726-9ab6-947abed111b0",
-    "properties": [
-     {
-      "name": "name",
-      "value": "userObj",
-      "type": "Id"
-     },
-     {
-      "name": "columnSpan",
-      "value": "2",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnAppend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "headerText bold",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "b403c7dc-841b-598b-1e21-379adcb6002e",
+    "id": "ca87789f-1347-14df-146d-930cb4f01580",
     "type": "LayoutRow",
     "typeDesc": "Row",
     "parent": "UnIqEiD",
     "properties": [
      {
       "name": "name",
-      "value": "Upload",
+      "value": "uploaderObj",
       "type": "Id"
      },
      {
@@ -605,99 +363,26 @@
       "type": "RoundCorners"
      },
      {
-      "name": "cssClass",
-      "value": "uploadRow",
-      "type": "String"
-     },
-     {
       "name": "textAlign",
       "value": "",
       "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "uploadCtrl",
+      "type": "String"
      }
     ]
    },
    {
-    "id": "9f74d69f-e4c0-426f-c53c-c9e567ecbfe8",
-    "type": "LayoutColumn",
-    "typeDesc": "Column",
-    "parent": "b403c7dc-841b-598b-1e21-379adcb6002e",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "columnSpan",
-      "value": "24",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnAppend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "58c3aac9-5732-c47e-6549-655fcae16501",
+    "id": "1768ef34-0ddb-6989-f54f-e024df4ab78f",
     "type": "LayoutRow",
     "typeDesc": "Row",
-    "parent": "9f74d69f-e4c0-426f-c53c-c9e567ecbfe8",
+    "parent": "UnIqEiD",
     "properties": [
      {
       "name": "name",
-      "value": "fileSelect",
+      "value": "fileListHeader",
       "type": "Id"
      },
      {
@@ -716,95 +401,22 @@
       "type": "RoundCorners"
      },
      {
-      "name": "cssClass",
-      "value": "fileSelect",
-      "type": "String"
-     },
-     {
       "name": "textAlign",
       "value": "",
       "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "fileListHeader",
+      "type": "String"
      }
     ]
    },
    {
-    "id": "b539d9ae-ec8c-735b-648d-136410c2a32d",
-    "type": "LayoutColumn",
-    "typeDesc": "Column",
-    "parent": "58c3aac9-5732-c47e-6549-655fcae16501",
-    "properties": [
-     {
-      "name": "name",
-      "value": "selectFile",
-      "type": "Id"
-     },
-     {
-      "name": "columnSpan",
-      "value": "19",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnAppend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "uploadButton",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "center",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "7377ef59-719b-43e1-bdca-b6a4649da176",
+    "id": "231a4507-53ae-ca2f-37dd-6ce835f27788",
     "type": "LayoutHtml",
     "typeDesc": "Html",
-    "parent": "b539d9ae-ec8c-735b-648d-136410c2a32d",
+    "parent": "1768ef34-0ddb-6989-f54f-e024df4ab78f",
     "properties": [
      {
       "name": "name",
@@ -813,13 +425,8 @@
      },
      {
       "name": "html",
-      "value": "<form action=\"../cfr/store\" method=\"post\"  enctype=\"multipart/form-data\"\ntarget=\"upload_target\">\n\n<label class=\"cabinet\"> \n    <input type=\"file\" class=\"file\" name='file' id='file' onchange='javascript:doStuff();'/>\n</label> \n\n<input type='hidden' value='teste' name='path'/>\n<input type=\"submit\" name=\"submitBtn\" value=\"\" />\n\n</form>\n\n<script>\nfunction stopUpload() {\n    var result = window.frames['upload_target'].document.body.innerHTML;\n    if (result == \"{result: true}\")\n        alert('File uploaded succesfully');\n    else\n        alert('Error uploading. Check server logs');\n}\n</script>\n<iframe \nid=\"upload_target\" \nname=\"upload_target\" \nsrc=\"#\" \nstyle=\"width:0;height:0;border:0px solid #fff;display:none\"\nonload=\"stopUpload(document.getElementById('upload_target').innerHTML);\">\n</iframe>\n\n ",
+      "value": "Previous Uploads\n<!--<button id=\"removeBtn\">Remove</button> -->\n<button id=\"downloadBtn\">Download</button>\n<button id=\"copyBtn\">Copy Link</button> ",
       "type": "Html"
-     },
-     {
-      "name": "color",
-      "value": "",
-      "type": "Color"
      },
      {
       "name": "fontSize",
@@ -827,332 +434,14 @@
       "type": "Integer"
      },
      {
-      "name": "cssClass",
-      "value": "hidePopup",
-      "type": "String"
-     }
-    ]
-   },
-   {
-    "id": "30094004-f73a-5176-100b-8f8fa5028b25",
-    "type": "LayoutHtml",
-    "typeDesc": "Html",
-    "parent": "b539d9ae-ec8c-735b-648d-136410c2a32d",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "html",
-      "value": "Select File ",
-      "type": "Html"
-     },
-     {
       "name": "color",
       "value": "",
       "type": "Color"
      },
      {
-      "name": "fontSize",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "select",
-      "type": "String"
-     }
-    ]
-   },
-   {
-    "id": "8532b271-1708-06c9-9967-5ac71d7553e9",
-    "type": "LayoutColumn",
-    "typeDesc": "Column",
-    "parent": "58c3aac9-5732-c47e-6549-655fcae16501",
-    "properties": [
-     {
-      "name": "name",
-      "value": "fileName",
-      "type": "Id"
-     },
-     {
-      "name": "columnSpan",
-      "value": "2",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnAppend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "hide fileName",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "c9e08d0e-dfdd-257e-05f5-04d8910642dd",
-    "type": "LayoutHtml",
-    "typeDesc": "Html",
-    "parent": "8532b271-1708-06c9-9967-5ac71d7553e9",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "html",
-      "value": "File Name ",
-      "type": "Html"
-     },
-     {
-      "name": "color",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "fontSize",
-      "value": "",
-      "type": "Integer"
-     },
-     {
       "name": "cssClass",
       "value": "",
       "type": "String"
-     }
-    ]
-   },
-   {
-    "id": "8320e1af-3b13-64f7-bb8a-ad495f51161f",
-    "type": "LayoutColumn",
-    "typeDesc": "Column",
-    "parent": "58c3aac9-5732-c47e-6549-655fcae16501",
-    "properties": [
-     {
-      "name": "name",
-      "value": "fileObj",
-      "type": "Id"
-     },
-     {
-      "name": "columnSpan",
-      "value": "19",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnAppend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "fileTextRow hide",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "f7fb3e4a-f65c-9bd1-5c30-954c3f27ee83",
-    "type": "LayoutColumn",
-    "typeDesc": "Column",
-    "parent": "58c3aac9-5732-c47e-6549-655fcae16501",
-    "properties": [
-     {
-      "name": "name",
-      "value": "cancelButtonObj",
-      "type": "Id"
-     },
-     {
-      "name": "columnSpan",
-      "value": "3",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnAppend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "cancelButton",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "2367b9dd-456f-e11e-cdee-770b29a6413f",
-    "type": "LayoutRow",
-    "typeDesc": "Row",
-    "parent": "9f74d69f-e4c0-426f-c53c-c9e567ecbfe8",
-    "properties": [
-     {
-      "name": "name",
-      "value": "uploadButtonRow",
-      "type": "Id"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "cssClass",
-      "value": "uploadButtonRow hide",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
      }
     ]
    },
@@ -1183,277 +472,22 @@
       "type": "RoundCorners"
      },
      {
-      "name": "cssClass",
-      "value": "WDdataCell",
-      "type": "String"
-     },
-     {
       "name": "textAlign",
       "value": "",
       "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
      }
     ]
    },
    {
-    "id": "b7a92cfe-620f-b9f9-b5c2-d25f8b22805e",
+    "id": "c2d3d57d-fa03-c448-83c5-dc504ac20d19",
     "type": "LayoutColumn",
     "typeDesc": "Column",
     "parent": "5949cedd-456e-ccc8-d075-ff93260d8b3c",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "columnSpan",
-      "value": "24",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnAppend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "bedf7c97-2983-2d61-7f6a-dfba59151fb2",
-    "type": "LayoutRow",
-    "typeDesc": "Row",
-    "parent": "b7a92cfe-620f-b9f9-b5c2-d25f8b22805e",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "cssClass",
-      "value": "WDdataCellHeader",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "3b449db8-a872-f372-ca43-ca04bbda4778",
-    "type": "LayoutColumn",
-    "typeDesc": "Column",
-    "parent": "bedf7c97-2983-2d61-7f6a-dfba59151fb2",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "columnSpan",
-      "value": "14",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnAppend",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "c0d34ddb-630a-4b12-e7ee-1003f92dce0e",
-    "type": "LayoutHtml",
-    "typeDesc": "Html",
-    "parent": "3b449db8-a872-f372-ca43-ca04bbda4778",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "html",
-      "value": "Previous Uploads ",
-      "type": "Html"
-     },
-     {
-      "name": "color",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "fontSize",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "cssClass",
-      "value": "",
-      "type": "String"
-     }
-    ]
-   },
-   {
-    "id": "f634cd4d-53b5-ae77-e6b8-dc627f05e4ac",
-    "type": "LayoutRow",
-    "typeDesc": "Row",
-    "parent": "b7a92cfe-620f-b9f9-b5c2-d25f8b22805e",
-    "properties": [
-     {
-      "name": "name",
-      "value": "",
-      "type": "Id"
-     },
-     {
-      "name": "height",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "backgroundColor",
-      "value": "",
-      "type": "Color"
-     },
-     {
-      "name": "roundCorners",
-      "value": "",
-      "type": "RoundCorners"
-     },
-     {
-      "name": "cssClass",
-      "value": "WDdataCellBody",
-      "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
-     }
-    ]
-   },
-   {
-    "id": "dd3daf58-71dc-6fd4-2ba2-da632b6b9648",
-    "type": "LayoutColumn",
-    "typeDesc": "Column",
-    "parent": "f634cd4d-53b5-ae77-e6b8-dc627f05e4ac",
     "properties": [
      {
       "name": "name",
@@ -1496,6 +530,11 @@
       "type": "Boolean"
      },
      {
+      "name": "height",
+      "value": "",
+      "type": "Integer"
+     },
+     {
       "name": "backgroundColor",
       "value": "",
       "type": "Color"
@@ -1506,19 +545,14 @@
       "type": "RoundCorners"
      },
      {
-      "name": "height",
+      "name": "textAlign",
       "value": "",
-      "type": "Integer"
+      "type": "TextAlign"
      },
      {
       "name": "cssClass",
       "value": "uploads",
       "type": "String"
-     },
-     {
-      "name": "textAlign",
-      "value": "",
-      "type": "TextAlign"
      }
     ]
    }
@@ -1557,14 +591,14 @@
       "type": "String"
      },
      {
-      "name": "bookmarkable",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
       "name": "parameterViewRole",
       "value": "unused",
       "type": "parameterViewRoleCustom"
+     },
+     {
+      "name": "bookmarkable",
+      "value": "false",
+      "type": "Boolean"
      }
     ]
    },
@@ -1583,6 +617,62 @@
       "name": "propertyDateValue",
       "value": "today",
       "type": "Date"
+     },
+     {
+      "name": "bookmarkable",
+      "value": "false",
+      "type": "Boolean"
+     }
+    ]
+   },
+   {
+    "id": "53ee4392-4f1e-1f38-669e-ca2067ae53ed",
+    "type": "ComponentsParameter",
+    "typeDesc": "Parameter",
+    "parent": "GENERIC",
+    "properties": [
+     {
+      "name": "name",
+      "value": "uploadedFileParam",
+      "type": "Id"
+     },
+     {
+      "name": "propertyValue",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "parameterViewRole",
+      "value": "unused",
+      "type": "parameterViewRoleCustom"
+     },
+     {
+      "name": "bookmarkable",
+      "value": "false",
+      "type": "Boolean"
+     }
+    ]
+   },
+   {
+    "id": "623f7242-d3cd-3428-994e-b8565d557889",
+    "type": "ComponentsParameter",
+    "typeDesc": "Parameter",
+    "parent": "GENERIC",
+    "properties": [
+     {
+      "name": "name",
+      "value": "selectedFileParam",
+      "type": "Id"
+     },
+     {
+      "name": "propertyValue",
+      "value": "",
+      "type": "String"
+     },
+     {
+      "name": "parameterViewRole",
+      "value": "unused",
+      "type": "parameterViewRoleCustom"
      },
      {
       "name": "bookmarkable",
@@ -1617,19 +707,29 @@
       "type": "Id"
      },
      {
+      "name": "listeners",
+      "value": "[]",
+      "type": "Listeners"
+     },
+     {
       "name": "expression",
       "value": "function(){\n    var ref = referenceDate.split('-');\n    var date = new Date(ref[0],ref[1]-1,ref[2]);\n    yearParam = date.getFullYear();\n    var month = date.getMonth() + 1;\n    dayParam = date.getDate();\n    \n    switch (month)\n    {\n    case 1:\n      monthParam=\"January\";\n      break;\n    case 2:\n      monthParam=\"February\";\n      break;\n    case 3:\n      monthParam=\"March\";\n      break;\n    case 4:\n      monthParam=\"April\";\n      break;\n    case 5:\n      monthParam=\"May\";\n      break;\n    case 6:\n      monthParam=\"June\";\n      break;\n    case 7:\n      monthParam=\"July\";\n      break;\n    case 8:\n      monthParam=\"August\";\n      break;\n    case 9:\n      monthParam=\"September\";\n      break;\n    case 10:\n      monthParam=\"October\";\n      break;\n    case 11:\n      monthParam=\"November\";\n      break;\n    case 12:\n      monthParam=\"December\";\n      break;\n    };\n\n    var fout = pv.Format.date('%B %d, %Y');\n    \n    date = fout.format(date);\n    \n    return date;\n}\n\n",
       "type": "JavaScript"
      },
      {
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "priority",
+      "value": 5,
+      "type": "Integer"
+     },
+     {
       "name": "htmlObject",
       "value": "${p:dateObj}",
       "type": "HtmlObject"
-     },
-     {
-      "name": "listeners",
-      "value": "[]",
-      "type": "Listeners"
      },
      {
       "name": "executeAtStart",
@@ -1647,19 +747,9 @@
       "type": "JavaScript"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
       "name": "tooltip",
       "value": "",
       "type": "Html"
-     },
-     {
-      "name": "priority",
-      "value": 5,
-      "type": "Integer"
      }
     ]
    },
@@ -1671,23 +761,33 @@
     "properties": [
      {
       "name": "name",
-      "value": "userText",
+      "value": "greetingText",
       "type": "Id"
-     },
-     {
-      "name": "expression",
-      "value": "function(){\n    return Dashboards.context.user;\n}",
-      "type": "JavaScript"
-     },
-     {
-      "name": "htmlObject",
-      "value": "${p:userObj}",
-      "type": "HtmlObject"
      },
      {
       "name": "listeners",
       "value": "[]",
       "type": "Listeners"
+     },
+     {
+      "name": "expression",
+      "value": "function(){\n    return 'Hello, ' + Dashboards.context.user;\n}",
+      "type": "JavaScript"
+     },
+     {
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "priority",
+      "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "htmlObject",
+      "value": "${p:greetingObj}",
+      "type": "HtmlObject"
      },
      {
       "name": "executeAtStart",
@@ -1705,155 +805,9 @@
       "type": "JavaScript"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
       "name": "tooltip",
       "value": "",
       "type": "Html"
-     },
-     {
-      "name": "priority",
-      "value": 5,
-      "type": "Integer"
-     }
-    ]
-   },
-   {
-    "id": "3ba5920a-863b-be58-ba77-66287d8231e5",
-    "type": "ComponentstextComponent",
-    "typeDesc": "Text Component",
-    "parent": "OTHERCOMPONENTS",
-    "properties": [
-     {
-      "name": "name",
-      "value": "fileText",
-      "type": "Id"
-     },
-     {
-      "name": "expression",
-      "value": "function(){\n    var a = $('#file').val();\n    if ( a.slice(3,11) == \"fakepath\" ) a = a.slice(12,a.length);\n    return a;\n}",
-      "type": "JavaScript"
-     },
-     {
-      "name": "htmlObject",
-      "value": "fileObj",
-      "type": "HtmlObject"
-     },
-     {
-      "name": "listeners",
-      "value": "[]",
-      "type": "Listeners"
-     },
-     {
-      "name": "executeAtStart",
-      "value": "true",
-      "type": "Boolean"
-     },
-     {
-      "name": "preExecution",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postExecution",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "tooltip",
-      "value": "",
-      "type": "Html"
-     },
-     {
-      "name": "priority",
-      "value": 5,
-      "type": "Integer"
-     }
-    ]
-   },
-   {
-    "id": "f20d68fd-b905-de86-3e17-49854d5da5c6",
-    "type": "ComponentsbuttonComponent",
-    "typeDesc": "Button Component",
-    "parent": "OTHERCOMPONENTS",
-    "properties": [
-     {
-      "name": "name",
-      "value": "cancelButton",
-      "type": "Id"
-     },
-     {
-      "name": "label",
-      "value": "Cancel",
-      "type": "String"
-     },
-     {
-      "name": "htmlObject",
-      "value": "${p:cancelButtonObj}",
-      "type": "HtmlObject"
-     },
-     {
-      "name": "tableStyle",
-      "value": "classic",
-      "type": "TableStyle"
-     },
-     {
-      "name": "listeners",
-      "value": "[]",
-      "type": "Listeners"
-     },
-     {
-      "name": "expression",
-      "value": "function(){\n    $('#selectFile').removeClass('zeroHeight');\n    $('label').removeClass('hide');\n    $('span.select').removeClass('hide');\n    $('#fileObj').addClass('hide');\n    $('#fileName').addClass('hide');\n    $('#uploadButtonRow').addClass('hide');\n    $('input').last().addClass('hide');\n}",
-      "type": "JavaScript"
-     },
-     {
-      "name": "executeAtStart",
-      "value": "true",
-      "type": "Boolean"
-     },
-     {
-      "name": "preExecution",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postExecution",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
-      "name": "preChange",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postChange",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "tooltip",
-      "value": "",
-      "type": "Html"
-     },
-     {
-      "name": "priority",
-      "value": 5,
-      "type": "Integer"
      }
     ]
    },
@@ -1869,39 +823,24 @@
       "type": "Id"
      },
      {
-      "name": "htmlObject",
-      "value": "uploadsTableObj",
-      "type": "HtmlObject"
+      "name": "expandContainerObject",
+      "value": "",
+      "type": "String"
      },
      {
       "name": "listeners",
-      "value": "[]",
+      "value": "['${p:uploadedFileParam}']",
       "type": "Listeners"
+     },
+     {
+      "name": "oLanguage",
+      "value": "",
+      "type": "JavaScript"
      },
      {
       "name": "xActionArrayParameter",
       "value": "[[\"userParam\",\"userParam\"]]",
       "type": "ValuesArray"
-     },
-     {
-      "name": "dataSource",
-      "type": "Datasource",
-      "value": "uploadsQuery"
-     },
-     {
-      "name": "cccClickAction",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
-      "name": "colHeaders",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
-      "name": "colTypes",
-      "value": "[]",
-      "type": "colTypesCustom"
      },
      {
       "name": "colFormats",
@@ -1919,7 +858,17 @@
       "type": "Array"
      },
      {
-      "name": "colSearchable",
+      "name": "expandParameters",
+      "value": "[]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "colTypes",
+      "value": "[]",
+      "type": "colTypesCustom"
+     },
+     {
+      "name": "colHeaders",
       "value": "[]",
       "type": "Array"
      },
@@ -1929,14 +878,14 @@
       "type": "Boolean"
      },
      {
-      "name": "paginateServerside",
-      "value": "false",
-      "type": "Boolean"
+      "name": "displayLength",
+      "value": "",
+      "type": "Integer"
      },
      {
-      "name": "paginationType",
-      "value": "two_button",
-      "type": "PaginationType"
+      "name": "lengthChange",
+      "value": "true",
+      "type": "Boolean"
      },
      {
       "name": "filter",
@@ -1954,24 +903,14 @@
       "type": "Boolean"
      },
      {
-      "name": "sortBy",
-      "value": "[]",
-      "type": "SortByArray"
-     },
-     {
-      "name": "displayLength",
-      "value": "",
-      "type": "Integer"
-     },
-     {
-      "name": "lengthChange",
-      "value": "true",
+      "name": "expandOnClick",
+      "value": "false",
       "type": "Boolean"
      },
      {
-      "name": "tableStyle",
-      "value": "classic",
-      "type": "TableStyle"
+      "name": "colSearchable",
+      "value": "[]",
+      "type": "Array"
      },
      {
       "name": "drawCallback",
@@ -1979,19 +918,69 @@
       "type": "JavaScript"
      },
      {
+      "name": "sortBy",
+      "value": "[]",
+      "type": "SortByArray"
+     },
+     {
       "name": "sDom",
       "value": "",
       "type": "JavaScript"
      },
      {
-      "name": "oLanguage",
+      "name": "dataSource",
+      "type": "Datasource",
+      "value": "uploadsQuery"
+     },
+     {
+      "name": "priority",
+      "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "refreshPeriod",
       "value": "",
-      "type": "JavaScript"
+      "type": "Integer"
+     },
+     {
+      "name": "paginationType",
+      "value": "two_button",
+      "type": "PaginationType"
+     },
+     {
+      "name": "tableStyle",
+      "value": "classic",
+      "type": "TableStyle"
+     },
+     {
+      "name": "htmlObject",
+      "value": "uploadsTableObj",
+      "type": "HtmlObject"
+     },
+     {
+      "name": "paginateServerside",
+      "value": "false",
+      "type": "Boolean"
      },
      {
       "name": "executeAtStart",
       "value": "true",
       "type": "Boolean"
+     },
+     {
+      "name": "preExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postExecution",
+      "value": "function f() {\n    \n    var $ph = $('#' + this.htmlObject),\n        $header = $ph.find('thead');\n    \n    $.each( $header.find(\"th.column0\"), function(i,d){ $(d).text(\"User\"); });\n    $.each( $header.find(\"th.column1\"), function(i,d){ $(d).text(\"File\"); });\n    $.each( $header.find(\"th.column2\"), function(i,d){ $(d).text(\"Date\"); });\n    \n    // hook click event on each file row\n    var $pb = $('#' + this.htmlObject),\n        $body = $pb.find('tbody');\n        \n    // selected file css class\n    var selectedCssClass = 'selected';\n    var selectedFileParamName = 'selectedFileParam'\n    \n    $.each( $body.find('tr'), function(index, element) {\n        $(element).click(function() {\n            // remove selected class from any other row\n            $.each( $body.find('tr'), function(i, e) {\n                if (!$(e).is(element)) $(e).removeClass(selectedCssClass);\n            });\n            \n            // toggle state for\n            $(element).toggleClass(selectedCssClass);\n            \n            if ($(element).hasClass(selectedCssClass)) {\n                Dashboards.fireChange(selectedFileParamName, $(element).find('.column0').text());\n            } else {\n                Dashboards.fireChange(selectedFileParamName, \"\");\n            }\n        });\n    });\n}\n\n\n",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postFetch",
+      "value": "function (data) {\n    var array = [];\n    \n    if ($.inArray(\"Admin\", Dashboards.context.roles)>-1)\n        return data;\n    \n    var j = 0;\n    for ( i = 0; i < data.resultset.length; i++ ){\n        \n        if ( Dashboards.context.user == data.resultset[i][0] ){\n            array[j] = data.resultset[i];\n            j++;\n        }\n    }\n    \n    data.queryInfo.totalRows = j;\n    data.resultset = array;\n    return data;\n}",
+      "type": "JavaScript"
      },
      {
       "name": "preChange",
@@ -2004,26 +993,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
-      "value": "function (data) {\n    var array = [];\n    \n    if ($.inArray(\"Admin\", Dashboards.context.roles)>-1)\n        return data;\n    \n    var j = 0;\n    for ( i = 0; i < data.resultset.length; i++ ){\n        \n        if ( Dashboards.context.user == data.resultset[i][0] ){\n            array[j] = data.resultset[i];\n            j++;\n        }\n    }\n    \n    data.queryInfo.totalRows = j;\n    data.resultset = array;\n    return data;\n}",
-      "type": "JavaScript"
-     },
-     {
-      "name": "preExecution",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
-      "name": "postExecution",
-      "value": "function(){\n    \n    var $ph = $('#' + this.htmlObject),\n        $header = $ph.find('thead');\n    \n    $.each( $header.find(\"th.column0\"), function(i,d){ $(d).text(\"User\"); })\n    $.each( $header.find(\"th.column1\"), function(i,d){ $(d).text(\"File\"); })\n    $.each( $header.find(\"th.column2\"), function(i,d){ $(d).text(\"Date\"); })\n    \n}\n\n\n",
-      "type": "JavaScript"
-     },
-     {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
-     },
-     {
       "name": "tooltip",
       "value": "",
       "type": "Html"
@@ -2034,24 +1003,9 @@
       "type": "OptionArray"
      },
      {
-      "name": "expandParameters",
-      "value": "[]",
-      "type": "ValuesArray"
-     },
-     {
-      "name": "expandOnClick",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "expandContainerObject",
+      "name": "cccClickAction",
       "value": "",
-      "type": "String"
-     },
-     {
-      "name": "priority",
-      "value": 5,
-      "type": "Integer"
+      "type": "JavaScript"
      }
     ]
    },
@@ -2082,8 +1036,80 @@
      },
      {
       "name": "javaScript",
-      "value": "Dashboards.postInit = function(){\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $('input').last().addClass('hide');\n    SI.Files.stylizeAll();\n}",
+      "value": "Dashboards.postInit = function() {\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $('input').last().addClass('hide');\n    SI.Files.stylizeAll();\n    \n    // File action hooks\n    $('button#copyBtn').click(function(e) {\n        \n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = 'Copy to clipboard...';\n            \n            var url = window.location.href;\n            url = url.substring(0, url.lastIndexOf('/'));\n            url = url + '/getFile?fileName=' + selectedFileParam;\n            \n            jPrompt(msg, url , 'Copy Link');\n        } else {\n            jAlert('No file selected!', 'Copy Link');\n        }\n    });\n    \n    $('button#removeBtn').click(function(e) {\n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = \n                '<p>Are you sure you want to remove the file:</p>'+\n                '<p class=\"text-big text-center\">' + selectedFileParam + '</p>';\n                \n            jConfirm(msg, 'Remove', function(remove) {\n                // if (remove) //TODO remove\n            });\n        } else {\n            jAlert('No file selected!', 'Remove');\n        }\n    });\n    \n    $('button#downloadBtn').click(function(e) {\n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = '<p>You are downloading the file:' +\n                '<p class=\"text-big text-left\">' + selectedFileParam + '</p>' +\n                '<p class=\"text-center text-bigger\">Would you like to open the file or save it to your computer?</p>';\n            jSave(msg, 'File Download', function (result) {\n                switch(result) {\n                    case 'open':\n                        \n                        break;\n                    case 'save':\n                        window.open('/pentaho/content/cfr/getFile?fileName=' + selectedFileParam,'_blank');\n                        break;\n                }\n            });\n        } else {\n            jAlert('No file selected!', 'File Download');\n        }\n    });\n};",
       "type": "JavaScript"
+     }
+    ]
+   },
+   {
+    "id": "CFRCOMPONENTS",
+    "name": "CFR",
+    "type": "Label",
+    "typeDesc": "<i>Group</i>",
+    "parent": "UnIqEiD",
+    "properties": [
+     {
+      "name": "Group",
+      "value": "CFR",
+      "type": "Label"
+     }
+    ]
+   },
+   {
+    "id": "f40b6754-c46e-cf94-beca-febfad314b29",
+    "type": "ComponentsfileUploader",
+    "typeDesc": "File Uploader Component",
+    "parent": "CFRCOMPONENTS",
+    "properties": [
+     {
+      "name": "name",
+      "value": "",
+      "type": "Id"
+     },
+     {
+      "name": "listeners",
+      "value": "[]",
+      "type": "Listeners"
+     },
+     {
+      "name": "rootFolder",
+      "value": ".",
+      "type": "String"
+     },
+     {
+      "name": "xActionArrayParameter",
+      "value": "[[\"uploadedFileParam\",\"uploadedFileParam\"]]",
+      "type": "ValuesArray"
+     },
+     {
+      "name": "priority",
+      "value": 5,
+      "type": "Integer"
+     },
+     {
+      "name": "htmlObject",
+      "value": "uploaderObj",
+      "type": "HtmlObject"
+     },
+     {
+      "name": "executeAtStart",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "preExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "postExecution",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
+      "name": "tooltip",
+      "value": "",
+      "type": "Html"
      }
     ]
    }
@@ -2135,14 +1161,14 @@
       "type": "Access"
      },
      {
+      "name": "query",
+      "value": "import org.pentaho.reporting.engine.classic.core.util.TypedTableModel;\nimport pt.webdetails.cda.utils.InterPluginUtils;\n\nHashMap params = new HashMap();\nparams.put(\"columns\", new String[]{\n\"file\", \"userid\", \"user\", \"uploadDate\"\n});\n\nTypedTableModel model = InterPluginUtils.getTableModelFromJsonPluginCall(\"cfr\", \"listUploadsFlat\", params);\nreturn model;",
+      "type": "SqlQuery"
+     },
+     {
       "name": "parameters",
       "value": "[]",
       "type": "CdaParameters"
-     },
-     {
-      "name": "output",
-      "value": "[\"1\",\"0\",\"3\"]",
-      "type": "IndexArray"
      },
      {
       "name": "outputMode",
@@ -2160,19 +1186,19 @@
       "type": "CdaCalculatedColumnsArray"
      },
      {
-      "name": "query",
-      "value": "import org.pentaho.reporting.engine.classic.core.util.TypedTableModel;\nimport pt.webdetails.cda.utils.InterPluginUtils;\n\nHashMap params = new HashMap();\nparams.put(\"columns\", new String[]{\n\"file\", \"userid\", \"user\", \"uploadDate\"\n});\n\nTypedTableModel model = InterPluginUtils.getTableModelFromJsonPluginCall(\"cfr\", \"listUploadsFlat\", params);\nreturn model;",
-      "type": "SqlQuery"
-     },
-     {
-      "name": "cache",
-      "value": "false",
-      "type": "Boolean"
+      "name": "output",
+      "value": "[\"0\",\"1\",\"3\"]",
+      "type": "IndexArray"
      },
      {
       "name": "cacheDuration",
       "value": 3600,
       "type": "Integer"
+     },
+     {
+      "name": "cache",
+      "value": "false",
+      "type": "Boolean"
      }
     ]
    }
