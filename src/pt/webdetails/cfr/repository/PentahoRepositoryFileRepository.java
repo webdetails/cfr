@@ -15,17 +15,19 @@ import org.pentaho.platform.api.engine.ISolutionFile;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.IFile;
-import pt.webdetails.cpf.repository.RepositoryAccess;
-import pt.webdetails.cpf.repository.RepositoryAccess.FileAccess;
-import pt.webdetails.cpf.repository.RepositoryAccess.SaveFileStatus;
+import pt.webdetails.cpf.repository.IRepositoryAccess;
+import pt.webdetails.cpf.repository.PentahoRepositoryAccess;
+import pt.webdetails.cpf.repository.BaseRepositoryAccess.FileAccess;
+import pt.webdetails.cpf.repository.BaseRepositoryAccess.SaveFileStatus;
+import pt.webdetails.cpf.repository.IRepositoryFile;
 
 public class PentahoRepositoryFileRepository implements IFileRepository {
 
   static Log logger = LogFactory.getLog(PentahoRepositoryFileRepository.class);  
   
   
-  protected RepositoryAccess getRepositoryAccess() {
-    return RepositoryAccess.getRepository();
+  protected IRepositoryAccess getRepositoryAccess() {
+    return PentahoRepositoryAccess.getRepository();
   }
   
   
@@ -46,10 +48,10 @@ public class PentahoRepositoryFileRepository implements IFileRepository {
 
   @Override
   public IFile[] listFiles(String startPath) {
-    ISolutionFile[] solutionFiles = getRepositoryAccess().getFileList(startPath, null, null, getUserSession());
-    IFile[] result = new IFile[solutionFiles.length];
-    for (int i=0; i < solutionFiles.length; i++) {
-      final ISolutionFile f = solutionFiles[i];
+    IRepositoryFile[] repositoryFiles = ((PentahoRepositoryAccess)getRepositoryAccess()).getFileList(startPath, null, null, getUserSession());
+    IFile[] result = new IFile[repositoryFiles.length];
+    for (int i=0; i < repositoryFiles.length; i++) {
+      final IRepositoryFile f = repositoryFiles[i];
       result[i] = new IFile() {
 
         @Override

@@ -5,21 +5,11 @@
 package pt.webdetails.cfr;
 
 import java.io.File;
-import java.io.IOException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.engine.IPluginLifecycleListener;
-import org.pentaho.platform.api.engine.IUserDetailsRoleListService;
 import org.pentaho.platform.api.engine.PluginLifecycleException;
-import org.pentaho.platform.api.repository.ISolutionRepository;
-import org.pentaho.platform.api.repository.ISolutionRepositoryService;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
-import org.pentaho.platform.engine.core.system.UserSession;
-import org.pentaho.platform.engine.security.SecurityHelper;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
 import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 

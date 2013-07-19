@@ -37,8 +37,8 @@
     <dependency org="pentaho" name="pentaho-bi-platform-web-servlet"
                 rev="${dependency.bi-platform.revision}" transitive="false"  changing="true"/>
                 
-    <dependency org="pentaho" name="cpf"
-        rev="TRUNK-SNAPSHOT" transitive="false" changing="true" conf='runtime,test->default'/>                
+    <dependency org="pt.webdetails" name="cpf-core" rev="TRUNK-SNAPSHOT" transitive="false" changing="true" conf='runtime,test->default'/>
+    <dependency org="pt.webdetails" name="cpf-pentaho" rev="TRUNK-SNAPSHOT" transitive="false" changing="true" conf='runtime,test->default'/>              
                 
     <!-- RUNTIME 
     <dependency org="pentaho" name="cda" rev="TRUNK-SNAPSHOT" changing="true" transitive="false" conf="default,runtime->default" />
@@ -58,6 +58,7 @@
     
   <dependency org="junit" name="junit" conf="test->default" rev='4.10'/>    
     
+    <exclude module="nekohtml" type="*" ext="*" conf="" matcher="exact"></exclude>
   </dependencies>
 
 </ivy-module>

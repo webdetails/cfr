@@ -11,7 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import pt.webdetails.cpf.JsonSerializable;
+import pt.webdetails.cpf.messaging.JsonSerializable;
 import pt.webdetails.cpf.Result;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 

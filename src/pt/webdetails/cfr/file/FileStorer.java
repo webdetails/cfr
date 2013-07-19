@@ -3,7 +3,6 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 package pt.webdetails.cfr.file;
 
-import com.ibm.icu.text.DateFormat;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;

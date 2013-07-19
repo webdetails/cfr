@@ -4,7 +4,6 @@
 package pt.webdetails.cfr;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
@@ -34,10 +33,9 @@ import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.InterPluginCall;
 import pt.webdetails.cpf.InvalidOperationException;
 import pt.webdetails.cpf.SimpleContentGenerator;
+import pt.webdetails.cpf.WrapperUtils;
 import pt.webdetails.cpf.annotations.AccessLevel;
 import pt.webdetails.cpf.annotations.Exposed;
-import pt.webdetails.cpf.olap.OlapUtils;
-import pt.webdetails.cpf.persistence.PersistenceEngine;
 import pt.webdetails.cpf.utils.PluginUtils;
 
 /**
@@ -85,7 +83,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     params.put("root", root);
 
     //add request parameters
-    PluginUtils.getInstance().copyParametersFromProvider(params, requestParams);
+    PluginUtils.copyParametersFromProvider(params, WrapperUtils.wrapParamProvider(requestParams));
 
     if (requestParams.hasParameter("mode") && requestParams.getStringParameter("mode", "Render").equals("edit")) {
 

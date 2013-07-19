@@ -15,12 +15,14 @@ import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
-import org.pentaho.platform.api.engine.IFileFilter;
 import org.pentaho.platform.api.engine.IPentahoSession;
-import org.pentaho.platform.api.engine.ISolutionFile;
 import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.IFile;
-import pt.webdetails.cpf.repository.RepositoryAccess;
+import pt.webdetails.cpf.repository.BaseRepositoryAccess.FileAccess;
+import pt.webdetails.cpf.repository.IRepositoryAccess;
+import pt.webdetails.cpf.repository.IRepositoryFile;
+import pt.webdetails.cpf.repository.IRepositoryFileFilter;
+import pt.webdetails.cpf.repository.PentahoRepositoryAccess;
 
 
 public class PentahoRepositoryFileRepositoryTest {
@@ -41,8 +43,8 @@ public class PentahoRepositoryFileRepositoryTest {
     
     
     @Override 
-    protected RepositoryAccess getRepositoryAccess(){
-      return new RepositoryAccess(null){
+    protected IRepositoryAccess getRepositoryAccess(){
+      return new PentahoRepositoryAccess(null){
 
         @Override
         public SaveFileStatus publishFile(String path, String fileName, byte[] data, boolean overwrite) {
@@ -50,10 +52,11 @@ public class PentahoRepositoryFileRepositoryTest {
         }        
         
         @Override
-        public ISolutionFile[] getFileList(String dir, final String fileExtensions, String access, IPentahoSession userSession) {
-          ISolutionFile[] files = new ISolutionFile[2];
+        public IRepositoryFile[] getFileList(String dir, final String fileExtensions, String access, IPentahoSession userSession) {
+          IRepositoryFile[] files = new IRepositoryFile[2];
           
-          files[0] = new ISolutionFile() {
+                  
+          files[0] = new IRepositoryFile() {
             @Override
             public String getFullPath() {
               return "/tmp/first.txt";
@@ -80,12 +83,12 @@ public class PentahoRepositoryFileRepositoryTest {
             }
 
             @Override
-            public ISolutionFile[] listFiles() {
+            public IRepositoryFile[] listFiles() {
               throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public ISolutionFile[] listFiles(IFileFilter iff) {
+            public IRepositoryFile[] listFiles(IRepositoryFileFilter iff) {
               throw new UnsupportedOperationException("Not supported yet.");
             }
 
@@ -95,7 +98,7 @@ public class PentahoRepositoryFileRepositoryTest {
             }
 
             @Override
-            public ISolutionFile retrieveParent() {
+            public IRepositoryFile retrieveParent() {
               throw new UnsupportedOperationException("Not supported yet.");
             }
 
@@ -121,7 +124,7 @@ public class PentahoRepositoryFileRepositoryTest {
           };
 
           
-          files[1] = new ISolutionFile() {
+          files[1] = new IRepositoryFile() {
             @Override
             public String getFullPath() {
               return "/tmp/newLevel/";
@@ -148,12 +151,12 @@ public class PentahoRepositoryFileRepositoryTest {
             }
 
             @Override
-            public ISolutionFile[] listFiles() {
+            public IRepositoryFile[] listFiles() {
               throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public ISolutionFile[] listFiles(IFileFilter iff) {
+            public IRepositoryFile[] listFiles(IRepositoryFileFilter iff) {
               throw new UnsupportedOperationException("Not supported yet.");
             }
 
@@ -163,7 +166,7 @@ public class PentahoRepositoryFileRepositoryTest {
             }
 
             @Override
-            public ISolutionFile retrieveParent() {
+            public IRepositoryFile retrieveParent() {
               throw new UnsupportedOperationException("Not supported yet.");
             }
 

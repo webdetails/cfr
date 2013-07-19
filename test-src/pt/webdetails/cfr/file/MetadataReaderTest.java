@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import pt.webdetails.cpf.JsonSerializable;
+import pt.webdetails.cpf.messaging.JsonSerializable;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 
 public class MetadataReaderTest {

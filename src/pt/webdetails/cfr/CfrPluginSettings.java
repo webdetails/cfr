@@ -5,10 +5,16 @@ package pt.webdetails.cfr;
 
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import pt.webdetails.cpf.PluginSettings;
+import pt.webdetails.cpf.repository.PentahoRepositoryAccess;
 
 
 public class CfrPluginSettings extends PluginSettings {
 
+    public CfrPluginSettings(){
+        super();
+        setRepository(PentahoRepositoryAccess.getRepository());
+    }
+    
   @Override
   public String getPluginName() {
     return "cfr";
