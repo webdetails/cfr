@@ -1063,7 +1063,7 @@
     "properties": [
      {
       "name": "name",
-      "value": "",
+      "value": "uploaderComp",
       "type": "Id"
      },
      {

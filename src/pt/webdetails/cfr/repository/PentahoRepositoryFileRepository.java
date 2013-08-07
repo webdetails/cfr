@@ -3,23 +3,22 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 package pt.webdetails.cfr.repository;
 
-import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.platform.api.engine.IPentahoSession;
-import org.pentaho.platform.api.engine.ISolutionFile;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
+
 import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.IFile;
-import pt.webdetails.cpf.repository.IRepositoryAccess;
-import pt.webdetails.cpf.repository.PentahoRepositoryAccess;
 import pt.webdetails.cpf.repository.BaseRepositoryAccess.FileAccess;
 import pt.webdetails.cpf.repository.BaseRepositoryAccess.SaveFileStatus;
+import pt.webdetails.cpf.repository.IRepositoryAccess;
 import pt.webdetails.cpf.repository.IRepositoryFile;
+import pt.webdetails.cpf.repository.PentahoRepositoryAccess;
 
 public class PentahoRepositoryFileRepository implements IFileRepository {
 
@@ -43,7 +42,7 @@ public class PentahoRepositoryFileRepository implements IFileRepository {
   @Override
   public boolean storeFile(byte[] content, String fileName, String relativePath) {
     SaveFileStatus sfs = getRepositoryAccess().publishFile(relativePath + "/" + fileName, content, true);
-    return sfs == sfs.OK;
+    return sfs == SaveFileStatus.OK;
   }
 
   @Override

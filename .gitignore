@@ -6,7 +6,9 @@ override.properties
 *_tmp.cd*
 
 # Eclipse Project Files
-#.classpath
+.classpath
+.project
+/.settings
 
 # Source Files
 *.class
@@ -16,9 +18,8 @@ override.properties
 *.war
 *.ear
 /bin
-
-# Eclipse files
-.classpath
-.project
-
 dist/
+
+# Intellij IDEA Project files
+/*.iml
+/.idea

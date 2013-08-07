@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import javax.servlet.ServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
@@ -25,17 +28,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.pentaho.platform.api.engine.IParameterProvider;
+
+import pt.webdetails.cfr.auth.FilePermissionEnum;
+import pt.webdetails.cfr.auth.FilePermissionMetadata;
 import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.FileStorer;
 import pt.webdetails.cfr.file.IFile;
 import pt.webdetails.cfr.file.MetadataReader;
-import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.InterPluginCall;
 import pt.webdetails.cpf.InvalidOperationException;
 import pt.webdetails.cpf.SimpleContentGenerator;
 import pt.webdetails.cpf.WrapperUtils;
 import pt.webdetails.cpf.annotations.AccessLevel;
 import pt.webdetails.cpf.annotations.Exposed;
+import pt.webdetails.cpf.messaging.JsonSerializable;
 import pt.webdetails.cpf.utils.PluginUtils;
 
 /**
@@ -45,7 +51,12 @@ import pt.webdetails.cpf.utils.PluginUtils;
 public class CfrContentGenerator extends SimpleContentGenerator {
 
   private static final long serialVersionUID = 1L;
+
   private static Map<String, Method> exposedMethods = new HashMap<String, Method>();
+
+  private CfrService service = new CfrService();
+
+  private MetadataReader metadata = new MetadataReader();
 
   static {
     //to keep case-insensitive methods
@@ -70,9 +81,9 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   public void home(OutputStream out) throws IOException {
 
     IParameterProvider requestParams = getRequestParameters();
-//    IParameterProvider pathParams = getPathParameters();
+    //    IParameterProvider pathParams = getPathParameters();
     ServletRequest wrapper = getRequest();
-    String root = wrapper.getScheme() + "://"+ wrapper.getServerName() + ":" + wrapper.getServerPort();
+    String root = wrapper.getScheme() + "://" + wrapper.getServerName() + ":" + wrapper.getServerPort();
 
     Map<String, Object> params = new HashMap<String, Object>();
     params.put("solution", "system");
@@ -104,49 +115,44 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   @Exposed(accessLevel = AccessLevel.PUBLIC)
   public void createFolder(OutputStream out) throws Exception {
     String path = getRequestParameters().getStringParameter("path", "");
-    
+
     if (path == null || StringUtils.isBlank(path))
       throw new Exception("path is null or empty");
-    
-    boolean createResult = getRepository().createFolder(path);    
-    writeOut(out, "{result: " + createResult + "}");    
-  }  
-  
+
+    boolean createResult = service.getRepository().createFolder(path);
+    writeOut(out, "{result: " + createResult + "}");
+  }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC)
   public void remove(OutputStream out) throws Exception {
     String fullFileName = getRequestParameters().getStringParameter("fileName", null);
-    
+
     if (fullFileName == null || StringUtils.isBlank(fullFileName))
       throw new Exception("fileName is null or empty");
-    
-    boolean createResult = getRepository().deleteFile(fullFileName);    
-    writeOut(out, "{result: " + createResult + "}");    
-  }  
-  
-  
-  
-  @Exposed(accessLevel = AccessLevel.PUBLIC)
+
+    boolean createResult = service.getRepository().deleteFile(fullFileName);
+    writeOut(out, "{result: " + createResult + "}");
+  }
+
+  @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
   public void store(OutputStream out) throws IOException, InvalidOperationException, Exception {
-        
-    
+
     FileItemFactory factory = new DiskFileItemFactory();
     ServletFileUpload upload = new ServletFileUpload(factory);
-    List /* FileItem */ items = upload.parseRequest(getRequest());
-    
+    List /* FileItem */items = upload.parseRequest(getRequest());
+
     String fileName = null, savePath = null;
     byte[] contents = null;
-    for (int i=0; i < items.size(); i++) {
+    for (int i = 0; i < items.size(); i++) {
       FileItem fi = (FileItem) items.get(i);
-      
+
       if ("path".equals(fi.getFieldName()))
         savePath = fi.getString();
       if ("file".equals(fi.getFieldName())) {
-        contents = fi.get();                 
-        fileName= fi.getName();
+        contents = fi.get();
+        fileName = fi.getName();
       }
     }
-    
 
     if (fileName == null) {
       logger.error("parameter fileName must not be null");
@@ -155,57 +161,54 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     if (savePath == null) {
       logger.error("parameter path must not be null");
       throw new Exception("parameter path must not be null");
-    }   
+    }
     if (contents == null) {
       logger.error("File content must not be null");
       throw new Exception("File content must not be null");
     }
-    
-    FileStorer fileStorer = new FileStorer(getRepository());
-    
+
+    FileStorer fileStorer = new FileStorer(service.getRepository());
+
     boolean result = fileStorer.storeFile(fileName, savePath, contents, userSession.getName());
     writeOut(out, "{result: " + result + "}");
   }
 
-  
   @Exposed(accessLevel = AccessLevel.PUBLIC)
   public void listFiles(OutputStream out) throws IOException {
     String baseDir = URLDecoder.decode(getRequestParameters().getStringParameter("dir", ""), "ISO-8859-1");
-    IFile[] files = getRepository().listFiles(baseDir);
-    
+    IFile[] files = service.getRepository().listFiles(baseDir);
+
     String extensions = getRequestParameters().getStringParameter("fileExtensions", "");
-    
+
     String[] exts = null;
     if (!StringUtils.isBlank(extensions))
-      exts = extensions.split(" "); 
+      exts = extensions.split(" ");
     writeOut(out, toJQueryFileTree(baseDir, files, exts));
-    
+
   }
-  
+
   @Exposed(accessLevel = AccessLevel.PUBLIC)
   public void getFile(OutputStream out) throws IOException, JSONException, Exception {
     String fullFileName = getRequestParameters().getStringParameter("fileName", null);
-    
+
     if (fullFileName == null) {
       logger.error("parameter fullFileName must not be null");
       throw new Exception("parameter fullFileName must not be null");
-      
+
     }
-    
-    CfrFile file = getRepository().getFile(fullFileName);
-    
+
+    CfrFile file = service.getRepository().getFile(fullFileName);
+
     setResponseHeaders(getMimeType(file.getFileName()), -1, file.getFileName());
     ByteArrayInputStream bais = new ByteArrayInputStream(file.getContent());
     IOUtils.copy(bais, out);
     IOUtils.closeQuietly(bais);
   }
-  
-  
 
-  @Exposed(accessLevel = AccessLevel.PUBLIC)
+  @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
   public void listFilesJSON(OutputStream out) throws IOException, JSONException {
     String baseDir = getRequestParameters().getStringParameter("dir", "");
-    IFile[] files = getRepository().listFiles(baseDir);
+    IFile[] files = service.getRepository().listFiles(baseDir);
     JSONArray arr = new JSONArray();
     for (IFile file : files) {
       JSONObject obj = new JSONObject();
@@ -214,87 +217,80 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       obj.put("path", baseDir);
       arr.put(obj);
     }
-    
+
     writeOut(out, arr.toString(2));
-    
+
   }
-  
-  
-  
-  
-  @Exposed(accessLevel = AccessLevel.PUBLIC)
+
+  @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
   public void listUploads(OutputStream out) throws IOException, JSONException {
     MetadataReader reader = new MetadataReader();
-    writeOut(out, reader.listFiles(getRequestParameters().getStringParameter("fileName", ""), 
-            getRequestParameters().getStringParameter("user", ""),
-            getRequestParameters().getStringParameter("startDate", ""), 
-            getRequestParameters().getStringParameter("endDate", "")));
+    writeOut(out, reader.listFiles(getRequestParameters().getStringParameter("fileName", ""), getRequestParameters()
+        .getStringParameter("user", ""), getRequestParameters().getStringParameter("startDate", ""),
+        getRequestParameters().getStringParameter("endDate", "")));
   }
-  
 
-  
-  @Exposed(accessLevel = AccessLevel.PUBLIC)
+  @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
   public void listUploadsFlat(OutputStream out) throws IOException, JSONException {
     MetadataReader reader = new MetadataReader();
-    writeOut(out, reader.listFilesFlat(getRequestParameters().getStringParameter("fileName", ""), 
+    writeOut(
+        out,
+        reader.listFilesFlat(getRequestParameters().getStringParameter("fileName", ""),
             getRequestParameters().getStringParameter("user", ""),
-            getRequestParameters().getStringParameter("startDate", ""), 
+            getRequestParameters().getStringParameter("startDate", ""),
             getRequestParameters().getStringParameter("endDate", "")).toString(2));
   }
-  
-  
 
-  
   private static String toJQueryFileTree(String baseDir, IFile[] files, String[] extensions) {
-	  StringBuilder out = new StringBuilder();
-      out.append("<ul class=\"jqueryFileTree\" style=\"display: none;\">");
-      
-      for (IFile file : files) {
-          if (file.isDirectory()) {
-              out.append("<li class=\"directory collapsed\"><a href=\"#\" rel=\"" + baseDir + file.getName() + "/\">"+ file.getName() + "</a></li>");
-          }
+    StringBuilder out = new StringBuilder();
+    out.append("<ul class=\"jqueryFileTree\" style=\"display: none;\">");
+
+    for (IFile file : files) {
+      if (file.isDirectory()) {
+        out.append("<li class=\"directory collapsed\"><a href=\"#\" rel=\"" + baseDir + file.getName() + "/\">"
+            + file.getName() + "</a></li>");
       }
-      
-      for (IFile file : files) {
-          if (!file.isDirectory()) {
-              int dotIndex = file.getName().lastIndexOf('.');
-              String ext = dotIndex > 0 ? file.getName().substring(dotIndex + 1) : "";
-              boolean accepted = ext.equals("");
-              if (!ext.equals("")) {
-                if (extensions == null || extensions.length == 0)
-                  accepted = true;
-                else {                         
-                  for (String acceptedExtension : extensions) {
-                    if (ext.equals(acceptedExtension)) {
-                      accepted = true;
-                      break;
-                    }
-                  }
-                }
-              }
-              if (accepted)
-                out.append("<li class=\"file ext_" + ext + "\"><a href=\"#\" rel=\"" + baseDir + file.getName() + "\">"+ file.getName() + "</a></li>");
-          }
-      }
-      out.append("</ul>");
-      return out.toString();
-	}
-    
-  
-  private IFileRepository getRepository() {
-    String repositoryClass = new CfrPluginSettings().getRepositoryClass();
-    try {
-      return (IFileRepository)Class.forName(repositoryClass).newInstance();    
-    } catch (ClassNotFoundException cnfe) {
-      logger.fatal("Class for repository " + repositoryClass + " not found. CFR will not be available", cnfe);
-    } catch (InstantiationException ie) {
-      logger.fatal("Instantiaton of class failed", ie);
-    } catch (IllegalAccessException iae) {
-      logger.fatal("Illegal access to repository class", iae);
     }
-    return null;
+
+    for (IFile file : files) {
+      if (!file.isDirectory()) {
+        int dotIndex = file.getName().lastIndexOf('.');
+        String ext = dotIndex > 0 ? file.getName().substring(dotIndex + 1) : "";
+        boolean accepted = ext.equals("");
+        if (!ext.equals("")) {
+          if (extensions == null || extensions.length == 0)
+            accepted = true;
+          else {
+            for (String acceptedExtension : extensions) {
+              if (ext.equals(acceptedExtension)) {
+                accepted = true;
+                break;
+              }
+            }
+          }
+        }
+        if (accepted)
+          out.append("<li class=\"file ext_" + ext + "\"><a href=\"#\" rel=\"" + baseDir + file.getName() + "\">"
+              + file.getName() + "</a></li>");
+      }
+    }
+    out.append("</ul>");
+    return out.toString();
   }
-  
+
+  //  private IFileRepository getRepository() {
+  //    String repositoryClass = new CfrPluginSettings().getRepositoryClass();
+  //    try {
+  //      return (IFileRepository)Class.forName(repositoryClass).newInstance();    
+  //    } catch (ClassNotFoundException cnfe) {
+  //      logger.fatal("Class for repository " + repositoryClass + " not found. CFR will not be available", cnfe);
+  //    } catch (InstantiationException ie) {
+  //      logger.fatal("Instantiaton of class failed", ie);
+  //    } catch (IllegalAccessException iae) {
+  //      logger.fatal("Illegal access to repository class", iae);
+  //    }
+  //    return null;
+  //  }
 
   private void redirectToCdeEditor(OutputStream out, Map<String, Object> params) throws IOException {
 
@@ -314,6 +310,46 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
     urlBuilder.append(StringUtils.join(paramArray, "&"));
     redirect(urlBuilder.toString());
+  }
+
+  @Exposed(accessLevel = AccessLevel.PUBLIC)
+  public void setPermissions(OutputStream out) throws JSONException {
+    String file = getRequestParameters().getStringParameter("fileName", null);
+    String[] userOrGroupId = getRequestParameters().getStringArrayParameter("id", new String[] {});
+    String[] _permissions = getRequestParameters().getStringArrayParameter("permissions",
+        new String[] { FilePermissionEnum.READ.getId() });
+
+    if (file != null && userOrGroupId.length > 0 && _permissions.length > 0) {
+      // build valid permissions set
+      Set<FilePermissionEnum> validPermissions = new TreeSet<FilePermissionEnum>();
+      for (String permission : _permissions) {
+        FilePermissionEnum perm = FilePermissionEnum.resolve(permission);
+        if (perm != null) {
+          validPermissions.add(perm);
+        }
+      }
+
+      for (String id : userOrGroupId) {
+        if (metadata.getFilePermissions(file, id, validPermissions).length() == 0) {
+          FileStorer.storeFilePermissions(new FilePermissionMetadata(file, id, validPermissions));
+        }
+      }
+    }
+  }
+
+  @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
+  public void getFilePermissions(OutputStream out) throws IOException, JSONException {
+    String file = getRequestParameters().getStringParameter("fileName", null);
+    String id = getRequestParameters().getStringParameter("id", null);
+    if (file != null || id != null) {
+      JSONArray permissions = metadata.getFilePermissions(file, id, FilePermissionMetadata.DEFAULT_PERMISSIONS);
+      writeOut(out, permissions.toString(0));
+    }
+  }
+
+  @Exposed(accessLevel = AccessLevel.ADMIN)
+  public void resetRepository() {
+    // TODO: implementation
   }
 
 }

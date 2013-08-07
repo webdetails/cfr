@@ -4,20 +4,16 @@
 
 package pt.webdetails.cfr.repository;
 
-import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.hadoop.fs.BufferedFSInputStream;
-import org.pentaho.platform.engine.core.system.PentahoSystem;
+
 import pt.webdetails.cfr.CfrPluginSettings;
 import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.IFile;
