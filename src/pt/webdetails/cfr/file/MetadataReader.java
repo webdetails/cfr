@@ -4,9 +4,9 @@
 package pt.webdetails.cfr.file;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,7 +19,6 @@ import org.json.JSONObject;
 
 import pt.webdetails.cfr.CfrService;
 import pt.webdetails.cfr.auth.FilePermissionEnum;
-import pt.webdetails.cfr.auth.FilePermissionMetadata;
 import pt.webdetails.cpf.Result;
 import pt.webdetails.cpf.messaging.JsonSerializable;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
@@ -30,7 +29,7 @@ public class MetadataReader {
 
   private static Log logger = LogFactory.getLog(MetadataReader.class);
 
-  private static CfrService service = new CfrService();
+  private CfrService service = new CfrService();
 
   public JSONArray listFilesFlat(String fileName, String user, String startDate, String endDate) {
     Map<String, Object> params = new HashMap<String, Object>();
@@ -67,22 +66,17 @@ public class MetadataReader {
       where = " where " + where;
 
     JSONArray array = new JSONArray();
+
     for (ODocument doc : getPersistenceEngine().executeQuery(query + where, params)) {
       String file = doc.field("file", String.class);
-      String owner = doc.field("user", String.class);
 
-      // TODO: optimization to take advantage of OrientDB LINK relation
-
-      // check if current user is the file owner
-      if (owner.equals(service.getUserName())) {
-        array.put(getJson(doc));
-      } else if (isCurrentUserAllowed(FilePermissionEnum.READ, file)) { // check if current user has read permissions
+      // checks if current user has read permissions on the folder/file
+      if (isCurrentUserAllowed(FilePermissionEnum.READ, file)) {
         array.put(getJson(doc));
       }
     }
 
     return array;
-
   }
 
   public JsonSerializable listFiles(String fileName, String user, String startDate, String endDate) {
@@ -115,11 +109,17 @@ public class MetadataReader {
     return json;
   }
 
-  public JsonSerializable getFilePermissions(String file) throws JSONException {
+  /**
+   * 
+   * @param path
+   * @return
+   * @throws JSONException
+   */
+  public JsonSerializable getPermissions(String path) throws JSONException {
     String query = "select * from " + FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS + " where file = :file";
 
     Map<String, Object> params = new HashMap<String, Object>();
-    params.put("file", file);
+    params.put("file", path);
 
     JSONArray result = new JSONArray();
     for (ODocument doc : getPersistenceEngine().executeQuery(query, params)) {
@@ -129,51 +129,133 @@ public class MetadataReader {
     return Result.getOK(result);
   }
 
-  public boolean isCurrentUserAllowed(FilePermissionEnum permission, String file) {
-    boolean result = false;
+  /**
+   * 
+   * @param permission Permission to be checked
+   * @param path Folder or file to validate against the specified permission
+   * @return true if current user is allowed, false otherwise
+   */
+  public boolean isCurrentUserAllowed(FilePermissionEnum permission, String path) {
+    CfrService service = new CfrService();
 
-    try {
-      result = getFilePermissions(file, service.getUserName(), FilePermissionMetadata.DEFAULT_PERMISSIONS).length() > 0;
-    } catch (JSONException e) {
-      // TODO: make pretty print of error
-      logger.error(e.getMessage());
+    if (service.isCurrentUserAdmin() || isCurrentUserOwner(path)) {
+      return true;
     }
 
-    return result;
+    List<String> ids = new ArrayList<String>();
+    // adds user roles to the list of ids to check permissions with
+    ids.addAll(service.getUserRoles());
+    // adds username to the list of ids to check permissions with
+    ids.add(service.getCurrentUserName());
+
+    List<ODocument> permissions = getPermissionEntities(path, ids, new FilePermissionEnum[] { permission });
+
+    return permissions != null && permissions.size() > 0;
   }
 
-  public boolean isCurrentUserOwner(String file) {
-    boolean result = false;
+  /**
+   * 
+   * @param path Folder or file from which we want to retrieve the ownership information 
+   * @return username of the owner if path exists, otherwise an empty string
+   */
+  public String getOwner(String path) {
+    String result = "";
+    final String ownerField = "user";
 
-    // TODO : implementation
-    result = true;
+    if (path != null) {
+      // build query to retrieve path metadata
+      String query = String.format("select %s from %s where file = '%s'", ownerField,
+          FileStorer.FILE_METADATA_STORE_CLASS, path);
+      Map<String, Object> params = new HashMap<String, Object>();
+      // params.put("owner", ownerField);
+      // params.put("file", file);
+      List<ODocument> doc = getPersistenceEngine().executeQuery(query, params);
+
+      if (doc.size() > 0) {
+        result = doc.get(0).field(ownerField);
+      }
+    }
 
     return result;
   }
 
   /**
    * 
-   * @param file
-   * @param id
+   * @param path
+   * @return
+   */
+  public boolean isCurrentUserOwner(String path) {
+    String owner = getOwner(path);
+    return owner.equals(service.getCurrentUserName());
+  }
+
+  /**
+   * 
+   * @param path
+   * @param id user/group names
    * @param allowedPermissions
    * @return
-   * @throws JSONException
    */
-  public JSONArray getFilePermissions(String file, String id, Set<FilePermissionEnum> allowedPermissions)
-      throws JSONException {
+  public List<ODocument> getPermissionEntities(String path, List<String> ids, FilePermissionEnum[] allowedPermissions) {
     StringBuilder queryBuilder = new StringBuilder("select * from ")
         .append(FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS);
+    final Map<String, Object> params = java.util.Collections.emptyMap();
+    String folder = null;
+
+    /*
+     * If path represent a file path than determine
+     * the parent folder in order to also check the
+     * permissions set to the parent folder.
+     * It is assumed that if the parent folder containing
+     * the file has permissions set those are inherited by
+     * the file.
+     */
+    if (path != null) {
+      CfrFile file = service.getRepository().getFile(path);
+      if (file != null) {
+        String filename = file.getFileName();
+        int index = path.lastIndexOf(filename);
+        if (index > 0) {
+          folder = path.substring(0, index);
+          if (folder.endsWith("/")) {
+            folder = folder.substring(0, folder.length() - 1);
+          }
+        } else {
+          folder = "";
+        }
+      }
+    }
 
     StringBuilder whereBuilder = new StringBuilder();
-    if (file != null)
-      whereBuilder.append(" file = '").append(file).append("'");
-    if (id != null) {
-      if (whereBuilder.length() != 0) {
-        whereBuilder.append(" and");
-      }
-      whereBuilder.append(" id = '").append(id).append("'");
+    if (path != null) {
+      whereBuilder.append(" file = '").append(path).append("'");
     }
-    if (allowedPermissions != null && allowedPermissions.size() > 0) {
+    if (folder != null) {
+      if (whereBuilder.length() != 0) {
+        whereBuilder.append(" or");
+      }
+
+      whereBuilder.append(" file = '").append(folder).append("'");
+    }
+    if (ids != null) {
+      if (whereBuilder.length() != 0) {
+        whereBuilder.append(" and ");
+      }
+      
+      whereBuilder.append("(");
+
+      StringBuilder idsBuilder = new StringBuilder();
+      for (String id : ids) {
+        if (idsBuilder.length() != 0) {
+          idsBuilder.append(" or");
+        }
+
+        idsBuilder.append(" id = '").append(id).append("'");
+      }
+
+      whereBuilder.append(idsBuilder.toString()).append(")");
+    }
+    if (allowedPermissions != null && allowedPermissions.length > 0) {
       if (whereBuilder.length() != 0) {
         whereBuilder.append(" and");
       }
@@ -181,22 +263,32 @@ public class MetadataReader {
     }
 
     if (whereBuilder.length() > 0) {
-      whereBuilder.insert(0, " where ");
+      whereBuilder.insert(0, " where");
     }
 
-    JSONArray result = new JSONArray();
     String query = queryBuilder.append(whereBuilder).toString();
-    for (ODocument doc : getPersistenceEngine().executeQuery(query, Collections.EMPTY_MAP)) {
+    List<ODocument> permissions = getPersistenceEngine().executeQuery(query, params);
+
+    return permissions;
+  }
+
+  public JSONArray getPermissions(String file, String id, FilePermissionEnum[] allowedPermissions) {
+    JSONArray result = new JSONArray();
+
+    List<String> ids = new ArrayList<String>();
+    ids.add(id);
+    for (ODocument doc : getPermissionEntities(file, ids, allowedPermissions)) {
       result.put(getJson(doc));
     }
 
     return result;
   }
 
-  private String toStringArray(Collection<FilePermissionEnum> allowedPermissions) {
+  private String toStringArray(FilePermissionEnum[] allowedPermissions) {
     StringBuilder result = new StringBuilder("[");
+    Set<FilePermissionEnum> permissions = new LinkedHashSet<FilePermissionEnum>(Arrays.asList(allowedPermissions));
 
-    for (FilePermissionEnum elem : allowedPermissions) {
+    for (FilePermissionEnum elem : permissions) {
       result.append("'").append(elem.getId()).append("',");
     }
 
@@ -208,16 +300,6 @@ public class MetadataReader {
     result.append("]");
 
     return result.toString();
-  }
-
-  private String[] toArrayString(FilePermissionEnum[] allowedPermissions) {
-    List<String> result = new ArrayList<String>();
-
-    for (FilePermissionEnum elem : allowedPermissions) {
-      result.add(elem.getId());
-    }
-
-    return (String[]) result.toArray();
   }
 
 }

@@ -18,7 +18,6 @@ import pt.webdetails.cfr.CfrPluginSettings;
 import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.IFile;
 
-
 /***
  * The default file repository takes system/.cfr as its base path.
  * All files and folders are created here.
@@ -26,8 +25,8 @@ import pt.webdetails.cfr.file.IFile;
  */
 public class DefaultFileRepository implements IFileRepository {
 
-static Log logger = LogFactory.getLog(DefaultFileRepository.class);
-  
+  static Log logger = LogFactory.getLog(DefaultFileRepository.class);
+
   protected String basePath;
 
   protected String getBasePath() {
@@ -37,35 +36,34 @@ static Log logger = LogFactory.getLog(DefaultFileRepository.class);
     }
     return basePath;
   }
-  
-  
+
   @Override
   public void init() {
-    
+
   }
-  
-  @Override 
+
+  @Override
   public void shutdown() {
-    
+
   }
-  
+
   @Override
   public boolean storeFile(byte[] content, String fileName, String relativePath) {
-    
+
     if (!checkPath(relativePath))
       return false;
-    
+
     String fullPath = getBasePath() + File.separator + relativePath;
     File f = new File(fullPath, fileName);
-    
+
     if (!f.getParentFile().exists()) {
       f.getParentFile().mkdirs();
     }
     FileOutputStream fos;
-    
+
     try {
-      fos = new FileOutputStream(f, false);    
-      fos.write(content);    
+      fos = new FileOutputStream(f, false);
+      fos.write(content);
       fos.flush();
       fos.close();
     } catch (FileNotFoundException fnfe) {
@@ -74,49 +72,48 @@ static Log logger = LogFactory.getLog(DefaultFileRepository.class);
     } catch (IOException ioe) {
       logger.error("Error caught while writing file", ioe);
       return false;
-    } 
-    
-    
+    }
+
     return true;
   }
 
   @Override
   public boolean createFolder(String fullPathName) {
-    
+
     if (!checkPath(fullPathName))
       return false;
-    
-    
+
     File f = new File(getBasePath() + File.separator + fullPathName);
     if (!f.exists())
       return f.mkdirs();
-    
+
     return true;
   }
-  
+
   @Override
   public boolean deleteFile(String fullName) {
-    
+
     if (!checkPath(fullName))
       return false;
-    
-    
-    File f = new File(getBasePath() + File.separator + fullName);    
+
+    File f = new File(getBasePath() + File.separator + fullName);
     return f.delete();
   }
-  
-  
+
   @Override
   public IFile[] listFiles(String startPath) {
-    
+
     if (!checkPath(startPath))
       return null;
-    
-    
+
     File f = new File(getBasePath() + File.separator + startPath);
-    File[] files =  f.listFiles();
+    File[] files = f.listFiles();
+    if (files == null) {
+      return null;
+    }
+    
     IFile[] result = new IFile[files.length];
-    for (int i=0; i < files.length; i++) {
+    for (int i = 0; i < files.length; i++) {
       final File listedFile = files[i];
       result[i] = new IFile() {
 
@@ -134,54 +131,41 @@ static Log logger = LogFactory.getLog(DefaultFileRepository.class);
         public boolean isDirectory() {
           return listedFile.isDirectory();
         }
-        
+
         @Override
         public boolean isFile() {
           return listedFile.isFile();
         }
-        
-        
+
       };
     }
-    
+
     return result;
   }
-  
-  
-  @Override 
-  public CfrFile getFile(String fullName) {
 
-    if (!checkPath(fullName))
+  @Override
+  public CfrFile getFile(String fullName) {
+    CfrFile result = null;
+
+    if (!checkPath(fullName)) {
       return null;
-    
-    
-    
-    File f = new File(getBasePath() + File.separator + fullName);
+    }
+
+    File f = null;
+    if (fullName.startsWith(File.separator)) {
+      f = new File(getBasePath() + fullName);
+    } else {
+      f = new File(getBasePath() + File.separator + fullName);
+    }
     if (!f.exists()) {
       logger.error("File not found for " + fullName + ". Returning null.");
       return null;
     }
-        
-    byte [] fileData;
-    try {
-        fileData = new byte[(int)f.length()];
-        DataInputStream dis = new DataInputStream(new FileInputStream(f));
-        dis.readFully(fileData);
-        dis.close();    
-    } catch (FileNotFoundException fnfe) {
-      logger.error("File not found for " + fullName + ". Returning null.", fnfe);
-      return null;      
-    } catch (IOException ioe) {
-      logger.error("Error caught while reading file from disk. Returning null", ioe);
-      return null;
-    }
-    CfrFile result = new CfrFile(f.getName(), f.getPath().replace(f.getName(), ""), fileData);
     
+    result = new CfrFile(f.getName(), f.getPath().replace(f.getName(), ""), f);
     return result;
-    
   }
-  
-  
+
   /**
    * Checks if path contains ../ - we won't allow any back tracking in paths,
    * even if they might be valid
@@ -194,5 +178,5 @@ static Log logger = LogFactory.getLog(DefaultFileRepository.class);
       logger.warn("Path parameter contains unsupported back tracking path element: " + path);
     return result;
   }
-  
+
 }

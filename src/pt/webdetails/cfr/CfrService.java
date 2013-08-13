@@ -1,21 +1,21 @@
 package pt.webdetails.cfr;
 
-import java.util.Collections;
+
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pentaho.platform.api.engine.IPentahoSession;
+import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
+import org.pentaho.platform.engine.security.SecurityHelper;
 
 import pt.webdetails.cfr.repository.IFileRepository;
-
-import org.pentaho.platform.api.engine.IPentahoSession;
-// import org.pentaho.platform.api.engine.IUserDetailsRoleListService;
-import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
-// import org.pentaho.platform.engine.core.system.PentahoSystem;
+import pt.webdetails.cpf.session.PentahoSession;
 
 public class CfrService {
 
-  static Log logger = LogFactory.getLog(CfrService.class);
+  protected static final Log logger = LogFactory.getLog(CfrService.class);
 
   public CfrService() {
   }
@@ -33,29 +33,19 @@ public class CfrService {
     }
     return null;
   }
-
-  //  protected IUserDetailsRoleListService getUserDetailsRoleListService() {
-  //    return PentahoSystem.get(IUserDetailsRoleListService.class);
-  //  }
-
-  public String getUserName() {
+  
+  public String getCurrentUserName() {
     IPentahoSession session = PentahoSessionHolder.getSession();
     return session.getName();
   }
 
+  public boolean isCurrentUserAdmin() {
+    return SecurityHelper.isPentahoAdministrator(PentahoSessionHolder.getSession());
+  }
+
   public List<String> getUserRoles() {
-    List<String> roles = Collections.emptyList();
-
-    // TODO: implementation
-    //    try {
-    //      roles = getUserDetailsRoleListService().getRolesForUser(getUserName());
-    //    } catch (Exception e) {
-    //      logger.error("unable to determine current user roles", e);
-    //    }
-    //    IUserRoleDao userRoleDao = PentahoSystem.get(IUserRoleDao.class, "userRoleDaoProxy",
-    //        PentahoSessionHolder.getSession());
-
-    return roles;
+    PentahoSession sessionInfo = new PentahoSession(PentahoSessionHolder.getSession());
+    return Arrays.asList(sessionInfo.getAuthorities());
   }
 
 }

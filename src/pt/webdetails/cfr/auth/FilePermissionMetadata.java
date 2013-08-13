@@ -1,5 +1,10 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
 package pt.webdetails.cfr.auth;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -15,12 +20,8 @@ public class FilePermissionMetadata {
   private String id;
 
   private Set<FilePermissionEnum> permissions;
-  
-  public static Set<FilePermissionEnum> DEFAULT_PERMISSIONS;
-  static {
-    DEFAULT_PERMISSIONS = new TreeSet<FilePermissionEnum>();
-    DEFAULT_PERMISSIONS.add(FilePermissionEnum.READ);
-  }
+
+  public static FilePermissionEnum[] DEFAULT_PERMISSIONS = new FilePermissionEnum[] { FilePermissionEnum.READ };
 
   /**
    * 
@@ -29,6 +30,16 @@ public class FilePermissionMetadata {
    */
   public FilePermissionMetadata(String file, String id) {
     this(file, id, DEFAULT_PERMISSIONS);
+  }
+
+  /**
+   * 
+   * @param file
+   * @param id
+   * @param permissions
+   */
+  public FilePermissionMetadata(String file, String id, FilePermissionEnum[] permissions) {
+    this(file, id, new LinkedHashSet<FilePermissionEnum>(Arrays.asList(permissions)));
   }
 
   /**
@@ -107,7 +118,7 @@ public class FilePermissionMetadata {
   public static FilePermissionMetadata fromJson(JSONObject obj) throws JSONException {
     String file = obj.getString("file");
     String id = obj.getString("id");
-    
+
     Object _permissions = obj.get("permissions");
     Set<FilePermissionEnum> permissions = new TreeSet<FilePermissionEnum>();
     if (_permissions instanceof JSONArray) {
@@ -119,7 +130,7 @@ public class FilePermissionMetadata {
         }
       }
     }
-    
+
     return new FilePermissionMetadata(file, id, permissions);
   }
 

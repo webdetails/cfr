@@ -838,7 +838,7 @@
       "type": "JavaScript"
      },
      {
-      "name": "xActionArrayParameter",
+      "name": "parameters",
       "value": "[[\"userParam\",\"userParam\"]]",
       "type": "ValuesArray"
      },
@@ -979,7 +979,7 @@
      },
      {
       "name": "postFetch",
-      "value": "function (data) {\n    var array = [];\n    \n    if ($.inArray(\"Admin\", Dashboards.context.roles)>-1)\n        return data;\n    \n    var j = 0;\n    for ( i = 0; i < data.resultset.length; i++ ){\n        \n        if ( Dashboards.context.user == data.resultset[i][0] ){\n            array[j] = data.resultset[i];\n            j++;\n        }\n    }\n    \n    data.queryInfo.totalRows = j;\n    data.resultset = array;\n    return data;\n}",
+      "value": "function filterData(data) {\n    \n    if ($.inArray(\"Admin\", Dashboards.context.roles)>-1) {\n        return data;\n    }\n    \n    var array = [];\n    var j = 0;\n    for ( i = 0; i < data.resultset.length; i++ ){\n        \n        if ( Dashboards.context.user == data.resultset[i][1] ){\n            array[j] = data.resultset[i];\n            j++;\n        }\n    }\n    \n    data.queryInfo.totalRows = j;\n    data.resultset = array;\n    return data;\n}",
       "type": "JavaScript"
      },
      {
@@ -1003,7 +1003,7 @@
       "type": "OptionArray"
      },
      {
-      "name": "cccClickAction",
+      "name": "clickAction",
       "value": "",
       "type": "JavaScript"
      }
@@ -1072,14 +1072,14 @@
       "type": "Listeners"
      },
      {
+      "name": "parameters",
+      "value": "[]",
+      "type": "CdaParameters"
+     },
+     {
       "name": "rootFolder",
       "value": ".",
       "type": "String"
-     },
-     {
-      "name": "xActionArrayParameter",
-      "value": "[[\"uploadedFileParam\",\"uploadedFileParam\"]]",
-      "type": "ValuesArray"
      },
      {
       "name": "priority",
