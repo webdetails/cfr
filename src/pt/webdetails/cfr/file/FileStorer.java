@@ -129,7 +129,7 @@ public class FileStorer {
    * @param path Full path of the folder/file
    * @param id Group/User Id
    */
-  public static void deletePermissions(String path, String id) {
+  public static boolean deletePermissions(String path, String id) {
     CfrService service = new CfrService();
     MetadataReader reader = new MetadataReader();
     if (service.isCurrentUserAdmin() || reader.isCurrentUserOwner(path)) {
@@ -156,7 +156,8 @@ public class FileStorer {
 
       String cmd = deleteCommandBuilder.append(whereBuilder.toString()).toString();
       getPersistenceEngine().executeCommand(cmd, params);
-    }
-  }
-
+      return true;
+    } else
+      return false;
+  } 
 }

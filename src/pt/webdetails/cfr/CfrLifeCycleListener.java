@@ -21,6 +21,7 @@ public class CfrLifeCycleListener implements IPluginLifecycleListener {
       logger.debug("Init for CFR");
       PersistenceEngine engine = PersistenceEngine.getInstance();
       engine.initializeClass("UploadedFiles");
+      engine.initializeClass("UploadedFilesPermissions");
   }
 
   @Override

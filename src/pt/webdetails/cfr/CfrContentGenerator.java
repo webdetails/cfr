@@ -368,13 +368,14 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC)
-  public void setPermissions(OutputStream out) throws JSONException {
+  public void setPermissions(OutputStream out) throws JSONException, IOException {
     String path = checkRelativePathSanity(getRequestParameters().getStringParameter(pathParameterPath, null));
     String[] userOrGroupId = getRequestParameters()
         .getStringArrayParameter(pathParameterGroupOrUserId, new String[] {});
     String[] _permissions = getRequestParameters().getStringArrayParameter(pathParameterPermission,
         new String[] { FilePermissionEnum.READ.getId() });
 
+    JSONObject result = new JSONObject();
     if (path != null && userOrGroupId.length > 0 && _permissions.length > 0) {
       // build valid permissions set
       Set<FilePermissionEnum> validPermissions = new TreeSet<FilePermissionEnum>();
@@ -384,28 +385,59 @@ public class CfrContentGenerator extends SimpleContentGenerator {
           validPermissions.add(perm);
         }
       }
-
+      JSONArray permissionAddResultArray = new JSONArray();
       for (String id : userOrGroupId) {
-        FileStorer.storeFilePermissions(new FilePermissionMetadata(path, id, validPermissions));
+        JSONObject individualResult = new JSONObject();
+        boolean storeResult = FileStorer.storeFilePermissions(new FilePermissionMetadata(path, id, validPermissions));
+        if (storeResult)
+          individualResult.put("status", String.format("Added permission for path %s and user/role %s", path, id));
+        else
+          individualResult.put("status", String.format("Failed to add permission for path %s and user/role %s", path, id));
+        permissionAddResultArray.put(individualResult);
       }
-    }
+      result.put("status", "Operation finished. Check statusArray for details.");
+      result.put("statusArray", permissionAddResultArray);
+    } else
+      result.put("status", "Path or user group parameters not found");
+    
+    writeOut(out, result.toString(2));
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC)
-  public void deletePermissions(OutputStream out) throws JSONException {
+  public void deletePermissions(OutputStream out) throws JSONException, IOException {
     String path = checkRelativePathSanity(getRequestParameters().getStringParameter(pathParameterPath, null));
     String[] userOrGroupId = getRequestParameters()
         .getStringArrayParameter(pathParameterGroupOrUserId, new String[] {});
 
+    JSONObject result = new JSONObject();
+
+    
     if (path != null || (userOrGroupId != null && userOrGroupId.length > 0)) {
       if (userOrGroupId == null || userOrGroupId.length == 0) {
-        FileStorer.deletePermissions(path, null);
+        if (FileStorer.deletePermissions(path, null))
+          result.put("status", "Permissions deleted");
+        else
+          result.put("status", "Error deleting permissions");
       } else {
+        JSONArray permissionDeleteResultArray = new JSONArray();
         for (String id : userOrGroupId) {
-          FileStorer.deletePermissions(path, id);
+          JSONObject individualResult = new JSONObject();
+          boolean deleteResult = FileStorer.deletePermissions(path, id);
+          if (deleteResult) 
+            individualResult.put("status", String.format("Permission for %s and path %s deleted.", id, path));
+          else
+            individualResult.put("status", String.format("Failed to delete permission for %s and path %s.", id, path));            
+          
+          permissionDeleteResultArray.put(individualResult);
         }
+        result.put("status", "Multiple permission deletion. Check Status array");
+        result.put("statusArray", permissionDeleteResultArray);
       }
-    }
+    } else
+          result.put("status", "Required arguments user/role and path not found");
+    
+    writeOut(out, result.toString(2));
+    
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
