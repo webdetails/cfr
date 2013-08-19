@@ -14,9 +14,9 @@ import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 
 import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.IFile;
-import pt.webdetails.cpf.repository.BaseRepositoryAccess.FileAccess;
-import pt.webdetails.cpf.repository.BaseRepositoryAccess.SaveFileStatus;
 import pt.webdetails.cpf.repository.IRepositoryAccess;
+import pt.webdetails.cpf.repository.IRepositoryAccess.FileAccess;
+import pt.webdetails.cpf.repository.IRepositoryAccess.SaveFileStatus;
 import pt.webdetails.cpf.repository.IRepositoryFile;
 import pt.webdetails.cpf.repository.PentahoRepositoryAccess;
 
