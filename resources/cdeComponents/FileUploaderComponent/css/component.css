@@ -1,4 +1,3 @@
-/* line 1, ../_base.scss */
 .SI-FILES-STYLIZED label.cabinet {
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkYWRhZGEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
   background: -moz-linear-gradient(top, white 0%, #dadada 100%);
@@ -25,7 +24,6 @@
   -webkit-border-radius: 3px 3px 3px 3px;
 }
 
-/* line 21, ../_base.scss */
 .SI-FILES-STYLIZED label.cabinet:hover {
   color: #56ACF5;
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2RhZGFkYSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
@@ -46,7 +44,6 @@
   -o-transition: all 0.25s linear 0s;
 }
 
-/* line 35, ../_base.scss */
 .SI-FILES-STYLIZED label.cabinet input.file {
   position: relative;
   height: 100%;
@@ -59,25 +56,21 @@
   filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
 }
 
-/* line 47, ../_base.scss */
 .zeroHeight {
   height: 0px;
 }
 
-/* line 51, ../_base.scss */
 .select {
   position: relative;
   left: 35%;
   top: 22px;
 }
 
-/* line 58, ../_base.scss */
 .cancelButton {
   margin-left: 5px;
   float: left;
 }
 
-/* line 63, ../_base.scss */
 .cancelButton button {
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkYWRhZGEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
   background: -moz-linear-gradient(top, white 0%, #dadada 100%);
@@ -101,7 +94,6 @@
   -webkit-border-radius: 3px 3px 3px 3px;
 }
 
-/* line 80, ../_base.scss */
 .cancelButton button:hover {
   cursor: pointer;
   color: #56ACF5;
@@ -123,17 +115,14 @@
   -o-transition: all 0.25s linear 0s;
 }
 
-/* line 95, ../_base.scss */
 .cancelButton button:hover {
   cursor: pointer;
 }
 
-/* line 99, ../_base.scss */
 .hide {
   display: none !important;
 }
 
-/* line 103, ../_base.scss */
 .fileName {
   color: #DCDCDC;
   margin-top: 17px;
@@ -141,7 +130,6 @@
   width: 80px;
 }
 
-/* line 110, ../_base.scss */
 .fileTextRow {
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkYWRhZGEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
   background: -moz-linear-gradient(top, white 0%, #dadada 100%);
@@ -171,9 +159,7 @@
   -webkit-border-radius: 3px 3px 3px 3px;
 }
 
-/* line 134, ../_base.scss */
 .SI-FILES-STYLIZED input {
-  background: url("images/Upload.png") no-repeat scroll 0 0 #4f9adb;
   height: 55px;
   width: 170px;
   border: none;
@@ -182,13 +168,10 @@
   left: 40%;
 }
 
-/* line 144, ../_base.scss */
 .SI-FILES-STYLIZED input:hover {
-  background: url("images/Upload.png") no-repeat scroll 0 -60px #4f9adb;
   cursor: pointer;
 }
 
-/* line 149, ../_base.scss */
 .uploadButtonRow {
   background-color: #4F9ADB;
   /* Old browsers */
@@ -215,7 +198,6 @@
   -webkit-border-radius: 3px 3px 3px 3px;
 }
 
-/* line 5, ../component.sass */
 .fileSelect {
   position: relative;
   width: 100%;
@@ -223,26 +205,23 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  background-color: #cad2d6;
 }
-/* line 11, ../component.sass */
 .fileSelect .uploadButton {
   height: inherit;
 }
-/* line 14, ../component.sass */
 .fileSelect form {
   width: inherit;
   height: inherit;
 }
-/* line 18, ../component.sass */
-.fileSelect .cabinet {
+.fileSelect form .cabinet {
   margin: 10px;
   position: absolute;
   top: 0;
   left: 0;
-  width: 400px;
+  width: 40%;
 }
-/* line 25, ../component.sass */
-.fileSelect .cabinet .file {
+.fileSelect form .file {
   position: absolute;
   top: 0;
   left: 0;
@@ -251,14 +230,13 @@
   box-sizing: border-box;
   border: none;
 }
-/* line 32, ../component.sass */
 .fileSelect .select {
   font-size: 16px;
   color: #cad2d6;
   position: absolute;
   top: 10px;
   left: 10px;
-  width: 400px;
+  width: 40%;
   height: 40px;
   z-index: 100000;
   line-height: 40px;
@@ -274,7 +252,6 @@
   background-position: center right;
   background-color: white;
 }
-/* line 52, ../component.sass */
 .fileSelect .select:hover {
   color: white;
   -webkit-transition: all 0.25s linear;
@@ -287,14 +264,13 @@
   background-position: center right;
   background-color: #2d3a3f;
 }
-/* line 61, ../component.sass */
 .fileSelect .fileTextRow {
   font-size: 16px;
   background-image: url("../images/selector_3.png");
   background-repeat: no-repeat;
   background-position: center right;
   background-color: white;
-  width: 400px;
+  width: 40%;
   height: 40px;
   margin: 0;
   top: 10px;
@@ -311,15 +287,13 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-/* line 79, ../component.sass */
 .fileSelect .cancelButton {
   position: absolute;
   right: 0;
   top: 0;
   margin: 10px;
-  width: 100px;
+  width: 15%;
 }
-/* line 86, ../component.sass */
 .fileSelect .cancelButton button {
   background: none;
   background-color: #2d3a3f;
@@ -332,25 +306,24 @@
   -o-border-radius: 0;
   border-radius: 0;
   border: none;
+  float: right;
 }
-/* line 95, ../component.sass */
 .fileSelect .cancelButton button:hover {
   background: none;
   background-color: white;
   color: #2d3a3f;
   border: none;
 }
-/* line 101, ../component.sass */
 .fileSelect .submitBtn {
   position: absolute;
   background-image: url("../images/upload_normal.png");
   background-repeat: no-repeat;
   background-position: center right;
-  left: 415px;
+  left: 43%;
   margin: 10px;
   height: 40px;
   background-color: #216dbf;
-  width: 400px;
+  width: 40%;
   color: #dee8ec;
   font-size: 16px;
   text-align: center;
@@ -361,7 +334,6 @@
   -o-border-radius: 0;
   border-radius: 0;
 }
-/* line 118, ../component.sass */
 .fileSelect .submitBtn:hover {
   background-color: #4d94e0;
   color: white;
