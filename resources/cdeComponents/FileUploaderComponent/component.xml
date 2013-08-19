@@ -26,7 +26,7 @@
           <Style version="1.0" src="css/component.css">FileUploaderComponent</Style>
       	</Styles>
       	<Dependencies>
-          <Dependency src="lib/si.files.js" version="1.0">si.files</Dependency>  
+          <Dependency src="lib/jquery.form.js" version="1.0">jquery.form</Dependency>
       	</Dependencies>
       	<CustomProperties>
           <DesignerProperty>

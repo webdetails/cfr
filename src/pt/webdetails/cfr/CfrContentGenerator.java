@@ -161,7 +161,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       throw new Exception("path is null or empty");
 
     boolean createResult = service.getRepository().createFolder(path);
-    writeOut(out, "{result: " + createResult + "}");
+    writeOut(out, "{\"result\": " + Boolean.toString(createResult) + "}");
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC)
@@ -175,7 +175,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     if (createResult) {
       FileStorer.deletePermissions(fullFileName, null);
     }
-    writeOut(out, "{result: " + createResult + "}");
+    writeOut(out, "{\"result\": " + Boolean.toString(createResult) + "}");
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
@@ -215,7 +215,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
     boolean result = fileStorer.storeFile(checkRelativePathSanity(fileName), checkRelativePathSanity(savePath),
         contents, userSession.getName());
-    writeOut(out, "{result: " + result + "}");
+    writeOut(out, "{\"result\": " + Boolean.toString(result) + "}");
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC)
@@ -367,7 +367,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     redirect(urlBuilder.toString());
   }
 
-  @Exposed(accessLevel = AccessLevel.PUBLIC)
+  @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
   public void setPermissions(OutputStream out) throws JSONException, IOException {
     String path = checkRelativePathSanity(getRequestParameters().getStringParameter(pathParameterPath, null));
     String[] userOrGroupId = getRequestParameters()
@@ -403,7 +403,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     writeOut(out, result.toString(2));
   }
 
-  @Exposed(accessLevel = AccessLevel.PUBLIC)
+  @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
   public void deletePermissions(OutputStream out) throws JSONException, IOException {
     String path = checkRelativePathSanity(getRequestParameters().getStringParameter(pathParameterPath, null));
     String[] userOrGroupId = getRequestParameters()
