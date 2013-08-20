@@ -184,6 +184,11 @@ public class MetadataReaderTest {
   }
 
   @Test
+  public void testGetPermissionEntities() {
+    // TODO: implementation
+  }
+
+  @Test
   public void testSetPermissions() {
     // TODO: implementation
   }
