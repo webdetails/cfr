@@ -3,8 +3,8 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 package pt.webdetails.cfr.file;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -21,8 +21,6 @@ import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 
 import com.orientechnologies.orient.core.record.impl.ODocument;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class FileStorer {
 
@@ -82,7 +80,7 @@ public class FileStorer {
 
   public static boolean storeFilePermissions(FilePermissionMetadata permission) {
     boolean result = false;
-    MetadataReader reader = new MetadataReader();
+    MetadataReader reader = new MetadataReader(new CfrService());
     final CfrService service = new CfrService();
 
     if (permission != null) {
@@ -97,9 +95,9 @@ public class FileStorer {
           JSONObject permissionToPersist = permission.toJson();
 
           // verify that the file hasn't already permissions defined
-
-          List<ODocument> currentPermissions = reader.getPermissionEntities(permission.getFile(),
-              Arrays.asList(new String[] { permission.getId() }), null);
+          List<String> ids = new ArrayList<String>();
+          ids.add(permission.getId());
+          List<ODocument> currentPermissions = reader.getPermissionEntities(permission.getFile(), ids, null);
           if (currentPermissions == null || currentPermissions.size() == 0) {
             persistedPermissions = getPersistenceEngine().store(null, FILE_PERMISSIONS_METADATA_STORE_CLASS,
                 permissionToPersist);
@@ -131,7 +129,7 @@ public class FileStorer {
    */
   public static boolean deletePermissions(String path, String id) {
     CfrService service = new CfrService();
-    MetadataReader reader = new MetadataReader();
+    MetadataReader reader = new MetadataReader(service);
     if (service.isCurrentUserAdmin() || reader.isCurrentUserOwner(path)) {
       Map<String, Object> params = Collections.emptyMap();
       StringBuilder deleteCommandBuilder = new StringBuilder(String.format("delete from %s",
@@ -159,5 +157,5 @@ public class FileStorer {
       return true;
     } else
       return false;
-  } 
+  }
 }

@@ -4,25 +4,17 @@
 package pt.webdetails.cfr.repository;
 
 import java.io.File;
+
 import junit.framework.Assert;
-import junit.framework.TestCase;
-import org.junit.After;
+
 import org.junit.AfterClass;
 import org.junit.Test;
+
 import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.IFile;
 
 
 public class DefaultFileRepositoryTest {
-  
-  
-  public class DefaultFileRepositoryForTests extends DefaultFileRepository {
-  
-    @Override
-    protected String getBasePath() {
-      return "./tests";
-    }        
-  }
   
   @AfterClass
   public static void onTestFinish() {

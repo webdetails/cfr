@@ -52,7 +52,8 @@
 
     <!-- test dependencies -->
     <dependency org="junit" name="junit" conf="test->default" rev='4.10'/>
-    <dependency org="org.mockito" name="mockito-all" rev="1.9.5" conf="test->default"/>    
+    <dependency org="org.mockito" name="mockito-all" rev="1.9.5" conf="test->default"/>
+    <dependency org="com.google.guava" name="guava" rev="14.0.1" conf="test->default"/>    
     
     <exclude module="nekohtml" type="*" ext="*" conf="" matcher="exact"></exclude>
   </dependencies>

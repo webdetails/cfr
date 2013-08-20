@@ -29,7 +29,11 @@ public class MetadataReader {
 
   private static Log logger = LogFactory.getLog(MetadataReader.class);
 
-  private CfrService service = new CfrService();
+  private CfrService service;
+
+  public MetadataReader(CfrService service) {
+    this.service = service;
+  }
 
   public JSONArray listFilesFlat(String fileName, String user, String startDate, String endDate) {
     Map<String, Object> params = new HashMap<String, Object>();
@@ -136,8 +140,6 @@ public class MetadataReader {
    * @return true if current user is allowed, false otherwise
    */
   public boolean isCurrentUserAllowed(FilePermissionEnum permission, String path) {
-    CfrService service = new CfrService();
-
     if (service.isCurrentUserAdmin() || isCurrentUserOwner(path)) {
       return true;
     }

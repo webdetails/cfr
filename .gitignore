@@ -2,6 +2,10 @@
 .DS_Store
 override.properties
 
+#Test files to be ignored
+/tests
+/webdetails.db
+
 # CTools Temporary Files
 *_tmp.cd*
 

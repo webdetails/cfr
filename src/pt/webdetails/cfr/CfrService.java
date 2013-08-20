@@ -1,6 +1,5 @@
 package pt.webdetails.cfr;
 
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,9 +16,6 @@ public class CfrService {
 
   protected static final Log logger = LogFactory.getLog(CfrService.class);
 
-  public CfrService() {
-  }
-
   public IFileRepository getRepository() {
     String repositoryClass = new CfrPluginSettings().getRepositoryClass();
     try {
@@ -33,7 +29,7 @@ public class CfrService {
     }
     return null;
   }
-  
+
   public String getCurrentUserName() {
     IPentahoSession session = PentahoSessionHolder.getSession();
     return session.getName();

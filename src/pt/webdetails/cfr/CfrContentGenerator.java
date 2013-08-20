@@ -58,7 +58,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
   private CfrService service = new CfrService();
 
-  private MetadataReader metadata = new MetadataReader();
+  private MetadataReader mr = new MetadataReader(service);
 
   static {
     //to keep case-insensitive methods
@@ -78,7 +78,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       if (result.startsWith("/")) {
         result = result.replaceFirst(".", "");
       }
-      
+
       if (result.endsWith("/")) {
         result = result.substring(0, result.length() - 1);
       }
@@ -161,7 +161,8 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       throw new Exception("path is null or empty");
 
     boolean createResult = service.getRepository().createFolder(path);
-    writeOut(out, "{\"result\": " + Boolean.toString(createResult) + "}");
+
+    writeOut(out, new JSONObject().put("result", createResult).toString());
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC)
@@ -171,11 +172,12 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     if (fullFileName == null || StringUtils.isBlank(fullFileName))
       throw new Exception("fileName is null or empty");
 
-    boolean createResult = service.getRepository().deleteFile(fullFileName);
-    if (createResult) {
+    boolean removeResult = service.getRepository().deleteFile(fullFileName);
+    if (removeResult) {
       FileStorer.deletePermissions(fullFileName, null);
     }
-    writeOut(out, "{\"result\": " + Boolean.toString(createResult) + "}");
+
+    writeOut(out, new JSONObject().put("result", removeResult).toString());
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
@@ -213,9 +215,11 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
     FileStorer fileStorer = new FileStorer(service.getRepository());
 
-    boolean result = fileStorer.storeFile(checkRelativePathSanity(fileName), checkRelativePathSanity(savePath),
+    boolean stored = fileStorer.storeFile(checkRelativePathSanity(fileName), checkRelativePathSanity(savePath),
         contents, userSession.getName());
-    writeOut(out, "{\"result\": " + Boolean.toString(result) + "}");
+
+    JSONObject result = new JSONObject().put("result", stored);
+    writeOut(out, result.toString());
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC)
@@ -224,7 +228,6 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     IFile[] files = service.getRepository().listFiles(baseDir);
     List<IFile> allowedFiles = new ArrayList<IFile>(files.length);
     String extensions = getRequestParameters().getStringParameter("fileExtensions", "");
-    MetadataReader mr = new MetadataReader();
 
     // checks permissions
     /*
@@ -251,8 +254,6 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   public void getFile(OutputStream out) throws IOException, JSONException, Exception {
     String fullFileName = checkRelativePathSanity(getRequestParameters().getStringParameter("fileName", null));
 
-    MetadataReader mr = new MetadataReader();
-
     if (fullFileName == null) {
       logger.error("request query parameter fileName must not be null");
       throw new Exception("request query parameter fileName must not be null");
@@ -274,7 +275,6 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   public void listFilesJSON(OutputStream out) throws IOException, JSONException {
     String baseDir = checkRelativePathSanity(getRequestParameters().getStringParameter("dir", ""));
     IFile[] files = service.getRepository().listFiles(baseDir);
-    MetadataReader mr = new MetadataReader();
     JSONArray arr = new JSONArray();
     if (files != null) {
       for (IFile file : files) {
@@ -293,19 +293,17 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
   @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
   public void listUploads(OutputStream out) throws IOException, JSONException {
-    MetadataReader reader = new MetadataReader();
     String path = checkRelativePathSanity(getRequestParameters().getStringParameter("fileName", ""));
-    writeOut(out, reader.listFiles(path, getRequestParameters().getStringParameter("user", ""), getRequestParameters()
+    writeOut(out, mr.listFiles(path, getRequestParameters().getStringParameter("user", ""), getRequestParameters()
         .getStringParameter("startDate", ""), getRequestParameters().getStringParameter("endDate", "")));
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
   public void listUploadsFlat(OutputStream out) throws IOException, JSONException {
-    MetadataReader reader = new MetadataReader();
     String path = checkRelativePathSanity(getRequestParameters().getStringParameter("fileName", ""));
     writeOut(
         out,
-        reader.listFilesFlat(path, getRequestParameters().getStringParameter("user", ""),
+        mr.listFilesFlat(path, getRequestParameters().getStringParameter("user", ""),
             getRequestParameters().getStringParameter("startDate", ""),
             getRequestParameters().getStringParameter("endDate", "")).toString(2));
   }
@@ -392,14 +390,15 @@ public class CfrContentGenerator extends SimpleContentGenerator {
         if (storeResult)
           individualResult.put("status", String.format("Added permission for path %s and user/role %s", path, id));
         else
-          individualResult.put("status", String.format("Failed to add permission for path %s and user/role %s", path, id));
+          individualResult.put("status",
+              String.format("Failed to add permission for path %s and user/role %s", path, id));
         permissionAddResultArray.put(individualResult);
       }
       result.put("status", "Operation finished. Check statusArray for details.");
       result.put("statusArray", permissionAddResultArray);
     } else
       result.put("status", "Path or user group parameters not found");
-    
+
     writeOut(out, result.toString(2));
   }
 
@@ -411,7 +410,6 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
     JSONObject result = new JSONObject();
 
-    
     if (path != null || (userOrGroupId != null && userOrGroupId.length > 0)) {
       if (userOrGroupId == null || userOrGroupId.length == 0) {
         if (FileStorer.deletePermissions(path, null))
@@ -423,21 +421,21 @@ public class CfrContentGenerator extends SimpleContentGenerator {
         for (String id : userOrGroupId) {
           JSONObject individualResult = new JSONObject();
           boolean deleteResult = FileStorer.deletePermissions(path, id);
-          if (deleteResult) 
+          if (deleteResult)
             individualResult.put("status", String.format("Permission for %s and path %s deleted.", id, path));
           else
-            individualResult.put("status", String.format("Failed to delete permission for %s and path %s.", id, path));            
-          
+            individualResult.put("status", String.format("Failed to delete permission for %s and path %s.", id, path));
+
           permissionDeleteResultArray.put(individualResult);
         }
         result.put("status", "Multiple permission deletion. Check Status array");
         result.put("statusArray", permissionDeleteResultArray);
       }
     } else
-          result.put("status", "Required arguments user/role and path not found");
-    
+      result.put("status", "Required arguments user/role and path not found");
+
     writeOut(out, result.toString(2));
-    
+
   }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
@@ -445,7 +443,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     String path = checkRelativePathSanity(getRequestParameters().getStringParameter(pathParameterPath, null));
     String id = getRequestParameters().getStringParameter(pathParameterGroupOrUserId, null);
     if (path != null || id != null) {
-      JSONArray permissions = metadata.getPermissions(path, id, FilePermissionMetadata.DEFAULT_PERMISSIONS);
+      JSONArray permissions = mr.getPermissions(path, id, FilePermissionMetadata.DEFAULT_PERMISSIONS);
       writeOut(out, permissions.toString(0));
     }
   }
