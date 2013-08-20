@@ -344,7 +344,7 @@
     "properties": [
      {
       "name": "name",
-      "value": "uploaderObj",
+      "value": "uploaderContainer",
       "type": "Id"
      },
      {
@@ -369,7 +369,80 @@
      },
      {
       "name": "cssClass",
-      "value": "uploadCtrl",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "44e767fe-d650-d329-e377-766d19bb1d46",
+    "type": "LayoutColumn",
+    "typeDesc": "Column",
+    "parent": "ca87789f-1347-14df-146d-930cb4f01580",
+    "properties": [
+     {
+      "name": "name",
+      "value": "uploaderObj",
+      "type": "Id"
+     },
+     {
+      "name": "columnSpan",
+      "value": "24",
+      "type": "Integer"
+     },
+     {
+      "name": "columnPrepend",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "columnAppend",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "columnPrependTop",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "columnAppendBottom",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "columnBorder",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "columnBigBorder",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "height",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "backgroundColor",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "roundCorners",
+      "value": "",
+      "type": "RoundCorners"
+     },
+     {
+      "name": "textAlign",
+      "value": "",
+      "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
       "type": "String"
      }
     ]
@@ -382,7 +455,7 @@
     "properties": [
      {
       "name": "name",
-      "value": "fileListHeader",
+      "value": "fileListHeaderContainer",
       "type": "Id"
      },
      {
@@ -413,10 +486,83 @@
     ]
    },
    {
-    "id": "231a4507-53ae-ca2f-37dd-6ce835f27788",
+    "id": "bf261534-f78d-2d57-053e-532a0265a93c",
+    "type": "LayoutColumn",
+    "typeDesc": "Column",
+    "parent": "1768ef34-0ddb-6989-f54f-e024df4ab78f",
+    "properties": [
+     {
+      "name": "name",
+      "value": "fileListHeader",
+      "type": "Id"
+     },
+     {
+      "name": "columnSpan",
+      "value": "24",
+      "type": "Integer"
+     },
+     {
+      "name": "columnPrepend",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "columnAppend",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "columnPrependTop",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "columnAppendBottom",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "columnBorder",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "columnBigBorder",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "height",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "backgroundColor",
+      "value": "",
+      "type": "Color"
+     },
+     {
+      "name": "roundCorners",
+      "value": "",
+      "type": "RoundCorners"
+     },
+     {
+      "name": "textAlign",
+      "value": "",
+      "type": "TextAlign"
+     },
+     {
+      "name": "cssClass",
+      "value": "",
+      "type": "String"
+     }
+    ]
+   },
+   {
+    "id": "e7c61f0e-db42-aaad-462e-6108e174fa2f",
     "type": "LayoutHtml",
     "typeDesc": "Html",
-    "parent": "1768ef34-0ddb-6989-f54f-e024df4ab78f",
+    "parent": "bf261534-f78d-2d57-053e-532a0265a93c",
     "properties": [
      {
       "name": "name",
@@ -453,7 +599,7 @@
     "properties": [
      {
       "name": "name",
-      "value": "dataTable",
+      "value": "uploadsTableContainer",
       "type": "Id"
      },
      {
@@ -838,21 +984,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "parameters",
-      "value": "[[\"userParam\",\"userParam\"]]",
-      "type": "ValuesArray"
-     },
-     {
-      "name": "colFormats",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
-      "name": "colWidths",
-      "value": "[\"300\",\"500\",\"150\"]",
-      "type": "Array"
-     },
-     {
       "name": "colSortable",
       "value": "[]",
       "type": "Array"
@@ -873,19 +1004,19 @@
       "type": "Array"
      },
      {
-      "name": "paginate",
-      "value": "false",
-      "type": "Boolean"
+      "name": "parameters",
+      "value": "[[\"userParam\",\"userParam\"]]",
+      "type": "ValuesArray"
      },
      {
-      "name": "displayLength",
-      "value": "",
-      "type": "Integer"
+      "name": "colFormats",
+      "value": "[]",
+      "type": "Array"
      },
      {
-      "name": "lengthChange",
-      "value": "true",
-      "type": "Boolean"
+      "name": "colWidths",
+      "value": "[\"300\",\"500\",\"150\"]",
+      "type": "Array"
      },
      {
       "name": "filter",
@@ -908,6 +1039,21 @@
       "type": "Boolean"
      },
      {
+      "name": "paginate",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "displayLength",
+      "value": "",
+      "type": "Integer"
+     },
+     {
+      "name": "lengthChange",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
       "name": "colSearchable",
       "value": "[]",
       "type": "Array"
@@ -923,14 +1069,14 @@
       "type": "SortByArray"
      },
      {
-      "name": "sDom",
-      "value": "",
-      "type": "JavaScript"
-     },
-     {
       "name": "dataSource",
       "type": "Datasource",
       "value": "uploadsQuery"
+     },
+     {
+      "name": "sDom",
+      "value": "",
+      "type": "JavaScript"
      },
      {
       "name": "priority",
@@ -1036,7 +1182,7 @@
      },
      {
       "name": "javaScript",
-      "value": "Dashboards.postInit = function() {\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $('input').last().addClass('hide');\n    SI.Files.stylizeAll();\n    \n    // File action hooks\n    $('button#copyBtn').click(function(e) {\n        \n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = 'Copy to clipboard...';\n            \n            var url = window.location.href;\n            url = url.substring(0, url.lastIndexOf('/'));\n            url = url + '/getFile?fileName=' + selectedFileParam;\n            \n            jPrompt(msg, url , 'Copy Link');\n        } else {\n            jAlert('No file selected!', 'Copy Link');\n        }\n    });\n    \n    $('button#removeBtn').click(function(e) {\n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = \n                '<p>Are you sure you want to remove the file:</p>'+\n                '<p class=\"text-big text-center\">' + selectedFileParam + '</p>';\n                \n            jConfirm(msg, 'Remove', function(remove) {\n                // if (remove) //TODO remove\n            });\n        } else {\n            jAlert('No file selected!', 'Remove');\n        }\n    });\n    \n    $('button#downloadBtn').click(function(e) {\n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = '<p>You are downloading the file:' +\n                '<p class=\"text-big text-left\">' + selectedFileParam + '</p>' +\n                '<p class=\"text-center text-bigger\">Would you like to open the file or save it to your computer?</p>';\n            jSave(msg, 'File Download', function (result) {\n                switch(result) {\n                    case 'open':\n                        \n                        break;\n                    case 'save':\n                        window.open('/pentaho/content/cfr/getFile?fileName=' + selectedFileParam,'_blank');\n                        break;\n                }\n            });\n        } else {\n            jAlert('No file selected!', 'File Download');\n        }\n    });\n};",
+      "value": "Dashboards.postInit = function () {\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $('input').last().addClass('hide');\n    \n    // File action hooks\n    $('button#copyBtn').click(function(e) {\n        \n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = 'Copy to clipboard...';\n            \n            var url = window.location.href;\n            url = url.substring(0, url.lastIndexOf('/'));\n            url = url + '/getFile?fileName=' + selectedFileParam;\n            \n            jPrompt(msg, url , 'Copy Link');\n        } else {\n            jAlert('No file selected!', 'Copy Link');\n        }\n    });\n    \n    $('button#removeBtn').click(function(e) {\n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = \n                '<p>Are you sure you want to remove the file:</p>'+\n                '<p class=\"text-big text-center\">' + selectedFileParam + '</p>';\n                \n            jConfirm(msg, 'Remove', function(remove) {\n                // if (remove) //TODO remove\n            });\n        } else {\n            jAlert('No file selected!', 'Remove');\n        }\n    });\n    \n    $('button#downloadBtn').click(function(e) {\n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = '<p>You are downloading the file:' +\n                '<p class=\"text-big text-left\">' + selectedFileParam + '</p>' +\n                '<p class=\"text-center text-bigger\">Would you like to open the file or save it to your computer?</p>';\n            jSave(msg, 'File Download', function (result) {\n                switch(result) {\n                    case 'open':\n                        \n                        break;\n                    case 'save':\n                        window.open('/pentaho/content/cfr/getFile?fileName=' + selectedFileParam,'_blank');\n                        break;\n                }\n            });\n        } else {\n            jAlert('No file selected!', 'File Download');\n        }\n    });\n};",
       "type": "JavaScript"
      }
     ]
@@ -1146,13 +1292,13 @@
       "type": "Id"
      },
      {
-      "name": "language",
-      "value": "beanshell",
+      "name": "initscript",
+      "value": "",
       "type": "String"
      },
      {
-      "name": "initscript",
-      "value": "",
+      "name": "language",
+      "value": "beanshell",
       "type": "String"
      },
      {

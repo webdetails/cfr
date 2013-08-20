@@ -19,8 +19,6 @@
   </publications>
 
   <dependencies defaultconf="default->default">
-  
-<!--    <dependency org="pentaho" name="cpf" rev="TRUNK-SNAPSHOT" transitive="false" conf="default,runtime->default" />-->
 
     <!--  third party dependencies -->
     <dependency org="commons-logging" name="commons-logging" rev="1.1.1" transitive="false"/>
@@ -38,25 +36,23 @@
                 rev="${dependency.bi-platform.revision}" transitive="false"  changing="true"/>
                 
     <dependency org="pt.webdetails" name="cpf-core" rev="TRUNK-SNAPSHOT" transitive="false" changing="true" conf='runtime,test->default'/>
-    <dependency org="pt.webdetails" name="cpf-pentaho" rev="TRUNK-SNAPSHOT" transitive="false" changing="true" conf='runtime,test->default'/>              
+    <dependency org="pt.webdetails" name="cpf-pentaho" rev="TRUNK-SNAPSHOT" transitive="false" changing="true" conf='runtime,test->default'/>
+    <dependency org="org.codehaus.jackson" name="jackson-mapper-asl" rev="1.9.12" conf='runtime->default' />
+    <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.2.2" conf='runtime->default' />
+    <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.2.2" conf='runtime->default' />
+    <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.2.2" conf='runtime->default'/>
                 
-    <!-- RUNTIME 
-    <dependency org="pentaho" name="cda" rev="TRUNK-SNAPSHOT" changing="true" transitive="false" conf="default,runtime->default" />
--->
 
-<!-- orient db (persistence) -->
+    <!-- orient db (persistence) -->
     <dependency org="com.orientechnologies" name="orient-commons" rev="${dependency.orientdb.revision}" transitive="false" conf="runtime,default->default"/>
     <dependency org="com.orientechnologies" name="orientdb-core" rev="${dependency.orientdb.revision}" transitive="false" conf="runtime,default->default"/>
     <dependency org="com.orientechnologies" name="orientdb-server" rev="${dependency.orientdb.revision}" transitive="false" conf="runtime,default->default" />
     <dependency org="com.orientechnologies" name="orientdb-client" rev="${dependency.orientdb.revision}" transitive="false" conf="runtime,default->default" />
     <dependency org="com.orientechnologies" name="orientdb-enterprise" rev="${dependency.orientdb.revision}" transitive="false" conf="runtime,default->default" />
 
-    
-    <!-- Mustache templates 
-    <dependency org="com.github.spullara.mustache.java" name="compiler" conf='runtime,default->default' rev="0.8.4"/>
-    -->
-    
-  <dependency org="junit" name="junit" conf="test->default" rev='4.10'/>    
+    <!-- test dependencies -->
+    <dependency org="junit" name="junit" conf="test->default" rev='4.10'/>
+    <dependency org="org.mockito" name="mockito-all" rev="1.9.5" conf="test->default"/>    
     
     <exclude module="nekohtml" type="*" ext="*" conf="" matcher="exact"></exclude>
   </dependencies>
