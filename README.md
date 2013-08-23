@@ -16,38 +16,38 @@ Frequently, we come across several file management needs in the context of the P
 - An easy way for a user to upload some files to the BA Server (maybe to be used by an ETL job);
 - The ability to explore, create and delete items in the Solution Repository when in a dashboard.
 
-As always, when we are faced with the same kind of task more than two times, we start wondering if there’s a new CTool that can help us (and everyone who uses our stuff) automate that task. In this scenario, we came up with CFR - Community File Repository.
+As always, when we are faced with the same kind of task more than twice, we start to wonder whether we couldn't build a CTool that could help us (and the community) automating that task. In this scenario, we came up with CFR - Community File Repository.
 
 
 ###Main features
 
 - Ability to upload and download files from the repository
 - Ability to create folders and delete items from the repository
-- Small audit database lets you track who changed the repository and when.
+- Provides an audit database which lets you track who changed the repository and when.
 - Provides a FileBrowser component for CDE that lets you browse the repository
-- Provides a FileUploader component for CDE that lets you upload files for the repository
-- Two distinct repositories available (just change a configuration setting):
+- Provides a FileUploader component for CDE that lets you upload files to the repository
+- Two distinct repositories are available (just change a configuration setting):
 	- Pentaho Solution Repository (whether DB or File based)
-	- Filesystem Based repository (based on a folder on your BA Server machine or some other accessible machine)	
+	- Filesystem Based repository (based on a folder in your BA Server machine or some other accessible machine)	
 
 
 ## Install & Config
 
-This is a Pentaho plugin, so you can install it as normal.  
+This is a Pentaho plugin, so you can install it as as you would do it with any other plugin (unzip the contents into your pentaho-solutions/system folder).  
 
 ### Build and install the plugin 
 
-The two opperations mode available are: aggregate and columnizer. 
+Two opperating modes are available: aggregate and columnizer. 
 
 - Clone public Git repository available [here](the https://github.com/webdetails/cfr.git)
 
-- To build the plugn you can run on the command line: `ant dist-plugin`. This will create a .zip file inside `/dist` folder
+- To build the plugin, you can run use the command line: `ant dist-plugin`. This will create a .zip file inside the `/dist` folder
 
-- Unzip the file and copy the entire cfr folder to your `system` folder located inside your `pentaho-solutions` folder 
+- Unzip the file and copy the entire cfr folder to your `system` folder, located inside your `pentaho-solutions` folder 
 
 ### Settings 
 
-Inside your plugin folder there is a file `settings.xml` where you can define how the plugin will work.  
+Inside your plugin folder there is a file named `settings.xml` where you can define how the plugin's behaviour.  
 
 Files and folders are by default stored in `system/.cfr`. You can also configure some other root folder by editing the configuration file `settings.xml` and adding an attribute for your file repository with the full name of the starting folder.
 
@@ -73,17 +73,17 @@ You can roll up your own version of a repository or develop a wrapper to whateve
 </repositoryClass>
 ~~~~~~
 
-## Workink with plugin
+## Workink with the plugin
 
-Using plugin can be made trough a user interface UI or using web requests. 
+The plugin can be accessed via a user interface UI or using web requests. 
 
 ### User Interface 
 
-You can use plugin using a friendly user interface
+You can manage the plugin via a friendly user interface
 
 ** User interface URL: ** `http://<pentaho-ba-server-host>:<port>/pentaho/content/cfr/home`
 
-It will be presented a page where you can upload or download files (using the folder outside of pentaho  you can put files there over the traditional process "copy/move")  
+It will be presented a page where you can upload or download files (choosing a folder outside the pentaho repository allows you to manage the files with traditional file operations "copy/move")  
 
 ### Web Requests
 
@@ -106,7 +106,7 @@ To create, delete, list or get files and folders there are some exposed inetrfac
 
 	/createFolder?path=/folder/subfolder --> creates the specified folder
 
-- **/remove** --> removes a file of folder
+- **/remove** --> removes a file from a folder
 
 	**Query Parameters:**
 
@@ -118,17 +118,17 @@ To create, delete, list or get files and folders there are some exposed inetrfac
 	
 	/remove?path=/folder/subfolder --> removes folder with name "subfolder"
 
-- **/listFilesJSON** --> returns a [Json](http://www.json.org/) object with all files and folder. For root folder if no parameter specified 
+- **/listFilesJSON** --> returns a [Json](http://www.json.org/) object with all the files and folder. Gets the root folder if no parameter is specified 
 
 	**Query Parameters:**
 
-	dir --> (optional) specifies wich folder we want to list content
+	dir --> (optional) specifies which folder we want to list content from
 
 	**Examples:**
 
-	/listFilesJSON --> returns a [Json](http://www.json.org/) object with all files and folders in root dir
+	/listFilesJSON --> returns a [Json](http://www.json.org/) object with all files and folders in the root dir
 	
-	/listFilesJSON?dir=/folder/subfolder --> returns a [Json](http://www.json.org/) object with all files elements inside the specified folder
+	/listFilesJSON?dir=/folder/subfolder --> returns a [Json](http://www.json.org/) object with all the file elements inside the specified folder
 
 - **/createFolder** --> creates a folder
 
@@ -145,7 +145,7 @@ To create, delete, list or get files and folders there are some exposed inetrfac
 
 #### Permissions management
 
-The access to the files repository is granted by default to the files owner and to all the user administrators. If granting access to files to other users is needed it must be setted using the interfaces exposed below.
+The access to the files repository is granted by default to the files owner and to all the user administrators. If granting access to files to other users is needed it must be set using the interfaces exposed below.
 
 ###### Exposed Interfaces 
 
@@ -159,7 +159,7 @@ The access to the files repository is granted by default to the files owner and 
 	
 	id --> specifies the role or username to which we want to grant the permissions
 	
-	permission --> this is an optional parameter, by default it assumes the read value. It is used to specify the permissions to be granted [for now only the read permissions are handled]
+	permission --> this is an optional parameter, by default it assumes the "read only" value. It is used to specify the permissions to be granted [for now only the "read" permissions are handled]
 	
 	**Examples:**
 	
@@ -204,9 +204,11 @@ Yes, we can build and execute a POST request specifying the correct options. For
 
 ***
 
-*Author:* Pedro Vale, Miguel Gaspar and Rafael	
+*Authors:* Pedro Vale, Miguel Gaspar and Rafael
 *Created on:* 20/08/2013 
 *Version:* 1.0
+*Reviewed by:* Pedro Martins
+
 ***
 
 
