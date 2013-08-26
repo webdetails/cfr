@@ -984,11 +984,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "colSortable",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
       "name": "expandParameters",
       "value": "[]",
       "type": "ValuesArray"
@@ -1019,9 +1014,9 @@
       "type": "Array"
      },
      {
-      "name": "filter",
-      "value": "false",
-      "type": "Boolean"
+      "name": "colSortable",
+      "value": "[]",
+      "type": "Array"
      },
      {
       "name": "info",
@@ -1054,6 +1049,11 @@
       "type": "Boolean"
      },
      {
+      "name": "filter",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
       "name": "colSearchable",
       "value": "[]",
       "type": "Array"
@@ -1069,14 +1069,14 @@
       "type": "SortByArray"
      },
      {
-      "name": "dataSource",
-      "type": "Datasource",
-      "value": "uploadsQuery"
-     },
-     {
       "name": "sDom",
       "value": "",
       "type": "JavaScript"
+     },
+     {
+      "name": "dataSource",
+      "type": "Datasource",
+      "value": "uploadsQuery"
      },
      {
       "name": "priority",
@@ -1292,13 +1292,13 @@
       "type": "Id"
      },
      {
-      "name": "initscript",
-      "value": "",
+      "name": "language",
+      "value": "beanshell",
       "type": "String"
      },
      {
-      "name": "language",
-      "value": "beanshell",
+      "name": "initscript",
+      "value": "",
       "type": "String"
      },
      {
@@ -1308,7 +1308,7 @@
      },
      {
       "name": "query",
-      "value": "import org.pentaho.reporting.engine.classic.core.util.TypedTableModel;\nimport pt.webdetails.cda.utils.InterPluginUtils;\n\nHashMap params = new HashMap();\nparams.put(\"columns\", new String[]{\n\"file\", \"userid\", \"user\", \"uploadDate\"\n});\n\nTypedTableModel model = InterPluginUtils.getTableModelFromJsonPluginCall(\"cfr\", \"listUploadsFlat\", params);\nreturn model;",
+      "value": "import org.pentaho.reporting.engine.classic.core.util.TypedTableModel;\nimport pt.webdetails.cda.utils.InterPluginUtils;\n\nHashMap params = new HashMap();\nparams.put(\"columns\", new String[]{\n\"file\", \"user\", \"uploadDate\"\n});\n\nTypedTableModel model = InterPluginUtils.getTableModelFromJsonPluginCall(\"cfr\", \"listUploadsFlat\", params);\nreturn model;",
       "type": "SqlQuery"
      },
      {
@@ -1323,7 +1323,7 @@
      },
      {
       "name": "cdacolumns",
-      "value": "[[\"2\",\"Files\"]]",
+      "value": "[[\"0\",\"File\"],[\"1\",\"User\"],[\"2\",\"Upload Date\"]]",
       "type": "CdaColumnsArray"
      },
      {
@@ -1333,7 +1333,7 @@
      },
      {
       "name": "output",
-      "value": "[\"0\",\"1\",\"3\"]",
+      "value": "[\"0\",\"1\",\"2\"]",
       "type": "IndexArray"
      },
      {

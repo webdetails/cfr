@@ -10,18 +10,24 @@
                id="uploadsQuery"
                type="scriptable">
       <Columns>
+         <Column idx="0">
+            <Name>File</Name>
+         </Column>
+         <Column idx="1">
+            <Name>User</Name>
+         </Column>
          <Column idx="2">
-            <Name>Files</Name>
+            <Name>Upload Date</Name>
          </Column>
       </Columns>
-      <Output indexes="0,1,3" mode="include"/>
+      <Output indexes="0,1,2" mode="include"/>
       <Parameters/>
       <Query>import org.pentaho.reporting.engine.classic.core.util.TypedTableModel;
 import pt.webdetails.cda.utils.InterPluginUtils;
 
 HashMap params = new HashMap();
 params.put("columns", new String[]{
-"file", "userid", "user", "uploadDate"
+"file", "user", "uploadDate"
 });
 
 TypedTableModel model = InterPluginUtils.getTableModelFromJsonPluginCall("cfr", "listUploadsFlat", params);
