@@ -270,6 +270,27 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       getResponse().sendError(HttpServletResponse.SC_UNAUTHORIZED, "you don't have permissions to access the file");
     }
   }
+  
+  @Exposed(accessLevel = AccessLevel.PUBLIC)
+  public void viewFile(OutputStream out) throws IOException, JSONException, Exception {
+    String fullFileName = checkRelativePathSanity(getRequestParameters().getStringParameter("fileName", null));
+
+    if (fullFileName == null) {
+      logger.error("request query parameter fileName must not be null");
+      throw new Exception("request query parameter fileName must not be null");
+    }
+
+    if (mr.isCurrentUserAllowed(FilePermissionEnum.READ, fullFileName)) {
+      CfrFile file = service.getRepository().getFile(fullFileName);
+
+      setResponseHeaders(getMimeType(file.getFileName()), -1, null);
+      ByteArrayInputStream bais = new ByteArrayInputStream(file.getContent());
+      IOUtils.copy(bais, out);
+      IOUtils.closeQuietly(bais);
+    } else {
+      getResponse().sendError(HttpServletResponse.SC_UNAUTHORIZED, "you don't have permissions to access the file");
+    }
+  }
 
   @Exposed(accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON)
   public void listFilesJSON(OutputStream out) throws IOException, JSONException {

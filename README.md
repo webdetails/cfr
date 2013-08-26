@@ -150,6 +150,15 @@ To create, delete, list or get files and folders there are some exposed inetrfac
     
     /getFile?fileName=/example.txt -> retrieves the example.txt file stored in the root folder of the repository
 
+- **/viewFile** --> if called in a browser and supported by the browser itself the specified file is previewed in it, but only if the user has read permissions on it
+
+    **Query Parameters:**
+    
+    fileName --> specifies the file we want to preview/retrieve, with the path relative to the repository root
+    
+    **Examples:**
+    
+    /viewFile?fileName=/example.txt -> retrieves the example.txt file stored in the root folder of the repository and it is called in a browser the file is rendered directly in the browser (if supported)
 
 #### Permissions management
 
