@@ -58,6 +58,14 @@ public class FileStorer {
       return false;
     }
 
+    MetadataReader mr = new MetadataReader(new CfrService());
+    List<ODocument> fileEntities = null;
+    try {
+      fileEntities = mr.getFileEntities(getFullFileName(relativePath, file));
+    } catch (JSONException e) {
+      logger.trace(String.format("unable to retrieve file %s metadata", file), e);
+    }
+
     JSONObject obj = new JSONObject();
     try {
       obj.put("user", user);
@@ -67,7 +75,15 @@ public class FileStorer {
       logger.error("An error ocurred while creating json object representing the upload.", jse);
       return false;
     }
-    return getPersistenceEngine().store(null, FILE_METADATA_STORE_CLASS, obj) != null;
+
+    String id = null;
+    if (fileEntities != null && fileEntities.size() > 0) {
+      id = fileEntities.get(0).getIdentity().toString();
+    }
+    
+    result = getPersistenceEngine().store(id, FILE_METADATA_STORE_CLASS, obj) != null;
+
+    return result;
   }
 
   public String getFullFileName(String path, String filename) {

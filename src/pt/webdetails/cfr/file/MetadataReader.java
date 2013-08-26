@@ -35,6 +35,12 @@ public class MetadataReader {
     this.service = service;
   }
 
+  public List<ODocument> getFileEntities(String file) throws JSONException {
+    String query = String.format("select * from %s where file = '%s'", FileStorer.FILE_METADATA_STORE_CLASS, file);
+
+    return getPersistenceEngine().executeQuery(query, null);
+  }
+
   public JSONArray listFilesFlat(String fileName, String user, String startDate, String endDate) {
     Map<String, Object> params = new HashMap<String, Object>();
     String query = "select * from " + FileStorer.FILE_METADATA_STORE_CLASS + " ";
@@ -243,7 +249,7 @@ public class MetadataReader {
       if (whereBuilder.length() != 0) {
         whereBuilder.append(" and ");
       }
-      
+
       whereBuilder.append("(");
 
       StringBuilder idsBuilder = new StringBuilder();
