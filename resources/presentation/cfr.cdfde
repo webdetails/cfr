@@ -984,16 +984,6 @@
       "type": "JavaScript"
      },
      {
-      "name": "expandParameters",
-      "value": "[]",
-      "type": "ValuesArray"
-     },
-     {
-      "name": "colTypes",
-      "value": "[]",
-      "type": "colTypesCustom"
-     },
-     {
       "name": "colHeaders",
       "value": "[]",
       "type": "Array"
@@ -1019,14 +1009,14 @@
       "type": "Array"
      },
      {
-      "name": "info",
-      "value": "false",
-      "type": "Boolean"
+      "name": "expandParameters",
+      "value": "[]",
+      "type": "ValuesArray"
      },
      {
-      "name": "sort",
-      "value": "false",
-      "type": "Boolean"
+      "name": "colTypes",
+      "value": "[]",
+      "type": "colTypesCustom"
      },
      {
       "name": "expandOnClick",
@@ -1050,6 +1040,16 @@
      },
      {
       "name": "filter",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "info",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "sort",
       "value": "false",
       "type": "Boolean"
      },
@@ -1182,7 +1182,7 @@
      },
      {
       "name": "javaScript",
-      "value": "Dashboards.postInit = function () {\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $('input').last().addClass('hide');\n    \n    // File action hooks\n    $('button#copyBtn').click(function(e) {\n        \n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = 'Copy to clipboard...';\n            \n            var url = window.location.href;\n            url = url.substring(0, url.lastIndexOf('/'));\n            url = url + '/getFile?fileName=' + selectedFileParam;\n            \n            jPrompt(msg, url , 'Copy Link');\n        } else {\n            jAlert('No file selected!', 'Copy Link');\n        }\n    });\n    \n    $('button#removeBtn').click(function(e) {\n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = \n                '<p>Are you sure you want to remove the file:</p>'+\n                '<p class=\"text-big text-center\">' + selectedFileParam + '</p>';\n                \n            jConfirm(msg, 'Remove', function(remove) {\n                // if (remove) //TODO remove\n            });\n        } else {\n            jAlert('No file selected!', 'Remove');\n        }\n    });\n    \n    $('button#downloadBtn').click(function(e) {\n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = '<p>You are downloading the file:' +\n                '<p class=\"text-big text-left\">' + selectedFileParam + '</p>' +\n                '<p class=\"text-center text-bigger\">Would you like to open the file or save it to your computer?</p>';\n            jSave(msg, 'File Download', function (result) {\n                switch(result) {\n                    case 'open':\n                        \n                        break;\n                    case 'save':\n                        window.open('/pentaho/content/cfr/getFile?fileName=' + selectedFileParam,'_blank');\n                        break;\n                }\n            });\n        } else {\n            jAlert('No file selected!', 'File Download');\n        }\n    });\n};",
+      "value": "Dashboards.postInit = function () {\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $(\".hidePopup\").removeClass(\"hidePopup\");\n    $('input').last().addClass('hide');\n    \n    // File action hooks\n    $('button#copyBtn').click(function(e) {\n        \n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = 'Please press Ctrl+C (Windows/Linux) or Cmd+c (Mac) to copy the link below to clipboard';\n            \n            var url = window.location.href;\n            url = url.substring(0, url.lastIndexOf('/'));\n            url = url + '/getFile?fileName=' + selectedFileParam;\n            \n            jPrompt(msg, url , 'Copy Link');\n        } else {\n            jAlert('No file selected!', 'Copy Link');\n        }\n    });\n    \n    $('button#removeBtn').click(function(e) {\n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = \n                '<p>Are you sure you want to remove the file:</p>'+\n                '<p class=\"text-big text-center\">' + selectedFileParam + '</p>';\n                \n            jConfirm(msg, 'Remove', function(remove) {\n                // if (remove) //TODO remove\n            });\n        } else {\n            jAlert('No file selected!', 'Remove');\n        }\n    });\n    \n    $('button#downloadBtn').click(function(e) {\n        e.preventDefault();\n        \n        if (selectedFileParam) {\n            var msg = '<p>You are downloading the file:' +\n                '<p class=\"text-big text-left\">' + selectedFileParam + '</p>' +\n                '<p class=\"text-center text-bigger\">Would you like to open the file or save it to your computer?</p>';\n            jSave(msg, 'File Download', function (result) {\n                switch(result) {\n                    case 'open':\n                        window.open('/pentaho/content/cfr/viewFile?fileName=' + selectedFileParam,'_blank');\n                        break;\n                    case 'save':\n                        window.open('/pentaho/content/cfr/getFile?fileName=' + selectedFileParam,'_blank');\n                        break;\n                }\n            });\n        } else {\n            jAlert('No file selected!', 'File Download');\n        }\n    });\n};",
       "type": "JavaScript"
      }
     ]

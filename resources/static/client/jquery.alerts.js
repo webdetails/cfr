@@ -136,7 +136,7 @@
 					});
 				break;
 				case 'prompt':
-					$("#popup_message").append('<br /><input type="text" size="30" id="popup_prompt" />').after('<div id="popup_panel"><input type="button" value="' + $.alerts.okButton + '" id="popup_ok" /> <input type="button" value="' + $.alerts.cancelButton + '" id="popup_cancel" /></div>');
+					$("#popup_message").append('<br /><textarea id="popup_prompt" rows="4" disabled></textarea>').after('<div id="popup_panel"><input type="button" value="' + $.alerts.okButton + '" id="popup_ok" /></div>');
 					$("#popup_ok").click( function() {
 						var val = $("#popup_prompt").val();
 						$.alerts._hide();
