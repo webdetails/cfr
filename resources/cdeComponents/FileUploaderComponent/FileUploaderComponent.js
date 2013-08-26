@@ -7,7 +7,6 @@ var FileUploaderComponent = BaseComponent.extend({
       root = this.rootFolder.charAt(this.rootFolder.length - 1) === "/" ? this.rootFolder.substring(0, this.rootFolder.length - 1) : this.rootFolder;
 
     var $fileSelect = $('<div>').addClass('fileSelect');
-
     $ph.empty();
     $ph.addClass('uploadRow');
     $ph.append($fileSelect);
@@ -15,6 +14,49 @@ var FileUploaderComponent = BaseComponent.extend({
     var $selectFile = $('<div>').addClass('uploadButton');
     var $fileObj = $('<div>').addClass('hide').addClass('fileTextRow');
     var $cancelButtonDiv = $('<div>').addClass('cancelButton');
+
+    /*
+     * initialize upload dialog container
+     */
+    var $uploadDialogContainer = $('<div>').addClass('modal-content');
+    var $uploadDialogParent = $('<div>').addClass('modal fade').append($('<div>').addClass('modal-dialog').append($uploadDialogContainer));
+    var $uploadDialogHeader = $('<div>').addClass('modal-header');
+    var $uploadDialogBody = $('<div>').addClass('modal-body');
+    var $uploadDialogFooter = $('<div>').addClass('modal-footer');
+
+    // dialog header
+    $uploadDialogHeader.append($('<button data-dismiss="modal" aria-hidden="true" class="close">&times;</button>'));
+    var $uploadDialogHeaderTitle = $('<h4>Uploading File</h4>');
+    $uploadDialogHeader.append($uploadDialogHeaderTitle);
+
+    $uploadDialogContainer.append($uploadDialogHeader);
+
+
+    // upload progress bar
+    var $uploadProgressBarContainer = $('<div>').addClass('progress progress-striped active');
+    var $uploadProgressBar = $('<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>');
+
+    $uploadProgressBarContainer.append($uploadProgressBar);
+    $uploadDialogBody.append($uploadProgressBarContainer);
+
+    // upload alert section
+    var $uploadAlerts = $('<div class="hide" ></div>');
+    $uploadDialogBody.append($uploadAlerts);
+
+    $uploadDialogContainer.append($uploadDialogBody);
+
+    // dialog footer
+    var $uploadDialogCancelButton = $('<button class="btn btn-warning"></button>');
+    $uploadDialogCancelButton.click(function (e){
+
+    });
+    var $uploadDialogDismissButton = $('<button type="button" class="btn btn-default" data-dismiss="modal" disabled>OK</button>');
+    $uploadDialogFooter.append($uploadDialogDismissButton);
+
+    $uploadDialogContainer.append($uploadDialogFooter);
+
+    $ph.append($uploadDialogParent);
+    // END: initialize upload dialog container
 
     $fileSelect.append($selectFile)
       .append($fileObj).append($cancelButtonDiv);
@@ -26,18 +68,51 @@ var FileUploaderComponent = BaseComponent.extend({
       $cancelButton.click();
     };
 
-    var fileUploaded = function (response) {
+    var fileUploadedCallback = function (response) {
       if (response.result) {
-        alert('File uploaded');
+
+        fileUploadProgressCallback(null, 0, 0, 100);
+
+        // update alert
+        $uploadAlerts.attr('class', 'alert alert-success').text('File successfully uploaded');
+
+        // activate upload dialog OK button
+        $uploadDialogDismissButton.enable();
+
+        // dismiss upload dialog
+        // $uploadDialogParent.modal('hide');
+
+        //reset upload progress bar
+        //fileUploadProgressCallback(null, 0, 0, 0);
+
         fireUploaded();
         resetUploadForm();
       } else {
-        fileUploadError()
+        fileUploadErrorCallback()
       }
     };
 
-    var fileUploadError = function () {
-      alert('Error uploading file');
+    var fileUploadErrorCallback = function () {
+        // update alert
+        $uploadAlerts.attr('class', 'alert alert-danger').text('Error uploading file');
+        // activate upload dialog OK button
+        $uploadDialogDismissButton.enable();
+    };
+
+    var fileUploadProgressCallback = function (event, position, total, percent) {
+      $uploadProgressBar.attr('aria-valuenow', percent);
+      $uploadProgressBar.attr('style', 'width:' + percent + '%;');
+    };
+
+    var fileUploadBeforeSubmitCallback = function (arr, form, options) {
+        // reset upload bar
+        fileUploadProgressCallback(null, 0, 0, 0);
+
+        // reset alerts
+        $uploadAlerts.attr('class', 'hide').text('');
+
+        // show upload dialog box
+        $uploadDialogParent.modal();
     };
 
     var fireUploaded = function (filename) {
@@ -47,8 +122,10 @@ var FileUploaderComponent = BaseComponent.extend({
     // configure file upload form
     $uploadForm.ajaxForm({
       dataType: 'json',
-      success: fileUploaded,
-      error: fileUploadError
+      beforeSubmit: fileUploadBeforeSubmitCallback,
+      success: fileUploadedCallback,
+      error: fileUploadErrorCallback,
+      uploadProgress: fileUploadProgressCallback
     });
 
     $selectFile.append($fileSelectTitle);

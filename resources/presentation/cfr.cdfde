@@ -15,7 +15,7 @@
      },
      {
       "name": "resourceFile",
-      "value": "static/client/jquery.alerts.js",
+      "value": "static/client/js/jquery.alerts.js",
       "type": "ResourceFile"
      },
      {
