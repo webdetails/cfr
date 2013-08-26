@@ -139,8 +139,16 @@ To create, delete, list or get files and folders there are some exposed inetrfac
 	**Examples:**
 
 	/createFolder?path=/folder/subfolder --> creates the specified folder
+	
+- **/getFile** --> returns the specified file only if the user has read permissions on it
 
-
+    **Query Parameters:**
+    
+    fileName --> specifies the file we want to retrieve, with the path relative to the repository root
+    
+    **Examples:**
+    
+    /getFile?fileName=/example.txt -> retrieves the example.txt file stored in the root folder of the repository
 
 
 #### Permissions management
