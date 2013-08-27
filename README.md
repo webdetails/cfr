@@ -73,7 +73,7 @@ You can roll up your own version of a repository or develop a wrapper to whateve
 </repositoryClass>
 ~~~~~~
 
-## Workink with the plugin
+## Working with the plugin
 
 The plugin can be accessed via a user interface UI or using web requests. 
 
@@ -81,7 +81,7 @@ The plugin can be accessed via a user interface UI or using web requests.
 
 You can manage the plugin via a friendly user interface
 
-** User interface URL: ** `http://<pentaho-ba-server-host>:<port>/pentaho/content/cfr/home`
+**User interface URL:** `http://<pentaho-ba-server-host>:<port>/pentaho/content/cfr/home`
 
 It will be presented a page where you can upload or download files (choosing a folder outside the pentaho repository allows you to manage the files with traditional file operations "copy/move")  
 
@@ -94,7 +94,7 @@ To create, delete, list or get files and folders there are some exposed inetrfac
 
 ###### Exposed Interfaces 
 
-** Base URL: ** `http://<pentaho-ba-server-host>:<port>/pentaho/content/cfr`
+**Base URL:** `http://<pentaho-ba-server-host>:<port>/pentaho/content/cfr`
 
 - **/createFolder** --> creates a folder
 
@@ -158,7 +158,7 @@ To create, delete, list or get files and folders there are some exposed inetrfac
     
     **Examples:**
     
-    /viewFile?fileName=/example.txt -> retrieves the example.txt file stored in the root folder of the repository and it is called in a browser the file is rendered directly in the browser (if supported)
+    /viewFile?fileName=/example.txt -> retrieves the example.txt file stored in the root folder and it is called in a browser. The file is rendered directly inside the browser (if supported)
 
 #### Permissions management
 
