@@ -24,7 +24,6 @@
       	<Code src="FileUploaderComponent.js"/>
       	<Styles>
           <Style version="1.0" src="css/component.css">FileUploaderCss</Style>
-          <Style version="1.0" src="css/bootstrap.min.css">BootstrapCss</Style>
       	</Styles>
       	<Dependencies>
           <Dependency src="lib/jquery.form.js" version="1.0">jquery.form</Dependency>
