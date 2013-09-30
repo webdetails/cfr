@@ -4,9 +4,9 @@
 
 package pt.webdetails.cfr.repository;
 
-import java.io.DataInputStream;
+//import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
+//import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,19 +18,19 @@ import pt.webdetails.cfr.CfrPluginSettings;
 import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.IFile;
 
-/***
- * The default file repository takes system/.cfr as its base path.
- * All files and folders are created here.
+/**
+ * The default file repository takes system/.cfr as its base path. All files and folders are created here.
+ * 
  * @author pedrovale
  */
 public class DefaultFileRepository implements IFileRepository {
 
-  static Log logger = LogFactory.getLog(DefaultFileRepository.class);
+  static Log logger = LogFactory.getLog( DefaultFileRepository.class );
 
   protected String basePath;
 
   protected String getBasePath() {
-    if (basePath == null) {
+    if ( basePath == null ) {
       CfrPluginSettings settings = new CfrPluginSettings();
       basePath = settings.getBasePath();
     }
@@ -48,29 +48,30 @@ public class DefaultFileRepository implements IFileRepository {
   }
 
   @Override
-  public boolean storeFile(byte[] content, String fileName, String relativePath) {
+  public boolean storeFile( byte[] content, String fileName, String relativePath ) {
 
-    if (!checkPath(relativePath))
+    if ( !checkPath( relativePath ) ) {
       return false;
+    }
 
     String fullPath = getBasePath() + File.separator + relativePath;
-    File f = new File(fullPath, fileName);
+    File f = new File( fullPath, fileName );
 
-    if (!f.getParentFile().exists()) {
+    if ( !f.getParentFile().exists() ) {
       f.getParentFile().mkdirs();
     }
     FileOutputStream fos;
 
     try {
-      fos = new FileOutputStream(f, false);
-      fos.write(content);
+      fos = new FileOutputStream( f, false );
+      fos.write( content );
       fos.flush();
       fos.close();
-    } catch (FileNotFoundException fnfe) {
-      logger.error("Unable to create file. Check permissions on folder " + fullPath, fnfe);
+    } catch ( FileNotFoundException fnfe ) {
+      logger.error( "Unable to create file. Check permissions on folder " + fullPath, fnfe );
       return false;
-    } catch (IOException ioe) {
-      logger.error("Error caught while writing file", ioe);
+    } catch ( IOException ioe ) {
+      logger.error( "Error caught while writing file", ioe );
       return false;
     }
 
@@ -78,42 +79,46 @@ public class DefaultFileRepository implements IFileRepository {
   }
 
   @Override
-  public boolean createFolder(String fullPathName) {
+  public boolean createFolder( String fullPathName ) {
 
-    if (!checkPath(fullPathName))
+    if ( !checkPath( fullPathName ) ) {
       return false;
+    }
 
-    File f = new File(getBasePath() + File.separator + fullPathName);
-    if (!f.exists())
+    File f = new File( getBasePath() + File.separator + fullPathName );
+    if ( !f.exists() ) {
       return f.mkdirs();
+    }
 
     return true;
   }
 
   @Override
-  public boolean deleteFile(String fullName) {
+  public boolean deleteFile( String fullName ) {
 
-    if (!checkPath(fullName))
+    if ( !checkPath( fullName ) ) {
       return false;
+    }
 
-    File f = new File(getBasePath() + File.separator + fullName);
+    File f = new File( getBasePath() + File.separator + fullName );
     return f.delete();
   }
 
   @Override
-  public IFile[] listFiles(String startPath) {
+  public IFile[] listFiles( String startPath ) {
 
-    if (!checkPath(startPath))
-      return null;
-
-    File f = new File(getBasePath() + File.separator + startPath);
-    File[] files = f.listFiles();
-    if (files == null) {
+    if ( !checkPath( startPath ) ) {
       return null;
     }
-    
+
+    File f = new File( getBasePath() + File.separator + startPath );
+    File[] files = f.listFiles();
+    if ( files == null ) {
+      return null;
+    }
+
     IFile[] result = new IFile[files.length];
-    for (int i = 0; i < files.length; i++) {
+    for ( int i = 0; i < files.length; i++ ) {
       final File listedFile = files[i];
       result[i] = new IFile() {
 
@@ -144,38 +149,39 @@ public class DefaultFileRepository implements IFileRepository {
   }
 
   @Override
-  public CfrFile getFile(String fullName) {
+  public CfrFile getFile( String fullName ) {
     CfrFile result = null;
 
-    if (!checkPath(fullName)) {
+    if ( !checkPath( fullName ) ) {
       return null;
     }
 
     File f = null;
-    if (fullName.startsWith(File.separator)) {
-      f = new File(getBasePath() + fullName);
+    if ( fullName.startsWith( File.separator ) ) {
+      f = new File( getBasePath() + fullName );
     } else {
-      f = new File(getBasePath() + File.separator + fullName);
+      f = new File( getBasePath() + File.separator + fullName );
     }
-    if (!f.exists()) {
-      logger.error("File not found for " + fullName + ". Returning null.");
+    if ( !f.exists() ) {
+      logger.error( "File not found for " + fullName + ". Returning null." );
       return null;
     }
-    
-    result = new CfrFile(f.getName(), f.getPath().replace(f.getName(), ""), f);
+
+    result = new CfrFile( f.getName(), f.getPath().replace( f.getName(), "" ), f );
     return result;
   }
 
   /**
-   * Checks if path contains ../ - we won't allow any back tracking in paths,
-   * even if they might be valid
+   * Checks if path contains ../ - we won't allow any back tracking in paths, even if they might be valid
+   * 
    * @param path
    * @return <i>true</i> if path does not contain bactracking info
    */
-  private boolean checkPath(String path) {
-    boolean result = !path.contains("..");
-    if (!result)
-      logger.warn("Path parameter contains unsupported back tracking path element: " + path);
+  private boolean checkPath( String path ) {
+    boolean result = !path.contains( ".." );
+    if ( !result ) {
+      logger.warn( "Path parameter contains unsupported back tracking path element: " + path );
+    }
     return result;
   }
 

@@ -19,13 +19,13 @@ public class CfrFile implements IFile {
 
   private String downloadPath;
 
-  public CfrFile(String fileName, String downloadPath, byte[] content) {
+  public CfrFile( String fileName, String downloadPath, byte[] content ) {
     this.fileName = fileName;
     this.downloadPath = downloadPath;
     this.content = content;
   }
 
-  public CfrFile(String fileName, String downloadPath, File file) {
+  public CfrFile( String fileName, String downloadPath, File file ) {
     this.fileName = fileName;
     this.downloadPath = downloadPath;
     this.file = file;
@@ -42,17 +42,17 @@ public class CfrFile implements IFile {
    * @return the content
    */
   public byte[] getContent() {
-    if (content == null && file != null) {
-      if (file.isFile()) {
+    if ( content == null && file != null ) {
+      if ( file.isFile() ) {
         content = new byte[(int) file.length()];
         try {
-          DataInputStream dis = new DataInputStream(new FileInputStream(file));
-          dis.readFully(content);
+          DataInputStream dis = new DataInputStream( new FileInputStream( file ) );
+          dis.readFully( content );
           dis.close();
-        } catch (FileNotFoundException e) {
+        } catch ( FileNotFoundException e ) {
           // TODO Auto-generated catch block
           e.printStackTrace();
-        } catch (IOException e) {
+        } catch ( IOException e ) {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
@@ -81,7 +81,7 @@ public class CfrFile implements IFile {
 
   @Override
   public boolean isDirectory() {
-    if (file != null) {
+    if ( file != null ) {
       return file.isDirectory();
     }
     return false;
@@ -89,7 +89,7 @@ public class CfrFile implements IFile {
 
   @Override
   public boolean isFile() {
-    if (file != null) {
+    if ( file != null ) {
       return file.isFile();
     }
     return true;

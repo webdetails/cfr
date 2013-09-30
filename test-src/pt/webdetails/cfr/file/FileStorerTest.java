@@ -15,8 +15,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.google.common.collect.Maps;
-
 import pt.webdetails.cfr.repository.DefaultFileRepository;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 
@@ -29,52 +27,52 @@ public class FileStorerTest {
 
   @AfterClass
   public static void setDown() throws Exception {
-    PersistenceEngine.getInstance().dropClass(FileStorer.FILE_METADATA_STORE_CLASS);
-    PersistenceEngine.getInstance().dropClass(FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS);
+    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
   }
 
   @Before
   public void resetRepo() {
-    PersistenceEngine.getInstance().dropClass(FileStorer.FILE_METADATA_STORE_CLASS);
-    PersistenceEngine.getInstance().dropClass(FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS);
-    PersistenceEngine.getInstance().initializeClass(FileStorer.FILE_METADATA_STORE_CLASS);
-    PersistenceEngine.getInstance().initializeClass(FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS);
+    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
+    PersistenceEngine.getInstance().initializeClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngine.getInstance().initializeClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
   }
 
   @Test
   public void testFileStorer() throws JSONException {
-    FileStorer fs = new FileStorer(new DefaultFileRepositoryForTests());
+    FileStorer fs = new FileStorer( new DefaultFileRepositoryForTests() );
 
-    Assert.assertTrue(fs.storeFile("t.txt", "my_test", new byte[50], "User"));
+    Assert.assertTrue( fs.storeFile( "t.txt", "my_test", new byte[50], "User" ) );
 
     PersistenceEngine pe = PersistenceEngine.getInstance();
-    JSONObject result = pe.query("select from " + FileStorer.FILE_METADATA_STORE_CLASS, null);
+    JSONObject result = pe.query( "select from " + FileStorer.FILE_METADATA_STORE_CLASS, null );
 
-    JSONArray resultArray = result.getJSONArray("object");
-    Assert.assertEquals(1, resultArray.length());
+    JSONArray resultArray = result.getJSONArray( "object" );
+    Assert.assertEquals( 1, resultArray.length() );
 
-    JSONObject resultElt = resultArray.getJSONObject(0);
+    JSONObject resultElt = resultArray.getJSONObject( 0 );
 
-    Assert.assertEquals("User", resultElt.getString("user"));
-    Assert.assertEquals("my_test" + File.separator + "t.txt", resultElt.getString("file"));
+    Assert.assertEquals( "User", resultElt.getString( "user" ) );
+    Assert.assertEquals( "my_test" + File.separator + "t.txt", resultElt.getString( "file" ) );
 
   }
 
   @Test
   public void testFileStorerFailLoading() throws JSONException {
-    FileStorer fs = new FileStorer(new DefaultFileRepositoryForTests());
+    FileStorer fs = new FileStorer( new DefaultFileRepositoryForTests() );
 
-    Assert.assertTrue(fs.storeFile("t.txt", "my_test", new byte[50], "User"));
+    Assert.assertTrue( fs.storeFile( "t.txt", "my_test", new byte[50], "User" ) );
 
-    fs = new FileStorer(new DefaultFileRepositoryForTests(false));
+    fs = new FileStorer( new DefaultFileRepositoryForTests( false ) );
 
-    Assert.assertFalse(fs.storeFile("t.txt", "my_test", new byte[50], "User"));
+    Assert.assertFalse( fs.storeFile( "t.txt", "my_test", new byte[50], "User" ) );
 
     PersistenceEngine pe = PersistenceEngine.getInstance();
-    JSONObject result = pe.query("select from " + FileStorer.FILE_METADATA_STORE_CLASS, null);
+    JSONObject result = pe.query( "select from " + FileStorer.FILE_METADATA_STORE_CLASS, null );
 
-    JSONArray resultArray = result.getJSONArray("object");
-    Assert.assertEquals(1, resultArray.length()); //There should be only the result of the first test      
+    JSONArray resultArray = result.getJSONArray( "object" );
+    Assert.assertEquals( 1, resultArray.length() ); // There should be only the result of the first test
   }
 
   public class DefaultFileRepositoryForTests extends DefaultFileRepository {
@@ -85,7 +83,7 @@ public class FileStorerTest {
       this.result = true;
     }
 
-    public DefaultFileRepositoryForTests(boolean expectedResult) {
+    public DefaultFileRepositoryForTests( boolean expectedResult ) {
       this.result = expectedResult;
     }
 
@@ -95,7 +93,7 @@ public class FileStorerTest {
     }
 
     @Override
-    public boolean storeFile(byte[] content, String fileName, String relativePath) {
+    public boolean storeFile( byte[] content, String fileName, String relativePath ) {
       return this.result;
     }
   }

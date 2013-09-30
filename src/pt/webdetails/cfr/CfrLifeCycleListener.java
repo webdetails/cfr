@@ -5,6 +5,7 @@
 package pt.webdetails.cfr;
 
 import java.io.File;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.platform.api.engine.IPluginLifecycleListener;
@@ -14,50 +15,48 @@ import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 
 public class CfrLifeCycleListener implements IPluginLifecycleListener {
-  static Log logger = LogFactory.getLog(CfrLifeCycleListener.class);
-    
+  static Log logger = LogFactory.getLog( CfrLifeCycleListener.class );
+
   @Override
   public void init() throws PluginLifecycleException {
-      logger.debug("Init for CFR");
-      PersistenceEngine engine = PersistenceEngine.getInstance();
-      engine.initializeClass("UploadedFiles");
-      engine.initializeClass("UploadedFilesPermissions");
+    logger.debug( "Init for CFR" );
+    PersistenceEngine engine = PersistenceEngine.getInstance();
+    engine.initializeClass( "UploadedFiles" );
+    engine.initializeClass( "UploadedFilesPermissions" );
   }
 
   @Override
-  public void loaded() throws PluginLifecycleException {    
-    String defaultRepositoryPath = PentahoSystem.getApplicationContext().getSolutionPath("/system/.cfr");
-    File dirPath = new File(defaultRepositoryPath);
-    if (!dirPath.exists()) {
+  public void loaded() throws PluginLifecycleException {
+    String defaultRepositoryPath = PentahoSystem.getApplicationContext().getSolutionPath( "/system/.cfr" );
+    File dirPath = new File( defaultRepositoryPath );
+    if ( !dirPath.exists() ) {
       dirPath.mkdir();
-    }    
-    
-    //Run the init method for the chosen FileRepository
+    }
+
+    // Run the init method for the chosen FileRepository
     IFileRepository repository = getRepository();
     repository.init();
-            
-    
+
   }
 
   @Override
   public void unLoaded() throws PluginLifecycleException {
-      logger.debug("Unload for CFR");
-      getRepository().shutdown();
+    logger.debug( "Unload for CFR" );
+    getRepository().shutdown();
   }
-  
-  
+
   private IFileRepository getRepository() {
     String repositoryClass = new CfrPluginSettings().getRepositoryClass();
     try {
-      return (IFileRepository)Class.forName(repositoryClass).newInstance();    
-    } catch (ClassNotFoundException cnfe) {
-      logger.fatal("Class for repository " + repositoryClass + " not found. CFR will not be available", cnfe);
-    } catch (InstantiationException ie) {
-      logger.fatal("Instantiaton of class failed", ie);
-    } catch (IllegalAccessException iae) {
-      logger.fatal("Illegal access to repository class", iae);
+      return (IFileRepository) Class.forName( repositoryClass ).newInstance();
+    } catch ( ClassNotFoundException cnfe ) {
+      logger.fatal( "Class for repository " + repositoryClass + " not found. CFR will not be available", cnfe );
+    } catch ( InstantiationException ie ) {
+      logger.fatal( "Instantiaton of class failed", ie );
+    } catch ( IllegalAccessException iae ) {
+      logger.fatal( "Illegal access to repository class", iae );
     }
     return null;
   }
-  
+
 }

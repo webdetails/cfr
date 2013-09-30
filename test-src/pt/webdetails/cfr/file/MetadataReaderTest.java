@@ -30,23 +30,23 @@ import com.google.common.collect.ImmutableList;
 
 public class MetadataReaderTest {
 
-  private static void createFile(String owner, String file, String date) throws JSONException {
+  private static void createFile( String owner, String file, String date ) throws JSONException {
     JSONObject obj = new JSONObject();
 
-    obj.put("user", owner);
-    obj.put("file", file);
-    obj.put("uploadDate", date);
-    PersistenceEngine.getInstance().store(null, FileStorer.FILE_METADATA_STORE_CLASS, obj);
+    obj.put( "user", owner );
+    obj.put( "file", file );
+    obj.put( "uploadDate", date );
+    PersistenceEngine.getInstance().store( null, FileStorer.FILE_METADATA_STORE_CLASS, obj );
 
   }
 
   private static final String USER_1 = "user1";
 
-  private static final List<String> USER_1_ROLES = ImmutableList.of("admin", "user");
+  private static final List<String> USER_1_ROLES = ImmutableList.of( "admin", "user" );
 
   private static final String USER_2 = "user2";
 
-  private static final List<String> USER_2_ROLES = ImmutableList.of("manager", "user");
+  private static final List<String> USER_2_ROLES = ImmutableList.of( "manager", "user" );
 
   private static final String FILE_1 = "test" + File.separator + "t1.txt";
 
@@ -65,21 +65,21 @@ public class MetadataReaderTest {
   @BeforeClass
   public static void setUp() throws Exception {
     PersistenceEngine.getInstance().startOrient();
-    PersistenceEngine.getInstance().dropClass(FileStorer.FILE_METADATA_STORE_CLASS);
-    PersistenceEngine.getInstance().dropClass(FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS);
+    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
 
-    PersistenceEngine.getInstance().initializeClass(FileStorer.FILE_METADATA_STORE_CLASS);
-    PersistenceEngine.getInstance().initializeClass(FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS);
+    PersistenceEngine.getInstance().initializeClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngine.getInstance().initializeClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
 
-    createFile(USER_1, FILE_1, FILE_1_DATE);
-    createFile(USER_1, FILE_2, FILE_2_DATE);
-    createFile(USER_2, FILE_3, FILE_3_DATE);
+    createFile( USER_1, FILE_1, FILE_1_DATE );
+    createFile( USER_1, FILE_2, FILE_2_DATE );
+    createFile( USER_2, FILE_3, FILE_3_DATE );
   }
 
   @AfterClass
   public static void setDown() throws Exception {
-    PersistenceEngine.getInstance().dropClass(FileStorer.FILE_METADATA_STORE_CLASS);
-    PersistenceEngine.getInstance().dropClass(FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS);
+    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
   }
 
   @Mock
@@ -90,91 +90,91 @@ public class MetadataReaderTest {
   @Before
   public void initializeMocks() {
 
-    cs = mock(CfrService.class);
+    cs = mock( CfrService.class );
 
-    when(cs.getCurrentUserName()).thenReturn(USER_1);
-    when(cs.getRepository()).thenReturn(new DefaultFileRepositoryForTests());
-    when(cs.getUserRoles()).thenReturn(USER_1_ROLES);
-    when(cs.isCurrentUserAdmin()).thenReturn(true);
+    when( cs.getCurrentUserName() ).thenReturn( USER_1 );
+    when( cs.getRepository() ).thenReturn( new DefaultFileRepositoryForTests() );
+    when( cs.getUserRoles() ).thenReturn( USER_1_ROLES );
+    when( cs.isCurrentUserAdmin() ).thenReturn( true );
 
-    mr = new MetadataReader(cs);
+    mr = new MetadataReader( cs );
 
   }
 
   @Test
   public void testMetadataReadFull() throws JSONException {
     // admin users are supposed to have access to the whole file repo
-    when(cs.isCurrentUserAdmin()).thenReturn(true);
+    when( cs.isCurrentUserAdmin() ).thenReturn( true );
 
-    JsonSerializable result = mr.listFiles(null, null, null, null);
+    JsonSerializable result = mr.listFiles( null, null, null, null );
     JSONObject obj = result.toJSON();
-    JSONArray arr = obj.getJSONArray("result");
+    JSONArray arr = obj.getJSONArray( "result" );
 
-    Assert.assertEquals("files count", 3, arr.length());
+    Assert.assertEquals( "files count", 3, arr.length() );
   }
 
   @Test
   public void testMetadataReadByUser() throws JSONException {
     // admin users are supposed to have access to the whole file repo
-    when(cs.isCurrentUserAdmin()).thenReturn(true);
+    when( cs.isCurrentUserAdmin() ).thenReturn( true );
 
-    JsonSerializable result = mr.listFiles(null, USER_2, null, null);
+    JsonSerializable result = mr.listFiles( null, USER_2, null, null );
     JSONObject obj = result.toJSON();
-    JSONArray arr = obj.getJSONArray("result");
+    JSONArray arr = obj.getJSONArray( "result" );
 
-    Assert.assertEquals(1, arr.length());
+    Assert.assertEquals( 1, arr.length() );
 
-    Assert.assertEquals(USER_2, arr.getJSONObject(0).getString("user"));
-    Assert.assertEquals(FILE_3, arr.getJSONObject(0).getString("file"));
+    Assert.assertEquals( USER_2, arr.getJSONObject( 0 ).getString( "user" ) );
+    Assert.assertEquals( FILE_3, arr.getJSONObject( 0 ).getString( "file" ) );
   }
 
   @Test
   public void testMetadataReadByFile() throws JSONException {
 
-    JsonSerializable result = mr.listFiles(FILE_1, null, null, null);
+    JsonSerializable result = mr.listFiles( FILE_1, null, null, null );
 
     JSONObject obj = result.toJSON();
-    JSONArray arr = obj.getJSONArray("result");
+    JSONArray arr = obj.getJSONArray( "result" );
 
-    assertEquals(1, arr.length());
+    assertEquals( 1, arr.length() );
 
-    result = mr.listFiles(FILE_NOT_STORED, null, null, null);
-    arr = result.toJSON().getJSONArray("result");
+    result = mr.listFiles( FILE_NOT_STORED, null, null, null );
+    arr = result.toJSON().getJSONArray( "result" );
 
-    assertEquals(0, arr.length());
+    assertEquals( 0, arr.length() );
   }
 
   @Test
   public void testMetadataReadByFileAndUser() throws JSONException {
-    when(cs.getCurrentUserName()).thenReturn(USER_2);
-    JsonSerializable result = mr.listFiles(FILE_3, USER_2, null, null);
+    when( cs.getCurrentUserName() ).thenReturn( USER_2 );
+    JsonSerializable result = mr.listFiles( FILE_3, USER_2, null, null );
 
     JSONObject obj = result.toJSON();
-    JSONArray arr = obj.getJSONArray("result");
+    JSONArray arr = obj.getJSONArray( "result" );
 
-    Assert.assertEquals(1, arr.length());
+    Assert.assertEquals( 1, arr.length() );
 
   }
 
   @Test
   public void testMetadataReadByStartDate() throws JSONException {
-    JsonSerializable result = mr.listFiles(null, null, "2012-11-13 16:50:00", null);
+    JsonSerializable result = mr.listFiles( null, null, "2012-11-13 16:50:00", null );
 
     JSONObject obj = result.toJSON();
-    JSONArray arr = obj.getJSONArray("result");
+    JSONArray arr = obj.getJSONArray( "result" );
 
-    Assert.assertEquals(2, arr.length());
+    Assert.assertEquals( 2, arr.length() );
   }
 
   @Test
   public void testMetadataReadByEndDate() throws JSONException {
-    JsonSerializable result = mr.listFiles(null, null, null, "2012-11-13 16:50:00");
+    JsonSerializable result = mr.listFiles( null, null, null, "2012-11-13 16:50:00" );
 
     JSONObject obj = result.toJSON();
 
-    JSONArray arr = obj.getJSONArray("result");
+    JSONArray arr = obj.getJSONArray( "result" );
 
-    Assert.assertEquals(1, arr.length());
+    Assert.assertEquals( 1, arr.length() );
 
   }
 
@@ -195,34 +195,34 @@ public class MetadataReaderTest {
 
   @Test
   public void testIsCurrentUserAllowed() {
-    when(cs.isCurrentUserAdmin()).thenReturn(false);
-    when(cs.getCurrentUserName()).thenReturn(USER_2);
+    when( cs.isCurrentUserAdmin() ).thenReturn( false );
+    when( cs.getCurrentUserName() ).thenReturn( USER_2 );
     FilePermissionEnum permission = FilePermissionEnum.READ;
-    assertFalse(String.format("current user %s isn't allowed to %s %s", cs.getCurrentUserName(), permission, FILE_1),
-        mr.isCurrentUserAllowed(permission, FILE_1));
+    assertFalse(
+        String.format( "current user %s isn't allowed to %s %s", cs.getCurrentUserName(), permission, FILE_1 ), mr
+            .isCurrentUserAllowed( permission, FILE_1 ) );
 
-    when(cs.getCurrentUserName()).thenReturn(USER_1);
-    assertTrue(String.format("current user %s is allowed to %s file %s", cs.getCurrentUserName(), permission, FILE_1),
-        mr.isCurrentUserAllowed(permission, FILE_1));
+    when( cs.getCurrentUserName() ).thenReturn( USER_1 );
+    assertTrue(
+        String.format( "current user %s is allowed to %s file %s", cs.getCurrentUserName(), permission, FILE_1 ), mr
+            .isCurrentUserAllowed( permission, FILE_1 ) );
   }
 
   @Test
   public void testIsCurrentUserOwner() {
-    when(cs.getCurrentUserName()).thenReturn(USER_1);
-    assertTrue(
-        String.format("current user %s is supposed to be the owner of the file %s", cs.getCurrentUserName(), FILE_1),
-        mr.isCurrentUserOwner(FILE_1));
+    when( cs.getCurrentUserName() ).thenReturn( USER_1 );
+    assertTrue( String.format( "current user %s is supposed to be the owner of the file %s", cs.getCurrentUserName(),
+        FILE_1 ), mr.isCurrentUserOwner( FILE_1 ) );
 
-    when(cs.getCurrentUserName()).thenReturn(USER_2);
-    assertFalse(
-        String.format("current user %s isn't supposed to be the owner of the file %s", cs.getCurrentUserName(), FILE_1),
-        mr.isCurrentUserOwner(FILE_1));
+    when( cs.getCurrentUserName() ).thenReturn( USER_2 );
+    assertFalse( String.format( "current user %s isn't supposed to be the owner of the file %s", cs
+        .getCurrentUserName(), FILE_1 ), mr.isCurrentUserOwner( FILE_1 ) );
   }
 
   @Test
   public void testGetOwner() {
-    assertEquals(String.format("file %s owner is ", FILE_1, USER_1), USER_1, mr.getOwner(FILE_1));
-    assertEquals("expected empty string since the file doesn't exists", "", mr.getOwner("unexistent_file.log"));
+    assertEquals( String.format( "file %s owner is ", FILE_1, USER_1 ), USER_1, mr.getOwner( FILE_1 ) );
+    assertEquals( "expected empty string since the file doesn't exists", "", mr.getOwner( "unexistent_file.log" ) );
   }
 
 }

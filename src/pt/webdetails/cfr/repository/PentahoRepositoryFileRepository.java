@@ -22,34 +22,33 @@ import pt.webdetails.cpf.repository.PentahoRepositoryAccess;
 
 public class PentahoRepositoryFileRepository implements IFileRepository {
 
-  static Log logger = LogFactory.getLog(PentahoRepositoryFileRepository.class);  
-  
-  
+  static Log logger = LogFactory.getLog( PentahoRepositoryFileRepository.class );
+
   protected IRepositoryAccess getRepositoryAccess() {
     return PentahoRepositoryAccess.getRepository();
   }
-  
-  
+
   protected IPentahoSession getUserSession() {
     return PentahoSessionHolder.getSession();
   }
-  
+
   @Override
   public void init() {
 
   }
 
   @Override
-  public boolean storeFile(byte[] content, String fileName, String relativePath) {
-    SaveFileStatus sfs = getRepositoryAccess().publishFile(relativePath + "/" + fileName, content, true);
+  public boolean storeFile( byte[] content, String fileName, String relativePath ) {
+    SaveFileStatus sfs = getRepositoryAccess().publishFile( relativePath + "/" + fileName, content, true );
     return sfs == SaveFileStatus.OK;
   }
 
   @Override
-  public IFile[] listFiles(String startPath) {
-    IRepositoryFile[] repositoryFiles = ((PentahoRepositoryAccess)getRepositoryAccess()).getFileList(startPath, null, null, getUserSession());
+  public IFile[] listFiles( String startPath ) {
+    IRepositoryFile[] repositoryFiles =
+        ( (PentahoRepositoryAccess) getRepositoryAccess() ).getFileList( startPath, null, null, getUserSession() );
     IFile[] result = new IFile[repositoryFiles.length];
-    for (int i=0; i < repositoryFiles.length; i++) {
+    for ( int i = 0; i < repositoryFiles.length; i++ ) {
       final IRepositoryFile f = repositoryFiles[i];
       result[i] = new IFile() {
 
@@ -72,57 +71,58 @@ public class PentahoRepositoryFileRepository implements IFileRepository {
         public boolean isFile() {
           return !f.isDirectory();
         }
-      
+
       };
     }
-    
+
     return result;
   }
 
   @Override
-  public CfrFile getFile(String fullName) {
+  public CfrFile getFile( String fullName ) {
     InputStream is = null;
     try {
-      is = getRepositoryAccess().getResourceInputStream(fullName, FileAccess.READ);
-    } catch (FileNotFoundException fnfe) {
-      logger.error("file not found: " + fullName, fnfe);
+      is = getRepositoryAccess().getResourceInputStream( fullName, FileAccess.READ );
+    } catch ( FileNotFoundException fnfe ) {
+      logger.error( "file not found: " + fullName, fnfe );
       return null;
     }
-    
+
     byte[] contents = null;
     try {
       contents = new byte[is.available()];
-      is.read(contents);    
+      is.read( contents );
       is.close();
-    } catch (IOException ioe) {
-      logger.error("IOException while reading file content", ioe);
+    } catch ( IOException ioe ) {
+      logger.error( "IOException while reading file content", ioe );
       return null;
     }
-    String[] pathComponents = fullName.split("/");
+    String[] pathComponents = fullName.split( "/" );
     String fileName = pathComponents[pathComponents.length - 1];
-    CfrFile resultFile = new CfrFile(fileName, fullName.replace(fileName, ""), contents);
+    CfrFile resultFile = new CfrFile( fileName, fullName.replace( fileName, "" ), contents );
     return resultFile;
   }
 
   @Override
-  public boolean createFolder(String fullPathName) {
+  public boolean createFolder( String fullPathName ) {
     try {
-      return getRepositoryAccess().createFolder(fullPathName);
-    } catch (IOException ioe) {
-      logger.error("Error while creating folder", ioe);
+      return getRepositoryAccess().createFolder( fullPathName );
+    } catch ( IOException ioe ) {
+      logger.error( "Error while creating folder", ioe );
       return false;
     }
   }
 
   @Override
-  public boolean deleteFile(String fullName) {
-    if (getRepositoryAccess().hasAccess(fullName, FileAccess.DELETE))
-      return getRepositoryAccess().removeFile(fullName);
+  public boolean deleteFile( String fullName ) {
+    if ( getRepositoryAccess().hasAccess( fullName, FileAccess.DELETE ) ) {
+      return getRepositoryAccess().removeFile( fullName );
+    }
     return false;
   }
 
   @Override
   public void shutdown() {
   }
-  
+
 }

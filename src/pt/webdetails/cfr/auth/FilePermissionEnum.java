@@ -5,13 +5,13 @@ package pt.webdetails.cfr.auth;
 
 public enum FilePermissionEnum {
 
-  READ("read"), WRITE("write"), DELETE("delete");
+  READ( "read" ), WRITE( "write" ), DELETE( "delete" );
 
   private String id;
 
   private String description;
 
-  private FilePermissionEnum(String id) {
+  private FilePermissionEnum( String id ) {
     this.id = id;
   }
 
@@ -29,12 +29,12 @@ public enum FilePermissionEnum {
     return description;
   }
 
-  public static FilePermissionEnum resolve(String permission) {
+  public static FilePermissionEnum resolve( String permission ) {
     FilePermissionEnum result = null;
 
-    if (permission != null) {
-      for (FilePermissionEnum value : FilePermissionEnum.values()) {
-        if (permission.equalsIgnoreCase(value.getId())) {
+    if ( permission != null ) {
+      for ( FilePermissionEnum value : FilePermissionEnum.values() ) {
+        if ( permission.equalsIgnoreCase( value.getId() ) ) {
           result = value;
           break;
         }

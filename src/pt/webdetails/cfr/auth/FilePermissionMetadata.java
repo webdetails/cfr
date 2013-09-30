@@ -24,31 +24,30 @@ public class FilePermissionMetadata {
   public static FilePermissionEnum[] DEFAULT_PERMISSIONS = new FilePermissionEnum[] { FilePermissionEnum.READ };
 
   /**
-   * 
-   * @param file Full path of the file
-   * @param id Username or Group name to associate the default permissions
+   * @param file
+   *          Full path of the file
+   * @param id
+   *          Username or Group name to associate the default permissions
    */
-  public FilePermissionMetadata(String file, String id) {
-    this(file, id, DEFAULT_PERMISSIONS);
+  public FilePermissionMetadata( String file, String id ) {
+    this( file, id, DEFAULT_PERMISSIONS );
   }
 
   /**
-   * 
    * @param file
    * @param id
    * @param permissions
    */
-  public FilePermissionMetadata(String file, String id, FilePermissionEnum[] permissions) {
-    this(file, id, new LinkedHashSet<FilePermissionEnum>(Arrays.asList(permissions)));
+  public FilePermissionMetadata( String file, String id, FilePermissionEnum[] permissions ) {
+    this( file, id, new LinkedHashSet<FilePermissionEnum>( Arrays.asList( permissions ) ) );
   }
 
   /**
-   * 
    * @param file
    * @param id
    * @param permissions
    */
-  public FilePermissionMetadata(String file, String id, Set<FilePermissionEnum> permissions) {
+  public FilePermissionMetadata( String file, String id, Set<FilePermissionEnum> permissions ) {
     this.file = file;
     this.id = id;
     this.permissions = permissions;
@@ -75,63 +74,65 @@ public class FilePermissionMetadata {
     return permissions;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see java.lang.Object#toString()
    */
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
-    builder.append("FilePermissionMetadata [");
-    if (file != null) {
-      builder.append("file=");
-      builder.append(file);
-      builder.append(", ");
+    builder.append( "FilePermissionMetadata [" );
+    if ( file != null ) {
+      builder.append( "file=" );
+      builder.append( file );
+      builder.append( ", " );
     }
-    if (id != null) {
-      builder.append("id=");
-      builder.append(id);
-      builder.append(", ");
+    if ( id != null ) {
+      builder.append( "id=" );
+      builder.append( id );
+      builder.append( ", " );
     }
-    if (permissions != null) {
-      builder.append("permissions=");
-      builder.append(permissions);
+    if ( permissions != null ) {
+      builder.append( "permissions=" );
+      builder.append( permissions );
     }
-    builder.append("]");
+    builder.append( "]" );
     return builder.toString();
   }
 
   public JSONObject toJson() throws JSONException {
     JSONObject obj = new JSONObject();
 
-    obj.put("file", this.file);
-    obj.put("id", id);
+    obj.put( "file", this.file );
+    obj.put( "id", id );
 
     JSONArray array = new JSONArray();
-    for (FilePermissionEnum permission : permissions) {
-      array.put(permission.getId());
+    for ( FilePermissionEnum permission : permissions ) {
+      array.put( permission.getId() );
     }
-    obj.put("permissions", array);
+    obj.put( "permissions", array );
 
     return obj;
   }
 
-  public static FilePermissionMetadata fromJson(JSONObject obj) throws JSONException {
-    String file = obj.getString("file");
-    String id = obj.getString("id");
+  public static FilePermissionMetadata fromJson( JSONObject obj ) throws JSONException {
+    String file = obj.getString( "file" );
+    String id = obj.getString( "id" );
 
-    Object _permissions = obj.get("permissions");
+    Object _permissions = obj.get( "permissions" );
     Set<FilePermissionEnum> permissions = new TreeSet<FilePermissionEnum>();
-    if (_permissions instanceof JSONArray) {
+    if ( _permissions instanceof JSONArray ) {
       JSONArray permissionsArray = (JSONArray) _permissions;
-      for (int i = 0; i < permissionsArray.length(); i++) {
-        FilePermissionEnum permission = FilePermissionEnum.resolve(permissionsArray.getString(i));
-        if (permission != null) {
-          permissions.add(permission);
+      for ( int i = 0; i < permissionsArray.length(); i++ ) {
+        FilePermissionEnum permission = FilePermissionEnum.resolve( permissionsArray.getString( i ) );
+        if ( permission != null ) {
+          permissions.add( permission );
         }
       }
     }
 
-    return new FilePermissionMetadata(file, id, permissions);
+    return new FilePermissionMetadata( file, id, permissions );
   }
 
 }

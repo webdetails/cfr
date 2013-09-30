@@ -5,10 +5,10 @@ package pt.webdetails.cfr.file;
 
 public interface IFile {
   public String getFullPath();
-  
+
   public String getName();
-  
+
   public boolean isDirectory();
-  
+
   public boolean isFile();
 }
