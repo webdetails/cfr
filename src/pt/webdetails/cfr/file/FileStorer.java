@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
@@ -138,6 +139,46 @@ public class FileStorer {
     }
 
     return result;
+  }
+
+  /**
+   * @param path
+   *          Full path of the folder/file
+   * @param id
+   *          Group/User Id
+   */
+  public static boolean removeFile( String path, String id ) {
+
+    CfrService service = new CfrService();
+    MetadataReader reader = new MetadataReader( service );
+    if ( service.isCurrentUserAdmin() || reader.isCurrentUserOwner( path ) ) {
+      Map<String, Object> params = Collections.emptyMap();
+      StringBuilder deleteFileBuilder =
+          new StringBuilder( String.format( "delete from %s", FILE_METADATA_STORE_CLASS ) );
+      StringBuilder whereBuilder = new StringBuilder();
+
+      if ( path != null ) {
+        whereBuilder.append( "file = '" ).append( path ).append( "'" );
+      }
+
+      if ( id != null ) {
+        if ( whereBuilder.length() > 0 ) {
+          whereBuilder.append( " and " );
+        }
+
+        whereBuilder.append( "id = '" ).append( id ).append( "'" );
+      }
+
+      if ( whereBuilder.length() > 0 ) {
+        whereBuilder.insert( 0, " where " );
+      }
+
+      String cmd = deleteFileBuilder.append( whereBuilder.toString() ).toString();
+      getPersistenceEngine().executeCommand( cmd, params );
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**

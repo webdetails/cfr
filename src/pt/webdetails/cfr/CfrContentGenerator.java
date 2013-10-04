@@ -175,11 +175,13 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     }
 
     boolean removeResult = service.getRepository().deleteFile( fullFileName );
+    boolean result = false;
     if ( removeResult ) {
       FileStorer.deletePermissions( fullFileName, null );
+      result = FileStorer.removeFile( fullFileName, null );
     }
 
-    writeOut( out, new JSONObject().put( "result", removeResult ).toString() );
+    writeOut( out, new JSONObject().put( "result", result ).toString() );
   }
 
   @Exposed( accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON )
