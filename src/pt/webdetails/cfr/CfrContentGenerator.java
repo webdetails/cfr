@@ -9,10 +9,11 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -36,6 +37,7 @@ import pt.webdetails.cfr.file.CfrFile;
 import pt.webdetails.cfr.file.FileStorer;
 import pt.webdetails.cfr.file.IFile;
 import pt.webdetails.cfr.file.MetadataReader;
+import pt.webdetails.cfr.plugin.CfrConfig;
 import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.InterPluginCall;
 import pt.webdetails.cpf.InvalidOperationException;
@@ -44,7 +46,10 @@ import pt.webdetails.cpf.WrapperUtils;
 import pt.webdetails.cpf.annotations.AccessLevel;
 import pt.webdetails.cpf.annotations.Exposed;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
+import pt.webdetails.cpf.utils.CharsetHelper;
+import pt.webdetails.cpf.utils.MimeTypes;
 import pt.webdetails.cpf.utils.PluginUtils;
+import pt.webdetails.cpf.VersionChecker;
 
 /**
  * @author pdpi
@@ -58,6 +63,8 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   private CfrService service = new CfrService();
 
   private MetadataReader mr = new MetadataReader( service );
+
+  private static final String UI_PATH = "cfr/presentation/";
 
   static {
     // to keep case-insensitive methods
@@ -267,7 +274,8 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     if ( mr.isCurrentUserAllowed( FilePermissionEnum.READ, fullFileName ) ) {
       CfrFile file = service.getRepository().getFile( fullFileName );
 
-      setResponseHeaders( getMimeType( file.getFileName() ), -1, file.getFileName() );
+      setResponseHeaders(getMimeType( file.getFileName() ), -1,
+              URLEncoder.encode(file.getFileName(), CharsetHelper.getEncoding() ) ); //XXX - The files get downloaded with '+' instead of ' '
       ByteArrayInputStream bais = new ByteArrayInputStream( file.getContent() );
       IOUtils.copy( bais, out );
       IOUtils.closeQuietly( bais );
@@ -500,5 +508,81 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   private static final String pathParameterPath = "path";
 
   private static final String pathParameterPermission = "permission";
+
+  @Exposed( accessLevel = AccessLevel.PUBLIC )
+  public void checkVersion( OutputStream out ) throws IOException, JSONException {
+    writeOut( out, getVersionChecker().checkVersion() );
+  }
+
+  @Exposed( accessLevel = AccessLevel.PUBLIC )
+  public void getVersion( OutputStream out ) throws IOException, JSONException {
+    writeOut( out, getVersionChecker().getVersion() );
+  }
+
+  @Exposed( accessLevel = AccessLevel.PUBLIC, outputType = MimeTypes.JSON )
+  public void about( OutputStream out ) throws IOException, JSONException {
+    renderInCde( out, getRenderRequestParameters( "cfrAbout.wcdf" ) );
+
+  }
+
+  public VersionChecker getVersionChecker() {
+
+    return new VersionChecker( CfrConfig.getConfig() ) {
+
+      @Override
+      protected String getVersionCheckUrl( VersionChecker.Branch branch ) {
+        switch ( branch ) {
+          case TRUNK:
+            return "http://ci.analytical-labs.com/job/Webdetails-CFR/lastSuccessfulBuild/artifact/dist/marketplace.xml";
+          case STABLE:
+            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
+                + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
+          default:
+            return null;
+        }
+
+      }
+
+    };
+  }
+
+  private void renderInCde( OutputStream out, Map<String, Object> params ) throws IOException {
+    InterPluginCall pluginCall = new InterPluginCall( InterPluginCall.CDE, "Render", params );
+    pluginCall.setResponse( getResponse() );
+    pluginCall.setOutputStream( out );
+    pluginCall.run();
+  }
+
+  private Map<String, Object> getRenderRequestParameters( String dashboardName ) {
+    Map<String, Object> params = new HashMap<String, Object>();
+    params.put( "solution", "system" );
+    params.put( "path", UI_PATH );
+    params.put( "file", dashboardName );
+    params.put( "bypassCache", "true" );
+    params.put( "absolute", "true" );
+    params.put( "inferScheme", "false" );
+    params.put( "root", getRoot() );
+
+    // add request parameters
+    ServletRequest request = getRequest();
+    @SuppressWarnings( "unchecked" )
+    // should always be String
+    Enumeration<String> originalParams = request.getParameterNames();
+    // Iterate and put the values there
+    while ( originalParams.hasMoreElements() ) {
+      String originalParam = originalParams.nextElement();
+      params.put( originalParam, request.getParameter( originalParam ) );
+    }
+
+    return params;
+  }
+
+  private String getRoot() {
+
+    ServletRequest wrapper = getRequest();
+    String root = wrapper.getScheme() + "://" + wrapper.getServerName() + ":" + wrapper.getServerPort();
+
+    return root;
+  }
 
 }

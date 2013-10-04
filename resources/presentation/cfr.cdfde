@@ -316,7 +316,7 @@
      },
      {
       "name": "html",
-      "value": "<a>About</a> ",
+      "value": "<a href=\"about\">About</a> ",
       "type": "Html"
      },
      {
@@ -984,6 +984,11 @@
       "type": "JavaScript"
      },
      {
+      "name": "colTypes",
+      "value": "[]",
+      "type": "colTypesCustom"
+     },
+     {
       "name": "colHeaders",
       "value": "[]",
       "type": "Array"
@@ -1014,9 +1019,9 @@
       "type": "ValuesArray"
      },
      {
-      "name": "colTypes",
-      "value": "[]",
-      "type": "colTypesCustom"
+      "name": "sort",
+      "value": "false",
+      "type": "Boolean"
      },
      {
       "name": "expandOnClick",
@@ -1045,11 +1050,6 @@
      },
      {
       "name": "info",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "sort",
       "value": "false",
       "type": "Boolean"
      },
@@ -1338,7 +1338,7 @@
      },
      {
       "name": "cacheDuration",
-      "value": 3600,
+      "value": "10",
       "type": "Integer"
      },
      {
