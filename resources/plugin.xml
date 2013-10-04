@@ -13,17 +13,16 @@
   </content-generator>
   <!-- Menu entry -->
   <menu-items/>
-  
   <!--
   <overlays>
-    <overlay id="startup.dashboardToolbar"  resourcebundle="../content/cdb/lang/messages">
-      <overlay id="startup.dashboardToolbar" resourcebundle="../content/cdb/lang/messages">
+    <overlay id="startup.dashboardToolbar"  resourcebundle="../content/cfr/lang/messages">
+      <overlay id="startup.dashboardToolbar" resourcebundle="../content/cfr/lang/messages">
         <toolbarbutton id="newAnalysisButton" removeelement="false"/>
         <toolbar id="mainToolbar">
-          <toolbarbutton id="newCDB" image="../content/cdb/overlay/cdb_toolbar_icon.png" onclick="mainToolbarHandler.openUrl('${tabName}','${tabName}','content/cdb/home')" tooltiptext="${openNewCDB}" insertafter="newCDBButton"/>
+          <toolbarbutton id="newCFR" image="../content/cfr/overlay/cfr_toolbar_icon.png" onclick="mainToolbarHandler.openUrl('${tabName}','${tabName}','content/cfr/home')" tooltiptext="${openNewCFR}" insertafter="newCFRButton"/>
         </toolbar>
       </overlay>
     </overlay>
   </overlays>
-  -->
+-->
 </plugin>
