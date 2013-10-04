@@ -64,7 +64,7 @@ body {
    ========================================================================== */
 .WDheader {
   height: 70px;
-  background: url(img/cdb_header.png) no-repeat scroll center 36px;
+  background: url(../images/cfr_header.png) no-repeat scroll center 36px;
   z-index: 100;
   padding-bottom: 10px;
   margin-bottom: -9px;
@@ -362,11 +362,11 @@ button:disabled {
 
 .chzn-container-single .chzn-single div b,
 .chzn-container-single .chzn-single-with-drop div b {
-  background: url("img/selector.png") 70px 0;
+  background: url("../images/selector.png") 70px 0;
 }
 
 .chzn-container-single:hover .chzn-single div b {
-  background: url("img/selector.png") 47px 0;
+  background: url("../images/selector.png") 47px 0;
 }
 
 .chzn-container-single .chzn-single.chzn-single-with-drop {
@@ -375,7 +375,7 @@ button:disabled {
 }
 
 .chzn-container-single .chzn-single.chzn-single-with-drop div b {
-  background: url("img/selector.png") 24px 0;
+  background: url("../images/selector.png") 24px 0;
 }
 
 /* =============================================================================
@@ -420,46 +420,18 @@ button, button *, input[type=button], input[type=button] * {
   src: local("Gudea"), url("http://themes.googleusercontent.com/static/fonts/gudea/v1/kfCeUiT0HGXHQC8YVeaKy6CWcynf_cDxXwCLxiixG1c.woff") format("woff");
 }
 
-.cdbBig {
-  float: right;
-  background: url("img/cdb_logo.png") no-repeat left bottom;
-  height: 15px;
-  margin-top: 50px;
-  position: relative;
-  width: 45px;
-}
-
-.cdbSmall {
-  float: right;
-  font-size: 11px;
-  margin-top: 52px;
-  position: relative;
-  margin-left: 5px;
-  height: 15px;
-}
-
-.cdbVersion {
-  float: right;
-  font-size: 11px;
-  top: 52px;
-  position: relative;
-  color: #B3BFC4;
-  margin-left: 5px;
-  height: 15px;
-}
-
 .WDinput input {
   height: 25px;
   font-size: 14px;
   color: #05282C;
   border: solid 1px #829299;
-  background: url("img/writeUnfocus.png") no-repeat right center;
+  background: url("../images/writeUnfocus.png") no-repeat right center;
   padding-left: 5px;
   background-attachment: fixed;
 }
 
 .WDinput input:focus {
-  background: url("img/writeFocus.png") no-repeat right center;
+  background: url("../images/writeFocus.png") no-repeat right center;
   background-position: 14px 1px;
   border: 1px solid #0f1414;
 }
@@ -478,11 +450,11 @@ button, button *, input[type=button], input[type=button] * {
 }
 
 .WDinput.groupName input:hover {
-  background: url("img/writeUnfocus.png") no-repeat right center;
+  background: url("../images/writeUnfocus.png") no-repeat right center;
 }
 
 .WDinput.groupName input:focus {
-  background: url("img/writeFocus.png") no-repeat right center;
+  background: url("../images/writeFocus.png") no-repeat right center;
   border: 1px solid #0f1414;
 }
 
@@ -507,100 +479,6 @@ button .label {
   margin: 2px;
 }
 
-.addQueryButton,
-.pasteQueryButton {
-  display: inline-block;
-  margin: 5px 5px 5px 0px;
-}
-
-.addQueryButton button .name,
-.pasteQueryButton button .name {
-  display: inline-block;
-  margin: 6px 10px;
-}
-
-.addQueryButton button .label {
-  background: url("img/new.png") no-repeat scroll -23px;
-}
-
-.addQueryButton button:hover .label {
-  background-position-x: -46px;
-}
-
-.addQueryButton button:active .label {
-  background-position-x: -69px;
-}
-
-.pasteQueryButton button .label {
-  background: url("img/paste.png") no-repeat scroll -23px;
-}
-
-.pasteQueryButton button:hover .label {
-  background-position-x: -46px;
-}
-
-.pasteQueryButton button:active .label {
-  background-position-x: -69px;
-}
-
-.addQueryButton button:disabled,
-.addQueryButton button:disabled:hover,
-.pasteQueryButton button:disabled,
-.pasteQueryButton button:disabled:hover {
-  background: white;
-}
-
-.addQueryButton button:disabled .label,
-.addQueryButton button:disabled:hover .label,
-.pasteQueryButton button:disabled .label,
-.pasteQueryButton button:disabled:hover .label {
-  background-position-x: 0px;
-}
-
-.queryName.toEdit input,
-.queryName.toEdit input:hover {
-  font-size: 12px;
-  background: transparent url("img/writeUnfocus.png") no-repeat right center;
-  border-top: 1px solid #829299;
-  border-left: 1px solid #829299;
-  border-bottom: 1px solid #829299;
-}
-
-.queryName input {
-  font-size: 12px;
-  height: 17px;
-  width: 230px;
-  background-color: transparent;
-  border: 1px solid transparent;
-}
-
-.queryName input:hover {
-  font-size: 12px;
-  border: 1px solid transparent;
-  background: transparent url("img/writeUnfocus.png") no-repeat right center;
-}
-
-.queryName input:focus {
-  font-size: 12px;
-  border: 1px solid #0F1414;
-  background: transparent url("img/writeFocus.png") no-repeat right center;
-}
-
-.query > div {
-  display: inline-block;
-  vertical-align: top;
-}
-
-.query button {
-  height: 21px;
-  background-color: transparent;
-}
-
-.query button:hover,
-.query button:active {
-  background-color: #CAD3D6;
-}
-
 .extraRight {
   margin-right: 5px;
 }
@@ -611,55 +489,6 @@ button .label {
   position: absolute;
   width: 948px;
   background: white;
-}
-
-.query .queryOkButton button {
-  background: #52A228;
-  color: white;
-  border-color: #7F9292;
-}
-
-.query .queryOkButton button:hover {
-  background: #3C771D;
-  border-color: #3C771D;
-}
-
-.query .queryOkButton button:active {
-  background: #3c771d;
-  border-color: #121914;
-}
-
-.query .queryCancelButton button {
-  background: #394A50;
-  color: white;
-  border-color: #394A50;
-}
-
-.query .queryCancelButton button:hover {
-  background: #2d3a3f;
-  border-color: #2d3a3f;
-}
-
-.query .queryCancelButton button:active {
-  background: #2d3a3f;
-  border-color: #111616;
-}
-
-.query .queryActiveTypeButton button:disabled,
-.query .queryActiveTypeButton button:disabled:hover,
-.query .queryActiveTypeButton button:disabled:active {
-  color: #0F1414;
-  border: 1px solid #829299;
-  background-color: white;
-}
-
-.query .queryActiveTypeButton button,
-.query .queryActiveTypeButton button:hover,
-.query .queryActiveTypeButton button:active {
-  background: none;
-  border: 1px solid transparent;
-  text-align: left;
-  padding-left: 8px;
 }
 
 .editLabel {
@@ -1303,9 +1132,6 @@ textarea#code {
   transition: all 0.25s linear 0s;
 }
 
-.WDheader {
-  background: url("../images/webdetails_banner.png") no-repeat scroll center;
-}
 .WDheader p {
   background: url("../images/logo_small.png") no-repeat left bottom;
   padding-left: 46px;
@@ -1445,4 +1271,79 @@ textarea#code {
 
 .text-tiny {
   font-size: 0.25em;
+}
+
+.cfrLogo {
+    background: url('../images/cfr_logo.png') no-repeat right bottom;
+    height: 15px;
+    margin-top: 50px;
+}
+
+div.cfrSmall {
+    float: right;
+    font-size: 11px;
+    font-weight: normal;
+    padding-top: 58px;
+    position: relative;
+}
+
+div.cfrVersion {
+    float: right;
+    font-size: 11px;
+    padding-top: 58px;
+    position: relative;
+    color: #829299;
+    margin-left: 5px;
+    height: 15px;
+}
+
+div.cfrBig {
+    background: url("../images/cfr_logo.png") no-repeat scroll left bottom transparent;
+    float: right;
+    height: 15px;
+    padding-top: 55px;
+    position: relative;
+    width: 45px;
+}
+
+.aboutBody {
+    background-color: #05282C;
+    color: #DEE8EC;
+    margin-top: 3px;
+    vertical-align: text-bottom;
+    font-size: 16px;
+}
+
+.aboutBody .footer a {
+    color: #829299;
+    text-decoration: none;
+}
+
+.aboutBody .footer #footer1text {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom:2px dashed #829299;
+}
+
+.aboutBody #innerVersionObj {
+    color: #829299;
+    font-size: 13px;
+}
+
+.aboutBody #cfrName {
+    font-size:23px;
+}
+
+.aboutTitle {
+    line-height: 50px;
+    vertical-align: bottom;
+    color: #ffffff;
+}
+.versionCheck {
+    font-size: 18px;
+    color: #829299;
+}
+
+.versionCheck a {
+        color:#ffffff;
 }
