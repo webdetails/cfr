@@ -132,7 +132,7 @@ var FileUploaderComponent = BaseComponent.extend({
     $selectFile.append($uploadForm);
 
     var $label = $('<label>').addClass('cabinet'),
-      $fileInput = $('<input type="file" class="file" name="file" required/>'),
+      $fileInput = $('<input type="file" class="file" name="file"/>'),
       $pathInput = $('<input type="hidden" name="path" value="' + root + '"/>'),
       $submitInput = $('<button type="submit">').addClass('submitBtn').addClass('hide').text('Upload File');
 
