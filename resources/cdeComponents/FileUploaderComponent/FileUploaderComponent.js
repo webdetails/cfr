@@ -151,6 +151,7 @@ var FileUploaderComponent = BaseComponent.extend({
         $fileSelectTitle.addClass('hide');
         $fileObj.removeClass('hide');
         $submitInput.removeClass('hide');
+        $cancelButton.removeClass('hide');
 
         var a = $fileInput.val();
         if (a.slice(3, 11) == "fakepath") a = a.slice(12, a.length);
@@ -168,9 +169,10 @@ var FileUploaderComponent = BaseComponent.extend({
       $fileObj.html('');
       $submitInput.addClass('hide');
       $fileInput.val('');
+      $cancelButton.addClass('hide');
     });
 
     $cancelButtonDiv.append($cancelButton);
-
+    $cancelButton.addClass('hide');
   }
 });

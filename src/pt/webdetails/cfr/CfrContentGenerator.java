@@ -525,6 +525,11 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
   }
 
+  @Exposed( accessLevel = AccessLevel.PUBLIC, outputType = MimeTypes.JSON )
+  public void browser( OutputStream out ) throws IOException, JSONException {
+    renderInCde( out, getRenderRequestParameters( "cfrBrowser.wcdf" ) );
+  }
+
   public VersionChecker getVersionChecker() {
 
     return new VersionChecker( CfrConfig.getConfig() ) {

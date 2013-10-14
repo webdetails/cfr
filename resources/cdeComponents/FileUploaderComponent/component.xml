@@ -26,6 +26,8 @@
           <Style version="1.0" src="css/component.css">FileUploaderCss</Style>
       	</Styles>
       	<Dependencies>
+          <Dependency src="lib/jquery.ie.cors.js" version="1.0">jquery.ie.cors</Dependency>
+          <Dependency src="lib/jQuery.XDomainRequest.js" version="1.0">jQuery.XDomainRequest</Dependency>
           <Dependency src="lib/jquery.form.js" version="1.0">jquery.form</Dependency>
           <Dependency src="lib/bootstrap.min.js" version="1.0">bootstrap</Dependency>
       	</Dependencies>
