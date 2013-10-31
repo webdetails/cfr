@@ -5,6 +5,7 @@
     <static-path url="/cfr/static" localFolder="static"/>
     <static-path url="/cfr/overlay" localFolder="overlay"/>
     <static-path url="/cfr/lang" localFolder="lang"/>
+    <static-path url="/cfr/cdeComponents" localFolder="cdeComponents"/>
   </static-paths>
   <content-types />
   <content-generator scope="local" id="cfr" type="graphicsGenerator" url="">
