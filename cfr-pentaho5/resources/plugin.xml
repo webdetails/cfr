@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin title="cfr" loader="OVERRIDING">
+  <overlays>
+    <overlay id="startup.cfr" resourcebundle="content/cfr/lang/messages">
+      <menubar id="toolsmenu">
+            <menuitem id="cfr" label="${Launcher.CFR_LABEL}" command="mantleXulHandler.openUrl('${Launcher.CFR_LABEL}','${Launcher.CFR}','plugin/cfr/api/home')"/>
+          </menubar>
+      </overlay>
+  </overlays>
+     <lifecycle-listener class="pt.webdetails.cfr.CfrLifeCycleListener"/>
+  <static-paths>
+    <static-path url="/cfr/static" localFolder="static"/>
+    <static-path url="/cfr/overlay" localFolder="overlay"/>
+    <static-path url="/cfr/lang" localFolder="lang"/>
+    <static-path url="/cfr/cdeComponents" localFolder="cdeComponents"/>
+  </static-paths>
+  <content-types />
+
+  <menu-items/>
+
+</plugin>
