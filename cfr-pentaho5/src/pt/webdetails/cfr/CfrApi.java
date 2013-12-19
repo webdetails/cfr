@@ -192,7 +192,7 @@ public class CfrApi {
 
     if ( fileName == null ) {
       logger.error( "parameter fileName must not be null" );
-      throw new Exception( "paramete fileName must not be null" );
+      throw new Exception( "parameter fileName must not be null" );
     }
     if ( savePath == null ) {
       logger.error( "parameter path must not be null" );

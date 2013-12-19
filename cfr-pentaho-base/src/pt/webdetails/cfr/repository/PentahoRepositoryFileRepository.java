@@ -25,6 +25,6 @@ public class PentahoRepositoryFileRepository extends AbstractPentahoRepositoryFi
   }
 
   @Override IRWAccess getRWAccess() {
-    return PentahoPluginEnvironment.getInstance().getPluginRepositoryWriter( new CfrPluginSettings().getBasePath() );
+    return CfrEnvironment.getInstance().getPluginRepositoryWriter( new CfrPluginSettings().getBasePath() );
   }
 }
