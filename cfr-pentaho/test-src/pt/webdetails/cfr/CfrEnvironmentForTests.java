@@ -13,12 +13,21 @@
 
 package pt.webdetails.cfr;
 
+import pt.webdetails.cfr.bean.ICfrBeanFactory;
 import pt.webdetails.cfr.repository.PentahoRepositoryFileRepositoryForTests;
 import pt.webdetails.cpf.repository.api.IReadAccess;
 
 public class CfrEnvironmentForTests extends CfrEnvironment {
 
   private static final String BASE_PATH = System.getProperty( "user.dir" ) + "test-resources";
+
+  public CfrEnvironmentForTests() {
+  }
+
+  @Override
+  public void init( ICfrBeanFactory factory ) {
+
+  }
 
   @Override protected String getPluginRepositoryDir() {
     return BASE_PATH;

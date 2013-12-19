@@ -13,13 +13,36 @@
 
 package pt.webdetails.cfr;
 
+import pt.webdetails.cfr.bean.CoreBeanFactory;
+import pt.webdetails.cfr.bean.ICfrBeanFactory;
+import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.PentahoPluginEnvironment;
+
 import pt.webdetails.cpf.session.ISessionUtils;
 import pt.webdetails.cpf.utils.IPluginUtils;
 
 public class CfrEnvironment extends PentahoPluginEnvironment implements ICfrEnvironment {
 
   private static final String PLUGIN_NAME = "cfr";
+
+  private ICfrBeanFactory factory;
+  private IFileRepository repository;
+
+
+  public void init( ICfrBeanFactory factory ) {
+    this.factory = factory;
+
+    if ( factory.containsBean( IFileRepository.class.getSimpleName() ) ) {
+      repository = (IFileRepository) factory.getBean( IFileRepository.class.getSimpleName() );
+    }
+
+    super.init( this );
+  }
+
+  public CfrEnvironment() {
+    init( new CoreBeanFactory() );
+  }
+
   @Override public IPluginUtils getPluginUtils() {
     return null;
   }
@@ -33,5 +56,11 @@ public class CfrEnvironment extends PentahoPluginEnvironment implements ICfrEnvi
   }
 
   @Override public void reload() {
+
   }
+
+  public IFileRepository getRepository() {
+    return repository;
+  }
+
 }

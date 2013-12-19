@@ -30,17 +30,7 @@ public class CfrService {
   protected static final Log logger = LogFactory.getLog( CfrService.class );
 
   public IFileRepository getRepository() {
-    String repositoryClass = new CfrPluginSettings().getRepositoryClass();
-    try {
-      return (IFileRepository) Class.forName( repositoryClass ).newInstance();
-    } catch ( ClassNotFoundException cnfe ) {
-      logger.fatal( "Class for repository " + repositoryClass + " not found. CFR will not be available", cnfe );
-    } catch ( InstantiationException ie ) {
-      logger.fatal( "Instantiaton of class failed", ie );
-    } catch ( IllegalAccessException iae ) {
-      logger.fatal( "Illegal access to repository class", iae );
-    }
-    return null;
+    return new CfrEnvironment().getRepository();
   }
 
   public String getCurrentUserName() {

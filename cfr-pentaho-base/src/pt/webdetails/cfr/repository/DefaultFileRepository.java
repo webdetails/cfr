@@ -16,6 +16,7 @@ package pt.webdetails.cfr.repository;
 import pt.webdetails.cfr.CfrPluginSettings;
 
 public class DefaultFileRepository extends AbstractDefaultFileRepository {
+
   @Override
   protected String getBasePath() {
     if ( basePath == null ) {
@@ -23,5 +24,9 @@ public class DefaultFileRepository extends AbstractDefaultFileRepository {
       basePath = settings.getBasePath();
     }
     return basePath;
+  }
+
+  public void setBasePath( String basePath ) {
+    this.basePath = basePath;
   }
 }
