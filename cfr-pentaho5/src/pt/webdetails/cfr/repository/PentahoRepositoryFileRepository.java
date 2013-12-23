@@ -13,22 +13,10 @@
 
 package pt.webdetails.cfr.repository;
 
-import pt.webdetails.cfr.CfrPluginSettings;
 
-public class DefaultFileRepository extends AbstractDefaultFileRepository {
+public class PentahoRepositoryFileRepository extends AbstractPentahoRepositoryFileRepository {
 
-  private String UPLOAD_DIR = "system/.cfr";
-
-  @Override
-  protected String getBasePath() {
-    if ( basePath == null ) {
-      CfrPluginSettings settings = new CfrPluginSettings();
-      basePath = settings.getBasePath() + UPLOAD_DIR;
-    }
-    return basePath;
-  }
-
-  public void setBasePath( String basePath ) {
-    this.basePath = basePath;
+  @Override protected String getDefaultBasePath() {
+    return "public/cfr";
   }
 }

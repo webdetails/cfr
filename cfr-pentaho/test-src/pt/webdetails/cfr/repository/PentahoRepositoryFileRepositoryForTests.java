@@ -36,17 +36,23 @@ public class PentahoRepositoryFileRepositoryForTests extends AbstractPentahoRepo
     this.hasAccess = hasAccess;
   }
 
-  @Override IReadAccess getReadAccess() {
-    return createPluginSystemAccess( "" );
+  @Override
+  public IReadAccess getReadAccess() {
+    return createPluginSystemAccess( "/" );
   }
 
-  @Override IRWAccess getRWAccess() {
-    return createPluginSystemAccess( "" );
+  @Override
+  public IRWAccess getRWAccess() {
+    return createPluginSystemAccess( "/" );
   }
 
   @Override
   protected IPentahoSession getUserSession() {
     return null;
+  }
+
+  @Override protected String getDefaultBasePath() {
+    return "";
   }
 
   public SystemPluginResourceAccess createPluginSystemAccess( String basePath ) {

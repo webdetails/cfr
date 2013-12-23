@@ -13,18 +13,10 @@
 
 package pt.webdetails.cfr.repository;
 
-import pt.webdetails.cfr.CfrEnvironment;
-import pt.webdetails.cfr.CfrPluginSettings;
-import pt.webdetails.cpf.PentahoPluginEnvironment;
-import pt.webdetails.cpf.repository.api.IRWAccess;
-import pt.webdetails.cpf.repository.api.IReadAccess;
 
 public class PentahoRepositoryFileRepository extends AbstractPentahoRepositoryFileRepository {
-  @Override IReadAccess getReadAccess() {
-    return CfrEnvironment.getInstance().getPluginRepositoryReader( new CfrPluginSettings().getBasePath() );
-  }
 
-  @Override IRWAccess getRWAccess() {
-    return CfrEnvironment.getInstance().getPluginRepositoryWriter( new CfrPluginSettings().getBasePath() );
+  @Override protected String getDefaultBasePath() {
+    return "cfr";
   }
 }

@@ -17,18 +17,10 @@ import org.pentaho.platform.engine.core.system.PentahoSystem;
 import pt.webdetails.cpf.PluginSettings;
 
 public class CfrPluginSettings extends PluginSettings {
-  private static final String BASE_PATH = "/system/.cfr";
+  private static final String BASE_PATH = "";
 
   public CfrPluginSettings( ) {
     super( CfrEnvironment.getInstance().getContentAccessFactory().getPluginSystemWriter( "" ) );
-  }
-
-  public String getPluginName() {
-    return "cfr";
-  }
-
-  public String getRepositoryClass() {
-    return getStringSetting( "repositoryClass", "pt.webdetails.cfr.repository.DefaultFileRepository" );
   }
 
   public String getBasePath() {
