@@ -22,9 +22,10 @@ import org.pentaho.platform.api.engine.PluginLifecycleException;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.PluginEnvironment;
+import pt.webdetails.cpf.SimpleLifeCycleListener;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 
-public class CfrLifeCycleListener implements IPluginLifecycleListener {
+public class CfrLifeCycleListener extends SimpleLifeCycleListener {
   static Log logger = LogFactory.getLog( CfrLifeCycleListener.class );
 
   @Override
@@ -53,7 +54,13 @@ public class CfrLifeCycleListener implements IPluginLifecycleListener {
   @Override
   public void unLoaded() throws PluginLifecycleException {
     logger.debug( "Unload for CFR" );
+    super.unLoaded();
     getRepository().shutdown();
+  }
+
+  @Override
+  public PluginEnvironment getEnvironment() {
+    return null;
   }
 
   private IFileRepository getRepository() {
