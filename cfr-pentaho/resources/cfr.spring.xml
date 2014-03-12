@@ -14,7 +14,7 @@ http://jax-ws.dev.java.net/spring/servlet http://jax-ws.dev.java.net/spring/serv
   <context:annotation-config />
 
   <bean id="IFileRepository" class="pt.webdetails.cfr.repository.DefaultFileRepository" scope="prototype">
-    <!-- Use this property to override the path to wich cfr uploads -->
+    <!-- Use this property to override the path to the CFR repository -->
     <!--<property name="basePath"><value>path/to/cfr/uploads</value></property>-->
   </bean>
 

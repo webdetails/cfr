@@ -108,13 +108,13 @@ public abstract class AbstractDefaultFileRepository implements IFileRepository {
   public IFile[] listFiles( String startPath ) {
 
     if ( !checkPath( startPath ) ) {
-      return null;
+      return new IFile[0];
     }
 
     File f = new File( getBasePath() + File.separator + startPath );
     File[] files = f.listFiles();
     if ( files == null ) {
-      return null;
+      return new IFile[0];
     }
 
     IFile[] result = new IFile[files.length];
