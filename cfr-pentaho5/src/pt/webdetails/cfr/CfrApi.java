@@ -13,10 +13,8 @@
 
 package pt.webdetails.cfr;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 
-import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -28,17 +26,9 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -59,6 +49,8 @@ import pt.webdetails.cpf.persistence.PersistenceEngine;
 import pt.webdetails.cpf.utils.CharsetHelper;
 import pt.webdetails.cpf.VersionChecker;
 import pt.webdetails.cpf.utils.MimeTypes;
+import com.sun.jersey.multipart.FormDataParam;
+import com.sun.jersey.core.header.FormDataContentDisposition;
 
 @Path( "cfr/api" )
 public class CfrApi {
@@ -169,26 +161,20 @@ public class CfrApi {
 
   @POST
   @Path( "/store" )
-  public void store( @Context HttpServletRequest request, @Context HttpServletResponse response )
+  @Consumes( "multipart/form-data" )
+  public void store( @FormDataParam( "file" ) InputStream uploadedInputStream,
+                     @FormDataParam( "file" ) FormDataContentDisposition fileDetail,
+                     @FormDataParam( "path" )  String path,
+                     @Context HttpServletRequest request, @Context HttpServletResponse response )
     throws IOException, InvalidOperationException, Exception {
 
-    FileItemFactory factory = new DiskFileItemFactory();
-    ServletFileUpload upload = new ServletFileUpload( factory );
-    List /* FileItem */items = upload.parseRequest( request );
 
-    String fileName = null, savePath = null;
-    byte[] contents = null;
-    for ( int i = 0; i < items.size(); i++ ) {
-      FileItem fi = (FileItem) items.get( i );
-
-      if ( "path".equals( fi.getFieldName() ) ) {
-        savePath = fi.getString();
-      }
-      if ( "file".equals( fi.getFieldName() ) ) {
-        contents = fi.get();
-        fileName = fi.getName();
-      }
-    }
+    String fileName = fileDetail.getFileName(), savePath = path;
+    ByteArrayOutputStream oStream = new ByteArrayOutputStream();
+    IOUtils.copy( uploadedInputStream, oStream );
+    oStream.flush();
+    byte[] contents = oStream.toByteArray();
+    oStream.close();
 
     if ( fileName == null ) {
       logger.error( "parameter fileName must not be null" );
@@ -473,7 +459,14 @@ public class CfrApi {
 
   @GET
   @Path( "/resetRepository" )
-  public void resetRepository() {
+  public String resetRepository() {
+
+    if ( !this.service.isCurrentUserAdmin() ) {
+      logger.warn( "Reset repository called by a non admin user. Aborting" );
+      return "User has no access to this endpoint";
+    }
+
+
     PersistenceEngine.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
     PersistenceEngine.getInstance().initializeClass( FileStorer.FILE_METADATA_STORE_CLASS );
     PersistenceEngine.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
@@ -483,6 +476,9 @@ public class CfrApi {
     for ( IFile file : repo.listFiles( "" ) ) {
       repo.deleteFile( file.getFullPath() );
     }
+
+    return "Repository Reset complete";
+
 
   }
 
@@ -526,10 +522,10 @@ public class CfrApi {
       protected String getVersionCheckUrl( VersionChecker.Branch branch ) {
         switch( branch ) {
           case TRUNK:
-            return "http://ci.analytical-labs.com/job/Webdetails-CFR/lastSuccessfulBuild/artifact/dist/marketplace.xml";
-          case STABLE:
-            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
-              + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
+            return "http://ci.pentaho.com/job/pentaho-cfr/lastSuccessfulBuild/artifact/cfr-pentaho5/dist/marketplace.xml";
+//          case STABLE:
+//            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
+//              + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
           default:
             return null;
         }

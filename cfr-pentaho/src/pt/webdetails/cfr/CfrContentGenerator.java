@@ -544,10 +544,10 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       protected String getVersionCheckUrl( VersionChecker.Branch branch ) {
         switch ( branch ) {
           case TRUNK:
-            return "http://ci.analytical-labs.com/job/Webdetails-CFR/lastSuccessfulBuild/artifact/dist/marketplace.xml";
-          case STABLE:
-            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
-                + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
+            return "http://ci.pentaho.com/job/pentaho-cfr-pentaho/lastSuccessfulBuild/artifact/cfr-pentaho/dist/marketplace.xml";
+//          case STABLE:
+//            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
+//                + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
           default:
             return null;
         }
