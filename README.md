@@ -80,17 +80,19 @@ Here are the instructions if you want to manually build the plugin:
 
 ### Settings 
 
-Inside your plugin folder there is a file named `settings.xml` where you can
+Inside your plugin folder there is a file named `cfr.spring.xml` where you can
 define how the plugin's behaviour.  
 
 Files and folders are by default stored in `system/.cfr`. You can also configure
-some other root folder by editing the configuration file `settings.xml` and
+some other root folder by editing the configuration file `cfr.spring.xml` and
 adding an attribute for your file repository with the full name of the starting
 folder.
 
-	<basePath>
-		/your/base_folder/for_cfr_files
-	</basePath>
+<property name="basePath">
+    <value>
+        path/to/cfr/uploads
+    </value>
+</property
 
 You can define another class, changing the value of `repositoryClass`. Right
 now, you can choose
@@ -98,14 +100,12 @@ now, you can choose
 Solution Repository or `pt.webdetails.cfr.repository.DefaultFileRepository` for
 a file system based repository.
 
-	<repositoryClass>
-		pt.webdetails.cfr.repository.DefaultFileRepository
-	</repositoryClass>
+<bean id="IFileRepository" class="pt.webdetails.cfr.repository.DefaultFileRepository" scope="prototype"/>
 
 You can roll up your own version of a repository or develop a wrapper to
 whatever you’re using to manage your files. Just implement the
 `pt.webdetails.cfr.repository.IFileRepository`, drop the resulting class or jar
-in the `system/cfr/lib` folder and reference the class from `settings.xml`.
+in the `system/cfr/lib` folder and reference the class from `cfr.spring.xml`.
 
 	<repositoryClass>
 		pt.webdetails.cfr.repository.IFileRepository
@@ -211,7 +211,9 @@ needed it must be set using the interfaces exposed below.
 
 ###### Exposed Interfaces 
 
-** Base URL: ** `http://<pentaho-ba-server-host>:<port>/pentaho/content/cfr`
+** Base URL: ** `http://<pentaho-ba-server-host>:<port>/pentaho/content/cfr` for Pentaho 4.x
+** `http://<pentaho-ba-server-host>:<port>/pentaho/plugin/cfr/api` for Pentaho 5.0
+
 
 - */setPermissions* --> 	Setting permissions is only allowed to the folder/file owner to which we want to set permissions or to any system administrator
 

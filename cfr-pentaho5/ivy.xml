@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
+
+  <info organisation="pentaho" module="cfr-pentaho5" revision="${project.revision}"/>
+
+  <configurations>
+    <conf name="default"/>
+    <conf name="test" visibility="private"/>
+    <conf name="codegen" visibility="private"/>
+    <conf name="runtime" visibility="private"/>
+    <conf name="dev" visibility="private"/>
+    <conf name="zip" visibility="private"/>
+    <conf name="sources"/>
+  </configurations>
+
+
+  <publications>
+    <artifact name="${ivy.artifact.id}" type="jar" conf="default" />
+    <artifact name="${ivy.artifact.id}" m:classifier="sources" type="source" ext="jar" conf="sources"/>
+  </publications>
+
+  <dependencies defaultconf="default->default">
+
+    <!--  third party dependencies -->
+    <dependency org="commons-logging"       name="commons-logging"      rev="1.1.1" transitive="false"/>
+    <dependency org="commons-lang"          name="commons-lang"         rev="2.2"/>
+    <dependency org="commons-io"            name="commons-io"           rev="2.4"   transitive="false"/>
+
+    <dependency org="dom4j"                 name="dom4j"                rev="1.6.1" transitive="false"/>
+    
+    <dependency org="org.json"              name="json"                 rev="3.1" transitive="false"/>
+
+    <dependency org="javax.servlet"         name="servlet-api"          rev="2.4"     transitive="false"/>
+    <dependency org="javax.ws.rs"           name="jsr311-api"           rev="1.1.1"/> 
+
+    <!--  pentaho dependencies -->
+    <dependency org="pentaho" name="pentaho-platform-api"  rev="${dependency.bi-platform.revision}" changing="true" transitive="false" />
+    <dependency org="pentaho" name="pentaho-platform-core" rev="${dependency.bi-platform.revision}" changing="true" transitive="false" />
+     
+    <!--  internal dependencies -->           
+    <dependency org="pentaho" name="cpf-core"     rev="${dependency.pentaho-cpf-plugin.revision}" transitive="false" changing="true" conf='runtime,test->default'/>
+    <dependency org="pentaho" name="cpf-pentaho5" rev="${dependency.pentaho-cpf-plugin.revision}" transitive="false" changing="true" conf='runtime,test->default'/>
+    <dependency org="pentaho" name="cfr-core"     rev="${project.revision}"                       transitive="false" changing="true" conf='runtime,test->default'/>
+
+    <dependency org="org.codehaus.jackson"          name="jackson-mapper-asl"     rev="1.9.12"    conf='runtime->default'/>
+    <dependency org="com.fasterxml.jackson.core"    name="jackson-core"           rev="2.2.2"     conf='runtime->default'/>
+    <dependency org="com.fasterxml.jackson.core"    name="jackson-databind"       rev="2.2.2"     conf='runtime->default'/>
+    <dependency org="com.fasterxml.jackson.core"    name="jackson-annotations"    rev="2.2.2"     conf='runtime->default'/>
+    <dependency org="com.sun.jersey.contribs"       name="jersey-multipart"       rev="1.17.1"/>
+    <dependency org="com.sun.jersey"                name="jersey-core"       rev="1.16"/>
+
+
+    <!-- orient db (persistence) -->
+    <dependency org="com.orientechnologies" name="orient-commons"       rev="${dependency.orientdb.revision}" transitive="false" conf="runtime,default->default"/>
+    <dependency org="com.orientechnologies" name="orientdb-core"        rev="${dependency.orientdb.revision}" transitive="false" conf="runtime,default->default"/>
+    <dependency org="com.orientechnologies" name="orientdb-server"      rev="${dependency.orientdb.revision}" transitive="false" conf="runtime,default->default" />
+    <dependency org="com.orientechnologies" name="orientdb-client"      rev="${dependency.orientdb.revision}" transitive="false" conf="runtime,default->default" />
+    <dependency org="com.orientechnologies" name="orientdb-enterprise"  rev="${dependency.orientdb.revision}" transitive="false" conf="runtime,default->default" />
+
+    <!-- test dependencies -->
+    <dependency org="junit"               name="junit"          rev='4.10'          conf="test->default"/>
+    <dependency org="org.mockito"         name="mockito-all"    rev="1.9.5"         conf="test->default"/>
+    <dependency org="com.google.guava"    name="guava"          rev="14.0.1"        conf="test->default"/>    
+    <dependency org="org.springframework" name="spring-context" rev="3.0.3.RELEASE" conf="test->default"/>
+
+    <dependency org="pentaho"           name="pentaho-platform-extensions" rev="${dependency.bi-platform.revision}" changing="true" transitive="false" conf="test->default"/>
+    
+    <exclude module="nekohtml" type="*" ext="*" conf="" matcher="exact"></exclude>
+  </dependencies>
+
+</ivy-module>

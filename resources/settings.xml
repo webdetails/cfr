@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<settings>
-  <repositoryClass>pt.webdetails.cfr.repository.DefaultFileRepository</repositoryClass>
-    
-  <cde-components>
-    <path>system/cfr/cdeComponents</path>
-  </cde-components>
-  
-</settings>
