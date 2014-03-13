@@ -145,9 +145,9 @@ public class DefaultFileRepositoryTest {
   public void testListFilesWithInvalidPath() {
     DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
 
-    Assert.assertNull( fileRep.listFiles( "../teste" ) );
+    Assert.assertEquals( 0, fileRep.listFiles( "../teste" ).length );
 
-    Assert.assertNull( fileRep.listFiles( "test/../teste" ) );
+    Assert.assertEquals( 0, fileRep.listFiles( "test/../teste" ).length );
   }
 
   @Test
