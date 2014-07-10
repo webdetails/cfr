@@ -27,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import pt.webdetails.cfr.CfrEnvironment;
 import pt.webdetails.cfr.CfrService;
 import pt.webdetails.cfr.auth.FilePermissionEnum;
 import pt.webdetails.cpf.Result;
@@ -110,7 +111,7 @@ public class MetadataReader {
   }
 
   protected PersistenceEngine getPersistenceEngine() {
-    return PersistenceEngine.getInstance();
+    return CfrEnvironment.getPersistenceEngine();
   }
 
   private static JSONObject getJson( ODocument doc ) {

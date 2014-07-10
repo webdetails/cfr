@@ -32,9 +32,6 @@ public class CfrLifeCycleListener extends SimpleLifeCycleListener {
   public void init() throws PluginLifecycleException {
     logger.debug( "Init for CFR" );
     PluginEnvironment.init( new CfrEnvironment() );
-    PersistenceEngine engine = PersistenceEngine.getInstance();
-    engine.initializeClass( "UploadedFiles" );
-    engine.initializeClass( "UploadedFilesPermissions" );
   }
 
   @Override

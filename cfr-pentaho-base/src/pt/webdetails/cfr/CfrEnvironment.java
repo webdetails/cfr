@@ -15,15 +15,18 @@ package pt.webdetails.cfr;
 
 import pt.webdetails.cfr.bean.CoreBeanFactory;
 import pt.webdetails.cfr.bean.ICfrBeanFactory;
+import pt.webdetails.cfr.file.FileStorer;
 import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.PentahoPluginEnvironment;
 
+import pt.webdetails.cpf.persistence.PersistenceEngine;
 import pt.webdetails.cpf.session.ISessionUtils;
 import pt.webdetails.cpf.utils.IPluginUtils;
 
 public class CfrEnvironment extends PentahoPluginEnvironment implements ICfrEnvironment {
 
   private static final String PLUGIN_NAME = "cfr";
+  private static boolean persistenceEngineInitialized = false;
 
   private ICfrBeanFactory factory;
   private IFileRepository repository;
@@ -61,6 +64,27 @@ public class CfrEnvironment extends PentahoPluginEnvironment implements ICfrEnvi
 
   public IFileRepository getRepository() {
     return repository;
+  }
+
+  public static PersistenceEngine getPersistenceEngine() {
+
+    PersistenceEngine engine = PersistenceEngine.getInstance();
+    if ( !persistenceEngineInitialized ) {
+      synchronized ( CfrEnvironment.class ) {
+        if ( !persistenceEngineInitialized ) {
+          if ( !engine.classExists( FileStorer.FILE_METADATA_STORE_CLASS ) ) {
+            engine.initializeClass( FileStorer.FILE_METADATA_STORE_CLASS );
+          }
+          if ( !engine.classExists( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS ) ) {
+            engine.initializeClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
+          }
+          persistenceEngineInitialized = true;
+        }
+
+      }
+    }
+
+    return engine;
   }
 
 }
