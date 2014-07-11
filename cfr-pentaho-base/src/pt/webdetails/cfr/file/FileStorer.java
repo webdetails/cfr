@@ -20,12 +20,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import pt.webdetails.cfr.CfrEnvironment;
 import pt.webdetails.cfr.CfrService;
 import pt.webdetails.cfr.auth.FilePermissionMetadata;
 import pt.webdetails.cfr.repository.IFileRepository;
@@ -41,6 +41,8 @@ public class FileStorer {
 
   protected static final Log logger = LogFactory.getLog( FileStorer.class );
 
+  private static boolean persistenceEngineInitialized = false;
+
   private IFileRepository repository;
 
   public FileStorer( IFileRepository repository ) {
@@ -48,7 +50,7 @@ public class FileStorer {
   }
 
   protected static PersistenceEngine getPersistenceEngine() {
-    return PersistenceEngine.getInstance();
+    return CfrEnvironment.getPersistenceEngine();
   }
 
   /**

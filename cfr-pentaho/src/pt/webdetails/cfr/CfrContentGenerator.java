@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
@@ -143,7 +144,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     params.put( "solution", "system" );
     params.put( "path", "cfr/presentation/" );
     params.put( "file", "cfr.wcdf" );
-    params.put( "absolute", "true" );
+    params.put( "absolute", "false" );
     params.put( "inferScheme", "false" );
     params.put( "root", root );
 
@@ -161,6 +162,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
     InterPluginCall pluginCall = new InterPluginCall( InterPluginCall.CDE, "Render", params );
     pluginCall.setResponse( getResponse() );
+    pluginCall.setRequest( getRequest() );
     pluginCall.setOutputStream( out );
     pluginCall.run();
 
@@ -560,6 +562,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   private void renderInCde( OutputStream out, Map<String, Object> params ) throws IOException {
     InterPluginCall pluginCall = new InterPluginCall( InterPluginCall.CDE, "Render", params );
     pluginCall.setResponse( getResponse() );
+    pluginCall.setRequest( getRequest() );
     pluginCall.setOutputStream( out );
     pluginCall.run();
   }
@@ -570,7 +573,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     params.put( "path", UI_PATH );
     params.put( "file", dashboardName );
     params.put( "bypassCache", "true" );
-    params.put( "absolute", "true" );
+    params.put( "absolute", "false" );
     params.put( "inferScheme", "false" );
     params.put( "root", getRoot() );
 
