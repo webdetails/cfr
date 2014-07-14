@@ -74,7 +74,7 @@ public class CfrApi {
         result = result.replaceFirst( ".", "" );
       }
       if ( result.startsWith( "/" ) ) {
-        result = result.replaceFirst( ".", "" );
+        result = result.replaceFirst( "/", "" );
       }
 
       if ( result.endsWith( "/" ) ) {
@@ -372,9 +372,15 @@ public class CfrApi {
     String path = checkRelativePathSanity( getParameter( pathParameterPath, null, request ) );
     String[] userOrGroupId = getStringArrayParameter( pathParameterGroupOrUserId, request );
     String[] _permissions = getStringArrayParameter( pathParameterPermission, request );
-
+    boolean recursive = Boolean.parseBoolean( getParameter( pathParameterRecursive, "false", request ) );
     JSONObject result = new JSONObject();
     if ( path != null && userOrGroupId.length > 0 && _permissions.length > 0 ) {
+      List<String> files = new ArrayList<String>();
+      if ( recursive ) {
+        files = getFileNameTree( path );
+      } else {
+        files.add( path );
+      }
       // build valid permissions set
       Set<FilePermissionEnum> validPermissions = new TreeSet<FilePermissionEnum>();
       for ( String permission : _permissions ) {
@@ -384,17 +390,21 @@ public class CfrApi {
         }
       }
       JSONArray permissionAddResultArray = new JSONArray();
-      for ( String id : userOrGroupId ) {
-        JSONObject individualResult = new JSONObject();
-        boolean storeResult =
-          FileStorer.storeFilePermissions( new FilePermissionMetadata( path, id, validPermissions ) );
-        if ( storeResult ) {
-          individualResult.put( "status", String.format( "Added permission for path %s and user/role %s", path, id ) );
-        } else {
-          individualResult.put( "status", String.format( "Failed to add permission for path %s and user/role %s", path,
-            id ) );
+      for ( String file : files ) {
+        for ( String id : userOrGroupId ) {
+          JSONObject individualResult = new JSONObject();
+          boolean storeResult =
+              FileStorer.storeFilePermissions( new FilePermissionMetadata( file, id, validPermissions ) );
+          if ( storeResult ) {
+            individualResult
+                .put( "status", String.format( "Added permission for path %s and user/role %s", file, id ) );
+          } else {
+            individualResult
+                .put( "status", String.format( "Failed to add permission for path %s and user/role %s", file,
+                    id ) );
+          }
+          permissionAddResultArray.put( individualResult );
         }
-        permissionAddResultArray.put( individualResult );
       }
       result.put( "status", "Operation finished. Check statusArray for details." );
       result.put( "statusArray", permissionAddResultArray );
@@ -487,6 +497,8 @@ public class CfrApi {
   private static final String pathParameterPath = "path";
 
   private static final String pathParameterPermission = "permission";
+
+  private static final String pathParameterRecursive = "recursive";
 
   @GET
   @Path( "/checkVersion" )
@@ -602,6 +614,42 @@ public class CfrApi {
   private void writeMessage( String message, OutputStream out ) throws IOException {
     IOUtils.write( message, out );
     out.flush();
+  }
+
+  private List<String> getFileNameTree( String path ) {
+    List<String> files = new ArrayList<String>();
+    if ( !StringUtils.isEmpty( path ) ) {
+      files.add( path );
+    }
+
+    files.addAll( buildFileNameTree( path, getFileNames( service.getRepository().listFiles( path ) ) ) );
+    List<String> treatedFileNames = new ArrayList<String>();
+    for (String file : files ) {
+      if (file.startsWith( "/" )) {
+        treatedFileNames.add( file.replaceFirst( "/", "" ) );
+      } else {
+        treatedFileNames.add( file );
+      }
+    }
+    return treatedFileNames;
+  }
+
+  private List<String> buildFileNameTree( String basePath, List<String> children ) {
+    List<String> result = new ArrayList<String>();
+    for ( String child : children ) {
+      String newEntry = basePath + "/" + child;
+      result.add( newEntry );
+      result.addAll( buildFileNameTree( newEntry, getFileNames( service.getRepository().listFiles( newEntry ) ) ) );
+    }
+    return result;
+  }
+
+  private List<String> getFileNames( IFile[] files ) {
+    List<String> names = new ArrayList<String>();
+    for ( IFile file : files ) {
+      names.add( file.getName() );
+    }
+    return names;
   }
 
 }
