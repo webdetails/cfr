@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -164,7 +164,7 @@ public class CfrApi {
   @Consumes( "multipart/form-data" )
   public void store( @FormDataParam( "file" ) InputStream uploadedInputStream,
                      @FormDataParam( "file" ) FormDataContentDisposition fileDetail,
-                     @FormDataParam( "path" )  String path,
+                     @FormDataParam( "path" ) String path,
                      @Context HttpServletRequest request, @Context HttpServletResponse response )
     throws IOException, InvalidOperationException, Exception {
 
@@ -394,14 +394,14 @@ public class CfrApi {
         for ( String id : userOrGroupId ) {
           JSONObject individualResult = new JSONObject();
           boolean storeResult =
-              FileStorer.storeFilePermissions( new FilePermissionMetadata( file, id, validPermissions ) );
+            FileStorer.storeFilePermissions( new FilePermissionMetadata( file, id, validPermissions ) );
           if ( storeResult ) {
             individualResult
-                .put( "status", String.format( "Added permission for path %s and user/role %s", file, id ) );
+              .put( "status", String.format( "Added permission for path %s and user/role %s", file, id ) );
           } else {
             individualResult
-                .put( "status", String.format( "Failed to add permission for path %s and user/role %s", file,
-                    id ) );
+              .put( "status", String.format( "Failed to add permission for path %s and user/role %s", file,
+                id ) );
           }
           permissionAddResultArray.put( individualResult );
         }
@@ -534,10 +534,11 @@ public class CfrApi {
       protected String getVersionCheckUrl( VersionChecker.Branch branch ) {
         switch( branch ) {
           case TRUNK:
-            return "http://ci.pentaho.com/job/pentaho-cfr/lastSuccessfulBuild/artifact/cfr-pentaho5/dist/marketplace.xml";
-//          case STABLE:
-//            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
-//              + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
+            return "http://ci.pentaho.com/job/pentaho-cfr/lastSuccessfulBuild/artifact/cfr-pentaho5/dist/marketplace" +
+              ".xml";
+          //          case STABLE:
+          //            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
+          //              + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
           default:
             return null;
         }
@@ -624,8 +625,8 @@ public class CfrApi {
 
     files.addAll( buildFileNameTree( path, getFileNames( service.getRepository().listFiles( path ) ) ) );
     List<String> treatedFileNames = new ArrayList<String>();
-    for (String file : files ) {
-      if (file.startsWith( "/" )) {
+    for ( String file : files ) {
+      if ( file.startsWith( "/" ) ) {
         treatedFileNames.add( file.replaceFirst( "/", "" ) );
       } else {
         treatedFileNames.add( file );
