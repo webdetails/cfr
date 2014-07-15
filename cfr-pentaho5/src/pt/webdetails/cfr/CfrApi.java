@@ -57,7 +57,7 @@ public class CfrApi {
 
   private static final Log logger = LogFactory.getLog( CfrApi.class );
 
-  private CfrService service = new CfrService();
+  private CfrService service = getCfrService();
 
   private MetadataReader mr = new MetadataReader( service );
 
@@ -393,8 +393,7 @@ public class CfrApi {
       for ( String file : files ) {
         for ( String id : userOrGroupId ) {
           JSONObject individualResult = new JSONObject();
-          boolean storeResult =
-            FileStorer.storeFilePermissions( new FilePermissionMetadata( file, id, validPermissions ) );
+          boolean storeResult = storeFile( file, id, validPermissions );
           if ( storeResult ) {
             individualResult
               .put( "status", String.format( "Added permission for path %s and user/role %s", file, id ) );
@@ -617,7 +616,7 @@ public class CfrApi {
     out.flush();
   }
 
-  private List<String> getFileNameTree( String path ) {
+  protected List<String> getFileNameTree( String path ) {
     List<String> files = new ArrayList<String>();
     if ( !StringUtils.isEmpty( path ) ) {
       files.add( path );
@@ -651,6 +650,14 @@ public class CfrApi {
       names.add( file.getName() );
     }
     return names;
+  }
+
+  protected CfrService getCfrService() {
+    return new CfrService();
+  }
+
+  protected boolean storeFile( String file, String id, Set<FilePermissionEnum> validPermissions ) {
+    return FileStorer.storeFilePermissions( new FilePermissionMetadata( file, id, validPermissions ) );
   }
 
 }
