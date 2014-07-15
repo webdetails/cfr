@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -57,7 +57,7 @@ public class CfrApi {
 
   private static final Log logger = LogFactory.getLog( CfrApi.class );
 
-  private CfrService service = new CfrService();
+  private CfrService service = getCfrService();
 
   private MetadataReader mr = new MetadataReader( service );
 
@@ -74,7 +74,7 @@ public class CfrApi {
         result = result.replaceFirst( ".", "" );
       }
       if ( result.startsWith( "/" ) ) {
-        result = result.replaceFirst( ".", "" );
+        result = result.replaceFirst( "/", "" );
       }
 
       if ( result.endsWith( "/" ) ) {
@@ -164,7 +164,7 @@ public class CfrApi {
   @Consumes( "multipart/form-data" )
   public void store( @FormDataParam( "file" ) InputStream uploadedInputStream,
                      @FormDataParam( "file" ) FormDataContentDisposition fileDetail,
-                     @FormDataParam( "path" )  String path,
+                     @FormDataParam( "path" ) String path,
                      @Context HttpServletRequest request, @Context HttpServletResponse response )
     throws IOException, InvalidOperationException, Exception {
 
@@ -372,9 +372,15 @@ public class CfrApi {
     String path = checkRelativePathSanity( getParameter( pathParameterPath, null, request ) );
     String[] userOrGroupId = getStringArrayParameter( pathParameterGroupOrUserId, request );
     String[] _permissions = getStringArrayParameter( pathParameterPermission, request );
-
+    boolean recursive = Boolean.parseBoolean( getParameter( pathParameterRecursive, "false", request ) );
     JSONObject result = new JSONObject();
     if ( path != null && userOrGroupId.length > 0 && _permissions.length > 0 ) {
+      List<String> files = new ArrayList<String>();
+      if ( recursive ) {
+        files = getFileNameTree( path );
+      } else {
+        files.add( path );
+      }
       // build valid permissions set
       Set<FilePermissionEnum> validPermissions = new TreeSet<FilePermissionEnum>();
       for ( String permission : _permissions ) {
@@ -384,17 +390,20 @@ public class CfrApi {
         }
       }
       JSONArray permissionAddResultArray = new JSONArray();
-      for ( String id : userOrGroupId ) {
-        JSONObject individualResult = new JSONObject();
-        boolean storeResult =
-          FileStorer.storeFilePermissions( new FilePermissionMetadata( path, id, validPermissions ) );
-        if ( storeResult ) {
-          individualResult.put( "status", String.format( "Added permission for path %s and user/role %s", path, id ) );
-        } else {
-          individualResult.put( "status", String.format( "Failed to add permission for path %s and user/role %s", path,
-            id ) );
+      for ( String file : files ) {
+        for ( String id : userOrGroupId ) {
+          JSONObject individualResult = new JSONObject();
+          boolean storeResult = storeFile( file, id, validPermissions );
+          if ( storeResult ) {
+            individualResult
+              .put( "status", String.format( "Added permission for path %s and user/role %s", file, id ) );
+          } else {
+            individualResult
+              .put( "status", String.format( "Failed to add permission for path %s and user/role %s", file,
+                id ) );
+          }
+          permissionAddResultArray.put( individualResult );
         }
-        permissionAddResultArray.put( individualResult );
       }
       result.put( "status", "Operation finished. Check statusArray for details." );
       result.put( "statusArray", permissionAddResultArray );
@@ -488,6 +497,8 @@ public class CfrApi {
 
   private static final String pathParameterPermission = "permission";
 
+  private static final String pathParameterRecursive = "recursive";
+
   @GET
   @Path( "/checkVersion" )
   public void checkVersion( @Context HttpServletResponse response ) throws IOException, JSONException {
@@ -522,10 +533,11 @@ public class CfrApi {
       protected String getVersionCheckUrl( VersionChecker.Branch branch ) {
         switch( branch ) {
           case TRUNK:
-            return "http://ci.pentaho.com/job/pentaho-cfr/lastSuccessfulBuild/artifact/cfr-pentaho5/dist/marketplace.xml";
-//          case STABLE:
-//            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
-//              + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
+            return "http://ci.pentaho.com/job/pentaho-cfr/lastSuccessfulBuild/artifact/cfr-pentaho5/dist/marketplace" +
+              ".xml";
+          //          case STABLE:
+          //            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
+          //              + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
           default:
             return null;
         }
@@ -602,6 +614,50 @@ public class CfrApi {
   private void writeMessage( String message, OutputStream out ) throws IOException {
     IOUtils.write( message, out );
     out.flush();
+  }
+
+  protected List<String> getFileNameTree( String path ) {
+    List<String> files = new ArrayList<String>();
+    if ( !StringUtils.isEmpty( path ) ) {
+      files.add( path );
+    }
+
+    files.addAll( buildFileNameTree( path, getFileNames( service.getRepository().listFiles( path ) ) ) );
+    List<String> treatedFileNames = new ArrayList<String>();
+    for ( String file : files ) {
+      if ( file.startsWith( "/" ) ) {
+        treatedFileNames.add( file.replaceFirst( "/", "" ) );
+      } else {
+        treatedFileNames.add( file );
+      }
+    }
+    return treatedFileNames;
+  }
+
+  private List<String> buildFileNameTree( String basePath, List<String> children ) {
+    List<String> result = new ArrayList<String>();
+    for ( String child : children ) {
+      String newEntry = basePath + "/" + child;
+      result.add( newEntry );
+      result.addAll( buildFileNameTree( newEntry, getFileNames( service.getRepository().listFiles( newEntry ) ) ) );
+    }
+    return result;
+  }
+
+  private List<String> getFileNames( IFile[] files ) {
+    List<String> names = new ArrayList<String>();
+    for ( IFile file : files ) {
+      names.add( file.getName() );
+    }
+    return names;
+  }
+
+  protected CfrService getCfrService() {
+    return new CfrService();
+  }
+
+  protected boolean storeFile( String file, String id, Set<FilePermissionEnum> validPermissions ) {
+    return FileStorer.storeFilePermissions( new FilePermissionMetadata( file, id, validPermissions ) );
   }
 
 }
