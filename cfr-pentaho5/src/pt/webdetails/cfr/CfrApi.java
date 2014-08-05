@@ -286,24 +286,22 @@ public class CfrApi {
 
   @GET
   @Path( "/listFilesJson" )
+  public void listFilesJson( @Context HttpServletRequest request, @Context HttpServletResponse response )
+    throws IOException, JSONException {
+    String baseDir = checkRelativePathSanity( getParameter( "dir", request ) );
+
+    JSONArray array = getFileListJson( baseDir );
+    writeMessage( array.toString( 2 ), response.getOutputStream() );
+  }
+
+  @GET
+  @Path( "/listFilesJSON" )
   public void listFilesJSON( @Context HttpServletRequest request, @Context HttpServletResponse response )
     throws IOException, JSONException {
     String baseDir = checkRelativePathSanity( getParameter( "dir", request ) );
-    IFile[] files = service.getRepository().listFiles( baseDir );
-    JSONArray arr = new JSONArray();
-    if ( files != null ) {
-      for ( IFile file : files ) {
-        if ( mr.isCurrentUserAllowed( FilePermissionEnum.READ, relativeFilePath( baseDir, file.getName() ) ) ) {
-          JSONObject obj = new JSONObject();
-          obj.put( "fileName", file.getName() );
-          obj.put( "isDirectory", file.isDirectory() );
-          obj.put( "path", baseDir );
-          arr.put( obj );
-        }
-      }
-    }
 
-    writeMessage( arr.toString( 2 ), response.getOutputStream() );
+    JSONArray array = getFileListJson( baseDir );
+    writeMessage( array.toString( 2 ), response.getOutputStream() );
   }
 
   @GET
@@ -650,6 +648,23 @@ public class CfrApi {
       names.add( file.getName() );
     }
     return names;
+  }
+
+  private JSONArray getFileListJson( String baseDir ) throws JSONException {
+    IFile[] files = service.getRepository().listFiles( baseDir );
+    JSONArray arr = new JSONArray();
+    if ( files != null ) {
+      for ( IFile file : files ) {
+        if ( mr.isCurrentUserAllowed( FilePermissionEnum.READ, relativeFilePath( baseDir, file.getName() ) ) ) {
+          JSONObject obj = new JSONObject();
+          obj.put( "fileName", file.getName() );
+          obj.put( "isDirectory", file.isDirectory() );
+          obj.put( "path", baseDir );
+          arr.put( obj );
+        }
+      }
+    }
+    return arr;
   }
 
   protected CfrService getCfrService() {
