@@ -15,6 +15,7 @@ package pt.webdetails.cfr;
 
 import java.io.*;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -205,7 +206,7 @@ public class CfrApi {
   public void listFiles( @FormParam( "dir" ) @DefaultValue( "" ) String baseDir,
                          @Context HttpServletRequest request, @Context HttpServletResponse response )
     throws IOException {
-    //String baseDir = URLDecoder.decode( getParameter( "dir", request ), "ISO-8859-1" );
+    baseDir = URLDecoder.decode( baseDir, CharsetHelper.getEncoding() );
     IFile[] files = service.getRepository().listFiles( baseDir );
     List<IFile> allowedFiles = new ArrayList<IFile>( files.length );
     String extensions = getParameter( "fileExtensions", request );
