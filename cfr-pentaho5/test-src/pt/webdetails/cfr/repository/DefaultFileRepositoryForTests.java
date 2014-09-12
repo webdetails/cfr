@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -15,8 +15,28 @@ package pt.webdetails.cfr.repository;
 
 public class DefaultFileRepositoryForTests extends DefaultFileRepository {
 
+  private boolean result;
+  private boolean normal;
+
+  public DefaultFileRepositoryForTests( boolean expectedResult ) {
+    this.result = expectedResult;
+  }
+
+  public DefaultFileRepositoryForTests() {
+    this.normal = true;
+  }
+
   @Override
   protected String getBasePath() {
     return "./test-resources";
   }
+
+  @Override
+  public boolean storeFile( byte[] content, String fileName, String relativePath ) {
+    if ( this.normal ) {
+      return super.storeFile( content, fileName, relativePath );
+    }
+    return this.result;
+  }
+
 }

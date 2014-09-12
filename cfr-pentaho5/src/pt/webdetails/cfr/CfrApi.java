@@ -60,7 +60,7 @@ public class CfrApi {
 
   private CfrService service = getCfrService();
 
-  private MetadataReader mr = new MetadataReader( service );
+  protected MetadataReader mr = new MetadataReader( service );
 
   private static final String UI_PATH = "cfr/presentation/";
 
@@ -135,7 +135,7 @@ public class CfrApi {
       throw new Exception( "path is null or empty" );
     }
 
-    boolean createResult = service.getRepository().createFolder( path );
+    boolean createResult = getRepository().createFolder( path );
     writeMessage( new JSONObject().put( "result", createResult ).toString(), response.getOutputStream() );
 
   }
@@ -150,7 +150,7 @@ public class CfrApi {
       throw new Exception( "fileName is null or empty" );
     }
 
-    boolean removeResult = service.getRepository().deleteFile( fullFileName );
+    boolean removeResult = getRepository().deleteFile( fullFileName );
     boolean result = false;
     if ( removeResult ) {
       FileStorer.deletePermissions( fullFileName, null );
@@ -190,7 +190,7 @@ public class CfrApi {
       throw new Exception( "File content must not be null" );
     }
 
-    FileStorer fileStorer = new FileStorer( service.getRepository() );
+    FileStorer fileStorer = new FileStorer( getRepository() );
 
     boolean stored =
       fileStorer
@@ -207,7 +207,7 @@ public class CfrApi {
                          @Context HttpServletRequest request, @Context HttpServletResponse response )
     throws IOException {
     baseDir = URLDecoder.decode( baseDir, CharsetHelper.getEncoding() );
-    IFile[] files = service.getRepository().listFiles( baseDir );
+    IFile[] files = getRepository().listFiles( baseDir );
     List<IFile> allowedFiles = new ArrayList<IFile>( files.length );
     String extensions = getParameter( "fileExtensions", request );
 
@@ -246,7 +246,7 @@ public class CfrApi {
     }
 
     if ( mr.isCurrentUserAllowed( FilePermissionEnum.READ, fullFileName ) ) {
-      CfrFile file = service.getRepository().getFile( fullFileName );
+      CfrFile file = getRepository().getFile( fullFileName );
 
 
       setResponseHeaders( getMimeType( file.getFileName() ), -1, URLEncoder.encode( file.getFileName(),
@@ -273,7 +273,7 @@ public class CfrApi {
     }
 
     if ( mr.isCurrentUserAllowed( FilePermissionEnum.READ, fullFileName ) ) {
-      CfrFile file = service.getRepository().getFile( fullFileName );
+      CfrFile file = getRepository().getFile( fullFileName );
 
       setResponseHeaders( getMimeType( file.getFileName() ), -1, null, response );
       ByteArrayInputStream bais = new ByteArrayInputStream( file.getContent() );
@@ -621,7 +621,7 @@ public class CfrApi {
       files.add( path );
     }
 
-    files.addAll( buildFileNameTree( path, getFileNames( service.getRepository().listFiles( path ) ) ) );
+    files.addAll( buildFileNameTree( path, getFileNames( getRepository().listFiles( path ) ) ) );
     List<String> treatedFileNames = new ArrayList<String>();
     for ( String file : files ) {
       if ( file.startsWith( "/" ) ) {
@@ -638,7 +638,7 @@ public class CfrApi {
     for ( String child : children ) {
       String newEntry = basePath + "/" + child;
       result.add( newEntry );
-      result.addAll( buildFileNameTree( newEntry, getFileNames( service.getRepository().listFiles( newEntry ) ) ) );
+      result.addAll( buildFileNameTree( newEntry, getFileNames( getRepository().listFiles( newEntry ) ) ) );
     }
     return result;
   }
@@ -652,7 +652,7 @@ public class CfrApi {
   }
 
   private JSONArray getFileListJson( String baseDir ) throws JSONException {
-    IFile[] files = service.getRepository().listFiles( baseDir );
+    IFile[] files = getRepository().listFiles( baseDir );
     JSONArray arr = new JSONArray();
     if ( files != null ) {
       for ( IFile file : files ) {
@@ -674,6 +674,10 @@ public class CfrApi {
 
   protected boolean storeFile( String file, String id, Set<FilePermissionEnum> validPermissions ) {
     return FileStorer.storeFilePermissions( new FilePermissionMetadata( file, id, validPermissions ) );
+  }
+
+  protected IFileRepository getRepository() {
+    return service.getRepository();
   }
 
 }

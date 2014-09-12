@@ -15,11 +15,13 @@ package pt.webdetails.cfr;
 
 import junit.framework.Assert;
 import org.json.JSONException;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import pt.webdetails.cfr.repository.PentahoRepositoryFileRepositoryForTests;
+import pt.webdetails.cfr.repository.DefaultFileRepositoryForTests;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +34,27 @@ import java.util.Map;
 
 public class CfrApiTest {
 
-  String result = "";
+  static String result = "";
+  static ServletOutputStream outputStreamMock;
+  static HttpServletResponse responseMock;
+  static CfrService cfrServiceMock;
+
+
+  @BeforeClass
+  public static void setup() {
+    byte[] content = new byte[ 100 ];
+    DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
+    fileRep.createFolder( "a folder" );
+    fileRep.storeFile( content, "a file.txt", "a folder" );
+
+  }
+
+  @AfterClass
+  public static void onTestFinish() {
+    DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
+    fileRep.deleteFile( "/a folder/a file.txt" );
+    fileRep.deleteFile( "/a folder" );
+  }
 
   @Test
   public void testRecursivelySetPermissions() throws IOException, JSONException {
@@ -73,9 +95,8 @@ public class CfrApiTest {
     files.addAll( Arrays.asList( filesArr ) );
     files.addAll( Arrays.asList( filesDir ) );
     cfrApi.setFileNames( files );
-    //setting the CfrServiceMock
-    CfrService cfrServiceMock = Mockito.mock( CfrService.class );
-    Mockito.when( cfrServiceMock.isCurrentUserAdmin() ).thenReturn( true );
+
+    createCfrServiceMock();
     cfrApi.setCfrService( cfrServiceMock );
 
     // setting up Map mock
@@ -83,24 +104,15 @@ public class CfrApiTest {
     Mockito.when( mapMock.get( "id" ) ).thenReturn( id );
     Mockito.when( mapMock.get( "permission" ) ).thenReturn( permission );
 
-    // setting up outputStream mock
-    ServletOutputStream outputStreamMock = Mockito.mock( ServletOutputStream.class );
-    Mockito.doAnswer( new Answer() {
-      @Override public Object answer( InvocationOnMock invocation ) throws Throwable {
-        Object[] args = invocation.getArguments();
-        byte[] b = (byte[]) args[ 0 ];
-        result = new String( b );
-        return null;
-      }
-    } ).when( outputStreamMock ).write( Mockito.any( byte[].class ) );
+    createOutputStreamMock();
+
     // setting up request mock
     HttpServletRequest requestMock = Mockito.mock( HttpServletRequest.class );
     Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
     Mockito.when( requestMock.getParameterMap() ).thenReturn( mapMock );
     Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
-    //setting up response mock
-    HttpServletResponse responseMock = Mockito.mock( HttpServletResponse.class );
-    Mockito.when( responseMock.getOutputStream() ).thenReturn( outputStreamMock );
+
+    createResponseMock();
 
     cfrApi.setPermissions( requestMock, responseMock );
     Assert.assertEquals( result, top + allFiles + bot );
@@ -118,5 +130,55 @@ public class CfrApiTest {
     Assert.assertEquals( result, top + dirOtherDirFiles + bot );
 
   }
+
+  @Test
+  public void testListFiles() throws IOException {
+    String correctResult = "<ul class=\"jqueryFileTree\" style=\"display: none;\"><li class=\"file ext_txt\"><a " +
+      "href=\"#\" rel=\"/a folder/a file.txt\">a file.txt</a></li></ul>";
+    CfrApiForTests cfrApi = new CfrApiForTests();
+    createCfrServiceMock();
+    createOutputStreamMock();
+    createResponseMock();
+    cfrApi.setCfrService( cfrServiceMock );
+    cfrApi.reloadMetadataReader();
+    HttpServletRequest requestMock = Mockito.mock( HttpServletRequest.class );
+    Mockito.when( requestMock.getParameter( "fileExtensions" ) ).thenReturn( "" );
+
+    cfrApi.listFiles( "/a%20folder/", requestMock, responseMock );
+    Assert.assertEquals( result, correctResult );
+
+  }
+
+  private static void createOutputStreamMock() throws IOException {
+    // setting up outputStream mock
+    if ( outputStreamMock == null ) {
+      outputStreamMock = Mockito.mock( ServletOutputStream.class );
+      Mockito.doAnswer( new Answer() {
+        @Override public Object answer( InvocationOnMock invocation ) throws Throwable {
+          Object[] args = invocation.getArguments();
+          byte[] b = (byte[]) args[ 0 ];
+          result = new String( b );
+          return null;
+        }
+      } ).when( outputStreamMock ).write( Mockito.any( byte[].class ) );
+    }
+  }
+
+  private static void createResponseMock() throws IOException {
+    //setting up response mock
+    if ( responseMock == null ) {
+      responseMock = Mockito.mock( HttpServletResponse.class );
+      Mockito.when( responseMock.getOutputStream() ).thenReturn( outputStreamMock );
+    }
+  }
+
+  private static void createCfrServiceMock() throws IOException {
+    //setting the CfrServiceMock
+    if ( cfrServiceMock == null ) {
+      cfrServiceMock = Mockito.mock( CfrService.class );
+      Mockito.when( cfrServiceMock.isCurrentUserAdmin() ).thenReturn( true );
+    }
+  }
+
 
 }

@@ -14,6 +14,9 @@
 package pt.webdetails.cfr;
 
 import pt.webdetails.cfr.auth.FilePermissionEnum;
+import pt.webdetails.cfr.file.MetadataReader;
+import pt.webdetails.cfr.repository.DefaultFileRepositoryForTests;
+import pt.webdetails.cfr.repository.IFileRepository;
 
 import java.util.List;
 import java.util.Set;
@@ -41,6 +44,14 @@ public class CfrApiForTests extends CfrApi {
 
   public void setFileNames( List<String> files ) {
     this.files = files;
+  }
+
+  protected IFileRepository getRepository() {
+    return new DefaultFileRepositoryForTests();
+  }
+
+  public void reloadMetadataReader() {
+    super.mr = new MetadataReader( cfrService );
   }
 
 }
