@@ -547,6 +547,7 @@ public class CfrApi {
   }
 
   private void renderInCde( HttpServletResponse response, Map<String, Object> params ) throws Exception {
+    response.setContentType( MimeTypes.HTML );
     InterPluginBroker.run( params, response.getOutputStream() );
   }
 
