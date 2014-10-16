@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
@@ -154,10 +155,8 @@ public class MetadataReader {
   }
 
   /**
-   * @param permission
-   *          Permission to be checked
-   * @param path
-   *          Folder or file to validate against the specified permission
+   * @param permission Permission to be checked
+   * @param path       Folder or file to validate against the specified permission
    * @return true if current user is allowed, false otherwise
    */
   public boolean isCurrentUserAllowed( FilePermissionEnum permission, String path ) {
@@ -177,8 +176,7 @@ public class MetadataReader {
   }
 
   /**
-   * @param path
-   *          Folder or file from which we want to retrieve the ownership information
+   * @param path Folder or file from which we want to retrieve the ownership information
    * @return username of the owner if path exists, otherwise an empty string
    */
   public String getOwner( String path ) {
@@ -188,7 +186,7 @@ public class MetadataReader {
     if ( path != null ) {
       // build query to retrieve path metadata
       String query = String.format( "select %s from %s where file = '%s'",
-              ownerField, FileStorer.FILE_METADATA_STORE_CLASS, path );
+        ownerField, FileStorer.FILE_METADATA_STORE_CLASS, path );
       Map<String, Object> params = new HashMap<String, Object>();
       // params.put("owner", ownerField);
       // params.put("file", file);
@@ -211,25 +209,51 @@ public class MetadataReader {
     return owner.equals( service.getCurrentUserName() );
   }
 
+  public List<ODocument> getUniquePermissionEntities( String path, List<String> ids,
+                                                      FilePermissionEnum[] allowedPermissions ) {
+    return findPermissionsEntities( path, ids, allowedPermissions, false );
+  }
+
   /**
    * @param path
-   * @param id
-   *          user/group names
+   * @param ids                user/group names
    * @param allowedPermissions
    * @return
    */
   public List<ODocument> getPermissionEntities( String path, List<String> ids,
                                                 FilePermissionEnum[] allowedPermissions ) {
-    StringBuilder queryBuilder =
-        new StringBuilder( "select * from " ).append( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
-    final Map<String, Object> params = java.util.Collections.emptyMap();
-    String folder = null;
+    return findPermissionsEntities( path, ids, allowedPermissions, true );
+  }
 
-    /*
-     * If path represent a file path than determine the parent folder in order to also check the permissions set to the
-     * parent folder. It is assumed that if the parent folder containing the file has permissions set those are
-     * inherited by the file.
-     */
+  private List<ODocument> findPermissionsEntities( String path, List<String> ids,
+                                                   FilePermissionEnum[] allowedPermissions, boolean lookup ) {
+    final Map<String, Object> params = java.util.Collections.emptyMap();
+
+    String idsQuery = "";
+    if ( ids != null ) {
+      idsQuery += " (";
+      for ( String id : ids ) {
+        if ( idsQuery.indexOf( "id =" ) > -1 ) {
+          idsQuery += " or";
+        }
+        idsQuery += " id = '" + id + "'";
+      }
+      idsQuery += ") ";
+    }
+    if ( allowedPermissions != null && allowedPermissions.length > 0 ) {
+      if ( !StringUtils.isEmpty( idsQuery ) ) {
+        idsQuery += "and";
+      }
+      idsQuery += " permissions in " + toStringArray( allowedPermissions );
+    }
+    List<ODocument> permissions = findPermissions( path, idsQuery, params, lookup );
+    return permissions;
+  }
+
+  private List<ODocument> findPermissions( String path, String idsQuery, Map<String, Object> params, boolean lookup ) {
+    List<ODocument> permissions = null;
+    String query = "select * from " + FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS;
+    String folder = null;
     if ( path != null ) {
       CfrFile file = service.getRepository().getFile( path );
       if ( file != null ) {
@@ -245,51 +269,28 @@ public class MetadataReader {
         }
       }
     }
-
-    StringBuilder whereBuilder = new StringBuilder();
-    if ( path != null ) {
-      whereBuilder.append( " file = '" ).append( path ).append( "'" );
-    }
-    if ( folder != null ) {
-      if ( whereBuilder.length() != 0 ) {
-        whereBuilder.append( " or" );
-      }
-
-      whereBuilder.append( " file = '" ).append( folder ).append( "'" );
-    }
-    if ( ids != null ) {
-      if ( whereBuilder.length() != 0 ) {
-        whereBuilder.append( " and " );
-      }
-
-      whereBuilder.append( "(" );
-
-      StringBuilder idsBuilder = new StringBuilder();
-      for ( String id : ids ) {
-        if ( idsBuilder.length() != 0 ) {
-          idsBuilder.append( " or" );
-        }
-
-        idsBuilder.append( " id = '" ).append( id ).append( "'" );
-      }
-
-      whereBuilder.append( idsBuilder.toString() ).append( ")" );
-    }
-    if ( allowedPermissions != null && allowedPermissions.length > 0 ) {
-      if ( whereBuilder.length() != 0 ) {
-        whereBuilder.append( " and" );
-      }
-      whereBuilder.append( " permissions in " ).append( toStringArray( allowedPermissions ) );
+    if ( !StringUtils.isEmpty( path ) ) {
+      query += " where file = '" + path + "'";
     }
 
-    if ( whereBuilder.length() > 0 ) {
-      whereBuilder.insert( 0, " where" );
+    permissions = getPersistenceEngine().executeQuery( query, params );
+    if ( !lookup || ( permissions.size() > 0 && query.indexOf( "where" ) > -1 ) ) {
+      return findPermissionsWithIdsQuery( query, idsQuery, params );
+    } else if ( StringUtils.isEmpty( folder ) ) {
+      return permissions;
+    } else {
+      return findPermissions( folder, idsQuery, params, lookup );
     }
+  }
 
-    String query = queryBuilder.append( whereBuilder ).toString();
-    List<ODocument> permissions = getPersistenceEngine().executeQuery( query, params );
-
-    return permissions;
+  private List<ODocument> findPermissionsWithIdsQuery( String query, String idsQuery, Map<String, Object> params ) {
+    if ( query.indexOf( "where" ) > -1 ) {
+      query += " and";
+    } else {
+      query += " where";
+    }
+    query += idsQuery;
+    return getPersistenceEngine().executeQuery( query, params );
   }
 
   public JSONArray getPermissions( String file, String id, FilePermissionEnum[] allowedPermissions ) {

@@ -54,4 +54,9 @@ public class CfrApiForTests extends CfrApi {
     super.mr = new MetadataReader( cfrService );
   }
 
+  @Override
+  public boolean isUserAdmin() {
+    return true;
+  }
+
 }

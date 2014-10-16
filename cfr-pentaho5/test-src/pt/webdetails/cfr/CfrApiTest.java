@@ -38,62 +38,61 @@ public class CfrApiTest {
   static ServletOutputStream outputStreamMock;
   static HttpServletResponse responseMock;
   static CfrService cfrServiceMock;
+  static final String[] dirStructure = { "dir1", "dir1/dir", "dir2", "a folder" };
+  static final String[] fileStructure = { "dir1/file1", "file2", "file3", "dir1/dir/file4", "a folder/a file.txt" };
 
 
   @BeforeClass
   public static void setup() {
     byte[] content = new byte[ 100 ];
     DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
-    fileRep.createFolder( "a folder" );
-    fileRep.storeFile( content, "a file.txt", "a folder" );
-
+    for ( String dir : dirStructure ) {
+      fileRep.createFolder( dir );
+    }
+    for ( String file : fileStructure ) {
+      fileRep.storeFile( content, file, "" );
+    }
   }
 
   @AfterClass
   public static void onTestFinish() {
     DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
-    fileRep.deleteFile( "/a folder/a file.txt" );
-    fileRep.deleteFile( "/a folder" );
+    for ( String file : fileStructure ) {
+      fileRep.deleteFile( file );
+    }
+    for ( int i = dirStructure.length - 1; i >= 0; i-- ) {
+      fileRep.deleteFile( dirStructure[ i ] );
+    }
   }
 
   @Test
-  public void testRecursivelySetPermissions() throws IOException, JSONException {
+  public void testSetPermissions() throws IOException, JSONException {
     CfrApiForTests cfrApi = new CfrApiForTests();
-    String top = "{\n"
-      + "  \"status\": \"Operation finished. Check statusArray for details.\",\n"
-      + "  \"statusArray\": [\n";
-    String bot = "  ]\n}";
-    String allFiles = "    {\"status\": \"Added permission for path file and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path file2 and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/dirInsideDir and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/dirInsideDir/file and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/otherDir and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/otherDir/file and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/file and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/file2 and user/role Authenticated\"}\n";
-    String dirFiles = "    {\"status\": \"Added permission for path dir and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/dirInsideDir and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/dirInsideDir/file and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/otherDir and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/otherDir/file and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/file and user/role Authenticated\"},\n"
-      + "    {\"status\": \"Added permission for path dir/file2 and user/role Authenticated\"}\n";
-    String dirOtherDirFiles =
-      "    {\"status\": \"Added permission for path dir/otherDir and user/role Authenticated\"},\n"
-        + "    {\"status\": \"Added permission for path dir/otherDir/file and user/role Authenticated\"}\n";
+    String top = "{"
+      + "  \"status\": \"Operation finished. Check statusArray for details.\","
+      + "  \"statusArray\": [";
+    String bot = "  ]}";
+    String singleBot = "]}";
+    String setOnDirRecur;
+    StringBuilder sbAllDir = new StringBuilder();
+    for ( String dir : dirStructure ) {
+      sbAllDir.append( "    {\"status\": \"Added permission for path " + dir + " and user/role Authenticated\"}," );
+    }
+    setOnDirRecur = sbAllDir.toString();
+    setOnDirRecur =
+      sbAllDir.replace( setOnDirRecur.lastIndexOf( "," ), setOnDirRecur.lastIndexOf( "," ) + 1, "" ).toString();
+
+    String setOnDir =
+      "{\"status\": \"Added permission for path " + dirStructure[ 0 ] + " and user/role Authenticated\"}";
+    String setOnFile =
+      "{\"status\": \"Added permission for path " + fileStructure[ 0 ] + " and user/role Authenticated\"}";
     String path = "/";
     String[] id = { "Authenticated" };
     String[] permission = { "read", "write" };
     String recursive = "true";
-    String[] filesArr =
-      { "file", "file2" };
-    String[] filesDir = { "dir", "dir/dirInsideDir", "dir/dirInsideDir/file", "dir/otherDir", "dir/otherDir/file",
-      "dir/file", "dir/file2" };
-    String[] filesDirOtherDir = { "dir/otherDir", "dir/otherDir/file" };
     List<String> files = new ArrayList<String>();
-    files.addAll( Arrays.asList( filesArr ) );
-    files.addAll( Arrays.asList( filesDir ) );
+    files.addAll( Arrays.asList( fileStructure ) );
+    files.addAll( Arrays.asList( dirStructure ) );
     cfrApi.setFileNames( files );
 
     createCfrServiceMock();
@@ -113,21 +112,33 @@ public class CfrApiTest {
     Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
 
     createResponseMock();
-
+    // setPermissions on a dir, with recursive = true
     cfrApi.setPermissions( requestMock, responseMock );
-    Assert.assertEquals( result, top + allFiles + bot );
+    Assert.assertEquals( top + setOnDirRecur + bot, result.replaceAll( "\n", "" ) );
 
+    //set permissions on a file, with recursive = true
+    path = fileStructure[ 0 ];
+    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
     files = new ArrayList<String>();
-    files.addAll( Arrays.asList( filesDir ) );
+    files.addAll( Arrays.asList( fileStructure[ 0 ] ) );
     cfrApi.setFileNames( files );
     cfrApi.setPermissions( requestMock, responseMock );
-    Assert.assertEquals( result, top + dirFiles + bot );
+    Assert.assertEquals( top + setOnFile + singleBot, result.replaceAll( "\n", "" ) );
 
-    files = new ArrayList<String>();
-    files.addAll( Arrays.asList( filesDirOtherDir ) );
-    cfrApi.setFileNames( files );
+    // setPermissions on a dir, with recursive = false
+    path = dirStructure[ 0 ];
+    recursive = "false";
+    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
+    Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
     cfrApi.setPermissions( requestMock, responseMock );
-    Assert.assertEquals( result, top + dirOtherDirFiles + bot );
+    Assert.assertEquals( top + setOnDir + singleBot, result.replaceAll( "\n", "" ) );
+
+    //set permissions on a file, with recursive = false
+    path = fileStructure[ 0 ];
+    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
+    Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
+    cfrApi.setPermissions( requestMock, responseMock );
+    Assert.assertEquals( top + setOnFile + singleBot, result.replaceAll( "\n", "" ) );
 
   }
 

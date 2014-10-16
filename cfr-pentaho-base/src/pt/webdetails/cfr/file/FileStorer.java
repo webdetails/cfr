@@ -128,7 +128,7 @@ public class FileStorer {
           // verify that the file hasn't already permissions defined
           List<String> ids = new ArrayList<String>();
           ids.add( permission.getId() );
-          List<ODocument> currentPermissions = reader.getPermissionEntities( permission.getFile(), ids, null );
+          List<ODocument> currentPermissions = reader.getUniquePermissionEntities( permission.getFile(), ids, null );
           if ( currentPermissions == null || currentPermissions.size() == 0 ) {
             persistedPermissions =
                 getPersistenceEngine().store( null, FILE_PERMISSIONS_METADATA_STORE_CLASS, permissionToPersist );
