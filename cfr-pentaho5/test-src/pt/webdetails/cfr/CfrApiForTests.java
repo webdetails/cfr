@@ -18,6 +18,7 @@ import pt.webdetails.cfr.file.MetadataReader;
 import pt.webdetails.cfr.repository.DefaultFileRepositoryForTests;
 import pt.webdetails.cfr.repository.IFileRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -25,13 +26,19 @@ public class CfrApiForTests extends CfrApi {
 
   private CfrService cfrService;
   private List<String> files;
+  private List<String> nonAdminUserFiles;
+  private boolean isAdmin;
+
+  public CfrApiForTests() {
+    this.nonAdminUserFiles = new ArrayList<String>();
+  }
 
   protected CfrService getCfrService() {
     return cfrService;
   }
 
   @Override protected boolean storeFile( String file, String id, Set<FilePermissionEnum> validPermissions ) {
-    return true;
+    return isAdmin || nonAdminUserFiles.contains( file );
   }
 
   @Override protected List<String> getFileNameTree( String path ) {
@@ -46,6 +53,14 @@ public class CfrApiForTests extends CfrApi {
     this.files = files;
   }
 
+  public void setNonAdminUserFiles( List<String> nonAdminUserFiles ) {
+    this.nonAdminUserFiles = nonAdminUserFiles;
+  }
+
+  public void setIsAdmin( boolean isAdmin ) {
+    this.isAdmin = isAdmin;
+  }
+
   protected IFileRepository getRepository() {
     return new DefaultFileRepositoryForTests();
   }
@@ -56,7 +71,7 @@ public class CfrApiForTests extends CfrApi {
 
   @Override
   public boolean isUserAdmin() {
-    return true;
+    return isAdmin;
   }
 
 }
