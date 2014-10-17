@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 
+import com.orientechnologies.orient.core.record.impl.ODocument;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -153,7 +154,7 @@ public class CfrApi {
     boolean removeResult = getRepository().deleteFile( fullFileName );
     boolean result = false;
     if ( removeResult ) {
-      FileStorer.deletePermissions( fullFileName, null );
+      deletePermissions( fullFileName, null );
       result = FileStorer.removeFile( fullFileName, null );
     }
 
@@ -372,6 +373,9 @@ public class CfrApi {
     String[] userOrGroupId = getStringArrayParameter( pathParameterGroupOrUserId, request );
     String[] _permissions = getStringArrayParameter( pathParameterPermission, request );
     boolean recursive = Boolean.parseBoolean( getParameter( pathParameterRecursive, "false", request ) );
+    boolean isDir = false;
+    boolean admin = isUserAdmin();
+    boolean errorSetting = false;
     JSONObject result = new JSONObject();
     if ( path != null && userOrGroupId.length > 0 && _permissions.length > 0 ) {
       List<String> files = new ArrayList<String>();
@@ -380,6 +384,7 @@ public class CfrApi {
       } else {
         files.add( path );
       }
+      isDir = getRepository().getFile( path ).isDirectory();
       // build valid permissions set
       Set<FilePermissionEnum> validPermissions = new TreeSet<FilePermissionEnum>();
       for ( String permission : _permissions ) {
@@ -390,21 +395,30 @@ public class CfrApi {
       }
       JSONArray permissionAddResultArray = new JSONArray();
       for ( String file : files ) {
+        CfrFile f = getRepository().getFile( file );
+        if ( isDir && f.isFile() ) {
+          continue;
+        }
         for ( String id : userOrGroupId ) {
-          JSONObject individualResult = new JSONObject();
           boolean storeResult = storeFile( file, id, validPermissions );
           if ( storeResult ) {
-            individualResult
-              .put( "status", String.format( "Added permission for path %s and user/role %s", file, id ) );
+            permissionAddResultArray.put( new JSONObject()
+              .put( "status", String.format( "Added permission for path %s and user/role %s", file, id ) ) );
           } else {
-            individualResult
-              .put( "status", String.format( "Failed to add permission for path %s and user/role %s", file,
-                id ) );
+            if ( admin ) {
+              permissionAddResultArray.put( new JSONObject()
+                .put( "status", String.format( "Failed to add permission for path %s and user/role %s", file,
+                  id ) ) );
+            } else {
+              errorSetting = true;
+            }
           }
-          permissionAddResultArray.put( individualResult );
         }
       }
       result.put( "status", "Operation finished. Check statusArray for details." );
+      if ( errorSetting ) {
+        permissionAddResultArray.put( new JSONObject().put( "status", "Some permissions could not be set" ) );
+      }
       result.put( "statusArray", permissionAddResultArray );
     } else {
       result.put( "status", "Path or user group parameters not found" );
@@ -419,29 +433,51 @@ public class CfrApi {
     throws JSONException, IOException {
     String path = checkRelativePathSanity( getParameter( pathParameterPath, null, request ) );
     String[] userOrGroupId = getStringArrayParameter( pathParameterGroupOrUserId, request );
-
+    boolean recursive = Boolean.parseBoolean( getParameter( pathParameterRecursive, "false", request ) );
     JSONObject result = new JSONObject();
+    boolean admin = isUserAdmin();
+    boolean errorDeleting = false;
 
     if ( path != null || ( userOrGroupId != null && userOrGroupId.length > 0 ) ) {
-      if ( userOrGroupId == null || userOrGroupId.length == 0 ) {
-        if ( FileStorer.deletePermissions( path, null ) ) {
-          result.put( "status", "Permissions deleted" );
-        } else {
-          result.put( "status", "Error deleting permissions" );
-        }
+      List<String> files = new ArrayList<String>();
+      if ( recursive ) {
+        files = getFileNameTree( path );
       } else {
-        JSONArray permissionDeleteResultArray = new JSONArray();
-        for ( String id : userOrGroupId ) {
-          JSONObject individualResult = new JSONObject();
-          boolean deleteResult = FileStorer.deletePermissions( path, id );
-          if ( deleteResult ) {
-            individualResult.put( "status", String.format( "Permission for %s and path %s deleted.", id, path ) );
+        files.add( path );
+      }
+      JSONArray permissionDeleteResultArray = new JSONArray();
+      if ( userOrGroupId == null || userOrGroupId.length == 0 ) {
+        for ( String f : files ) {
+          if ( deletePermissions( f, null ) ) {
+            permissionDeleteResultArray.put( new JSONObject().put( "status", "Permissions for " + f + " deleted" ) );
           } else {
-            individualResult
-              .put( "status", String.format( "Failed to delete permission for %s and path %s.", id, path ) );
+            if ( admin ) {
+              permissionDeleteResultArray
+                .put( new JSONObject().put( "status", "Error deleting permissions for " + f ) );
+            } else {
+              errorDeleting = true;
+            }
           }
+        }
+        result.put( "status", "Multiple permission deletion. Check Status array" );
+        if ( errorDeleting ) {
+          permissionDeleteResultArray.put( new JSONObject().put( "status", "Some permissions could not be removed" ) );
+        }
+        result.put( "statusArray", permissionDeleteResultArray );
+      } else {
+        for ( String id : userOrGroupId ) {
+          for ( String f : files ) {
+            JSONObject individualResult = new JSONObject();
+            boolean deleteResult = deletePermissions( f, id );
+            if ( deleteResult ) {
+              individualResult.put( "status", String.format( "Permission for %s and path %s deleted.", id, f ) );
+            } else {
+              individualResult
+                .put( "status", String.format( "Failed to delete permission for %s and path %s.", id, f ) );
+            }
 
-          permissionDeleteResultArray.put( individualResult );
+            permissionDeleteResultArray.put( individualResult );
+          }
         }
         result.put( "status", "Multiple permission deletion. Check Status array" );
         result.put( "statusArray", permissionDeleteResultArray );
@@ -469,7 +505,7 @@ public class CfrApi {
   @Path( "/resetRepository" )
   public String resetRepository() {
 
-    if ( !this.service.isCurrentUserAdmin() ) {
+    if ( !isUserAdmin() ) {
       logger.warn( "Reset repository called by a non admin user. Aborting" );
       return "User has no access to this endpoint";
     }
@@ -679,6 +715,14 @@ public class CfrApi {
 
   protected IFileRepository getRepository() {
     return service.getRepository();
+  }
+
+  private boolean deletePermissions( String path, String id ) {
+    return FileStorer.deletePermissions( path, id );
+  }
+
+  protected boolean isUserAdmin() {
+    return this.service.isCurrentUserAdmin();
   }
 
 }
