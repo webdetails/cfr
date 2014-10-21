@@ -43,23 +43,27 @@ public class FileStorer {
 
   private static boolean persistenceEngineInitialized = false;
 
+  private static PersistenceEngine defaultPersistenceEngine;
+
   private IFileRepository repository;
 
   public FileStorer( IFileRepository repository ) {
     this.repository = repository;
   }
 
+  protected FileStorer( IFileRepository repository, PersistenceEngine pe ) {
+    this.repository = repository;
+    this.defaultPersistenceEngine = pe;
+  }
+
   protected static PersistenceEngine getPersistenceEngine() {
-    return CfrEnvironment.getPersistenceEngine();
+    return defaultPersistenceEngine != null ? defaultPersistenceEngine : CfrEnvironment.getPersistenceEngine();
   }
 
   /**
-   * @param file
-   *          Name of the file to be stored
-   * @param relativePath
-   *          Path relative to repository root for the file to be stored in
-   * @param contents
-   *          File content
+   * @param file         Name of the file to be stored
+   * @param relativePath Path relative to repository root for the file to be stored in
+   * @param contents     File content
    * @param user
    * @return
    */
@@ -73,7 +77,7 @@ public class FileStorer {
       return false;
     }
 
-    MetadataReader mr = new MetadataReader( new CfrService() );
+    MetadataReader mr = getMetadataReader();
     List<ODocument> fileEntities = null;
     try {
       fileEntities = mr.getFileEntities( getFullFileName( relativePath, file ) );
@@ -120,7 +124,7 @@ public class FileStorer {
         if ( service.isCurrentUserAdmin() || reader.isCurrentUserOwner( permission.getFile() ) ) {
 
           logger.debug( String.format( "current user is an administrator or the owner of the file: %s", permission
-              .getFile() ) );
+            .getFile() ) );
 
           JSONObject persistedPermissions = null;
           JSONObject permissionToPersist = permission.toJson();
@@ -131,11 +135,11 @@ public class FileStorer {
           List<ODocument> currentPermissions = reader.getUniquePermissionEntities( permission.getFile(), ids, null );
           if ( currentPermissions == null || currentPermissions.size() == 0 ) {
             persistedPermissions =
-                getPersistenceEngine().store( null, FILE_PERMISSIONS_METADATA_STORE_CLASS, permissionToPersist );
+              getPersistenceEngine().store( null, FILE_PERMISSIONS_METADATA_STORE_CLASS, permissionToPersist );
           } else {
             String id = currentPermissions.get( 0 ).getIdentity().toString();
             persistedPermissions =
-                getPersistenceEngine().store( id, FILE_PERMISSIONS_METADATA_STORE_CLASS, permissionToPersist );
+              getPersistenceEngine().store( id, FILE_PERMISSIONS_METADATA_STORE_CLASS, permissionToPersist );
           }
 
           result = null != persistedPermissions;
@@ -147,17 +151,15 @@ public class FileStorer {
 
     if ( result == false ) {
       logger.warn( String.format( "current user doesn't have permissions to set permissions on folder/file: %s",
-          permission.getFile() ) );
+        permission.getFile() ) );
     }
 
     return result;
   }
 
   /**
-   * @param path
-   *          Full path of the folder/file
-   * @param id
-   *          Group/User Id
+   * @param path Full path of the folder/file
+   * @param id   Group/User Id
    */
   public static boolean removeFile( String path, String id ) {
 
@@ -166,7 +168,7 @@ public class FileStorer {
     if ( service.isCurrentUserAdmin() || reader.isCurrentUserOwner( path ) ) {
       Map<String, Object> params = Collections.emptyMap();
       StringBuilder deleteFileBuilder =
-          new StringBuilder( String.format( "delete from %s", FILE_METADATA_STORE_CLASS ) );
+        new StringBuilder( String.format( "delete from %s", FILE_METADATA_STORE_CLASS ) );
       StringBuilder whereBuilder = new StringBuilder();
 
       if ( path != null ) {
@@ -194,10 +196,8 @@ public class FileStorer {
   }
 
   /**
-   * @param path
-   *          Full path of the folder/file
-   * @param id
-   *          Group/User Id
+   * @param path Full path of the folder/file
+   * @param id   Group/User Id
    */
   public static boolean deletePermissions( String path, String id ) {
     CfrService service = new CfrService();
@@ -205,7 +205,7 @@ public class FileStorer {
     if ( service.isCurrentUserAdmin() || reader.isCurrentUserOwner( path ) ) {
       Map<String, Object> params = Collections.emptyMap();
       StringBuilder deleteCommandBuilder =
-          new StringBuilder( String.format( "delete from %s", FILE_PERMISSIONS_METADATA_STORE_CLASS ) );
+        new StringBuilder( String.format( "delete from %s", FILE_PERMISSIONS_METADATA_STORE_CLASS ) );
       StringBuilder whereBuilder = new StringBuilder();
 
       if ( path != null ) {
@@ -230,5 +230,9 @@ public class FileStorer {
     } else {
       return false;
     }
+  }
+
+  protected MetadataReader getMetadataReader() {
+    return new MetadataReader( new CfrService() );
   }
 }

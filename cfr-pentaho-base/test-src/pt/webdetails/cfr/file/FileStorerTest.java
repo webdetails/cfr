@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -25,9 +25,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.webdetails.cfr.CfrEnvironment;
 import pt.webdetails.cfr.CfrEnvironmentForTests;
-import pt.webdetails.cfr.repository.DefaultFileRepository;
+import pt.webdetails.cfr.persistence.PersistenceEngineForTests;
+import pt.webdetails.cfr.repository.DefaultFileRepositoryForTests;
 import pt.webdetails.cpf.PluginEnvironment;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 
@@ -36,30 +36,30 @@ public class FileStorerTest {
   @BeforeClass
   public static void setUp() throws Exception {
     PluginEnvironment.init( new CfrEnvironmentForTests() );
-    PersistenceEngine.getInstance().startOrient();
+    PersistenceEngineForTests.getInstance().startOrient();
   }
 
   @AfterClass
   public static void setDown() throws Exception {
-    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
-    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
   }
 
   @Before
   public void resetRepo() {
-    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
-    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
-    PersistenceEngine.getInstance().initializeClass( FileStorer.FILE_METADATA_STORE_CLASS );
-    PersistenceEngine.getInstance().initializeClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().initializeClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().initializeClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
   }
 
   @Test
   public void testFileStorer() throws JSONException {
-    FileStorer fs = new FileStorer( new DefaultFileRepositoryForTests() );
+    FileStorer fs = new FileStorerForTests( new DefaultFileRepositoryForTests( true ) );
 
-    Assert.assertTrue( fs.storeFile( "t.txt", "my_test", new byte[50], "User" ) );
+    Assert.assertTrue( fs.storeFile( "t.txt", "my_test", new byte[ 50 ], "User" ) );
 
-    PersistenceEngine pe = PersistenceEngine.getInstance();
+    PersistenceEngine pe = PersistenceEngineForTests.getInstance();
     JSONObject result = pe.query( "select from " + FileStorer.FILE_METADATA_STORE_CLASS, null );
 
     JSONArray resultArray = result.getJSONArray( "object" );
@@ -74,42 +74,19 @@ public class FileStorerTest {
 
   @Test
   public void testFileStorerFailLoading() throws JSONException {
-    FileStorer fs = new FileStorer( new DefaultFileRepositoryForTests() );
+    FileStorer fs = new FileStorerForTests( new DefaultFileRepositoryForTests( true ) );
 
-    Assert.assertTrue( fs.storeFile( "t.txt", "my_test", new byte[50], "User" ) );
+    Assert.assertTrue( fs.storeFile( "t.txt", "my_test", new byte[ 50 ], "User" ) );
 
-    fs = new FileStorer( new DefaultFileRepositoryForTests( false ) );
+    fs = new FileStorerForTests( new DefaultFileRepositoryForTests( false ) );
 
-    Assert.assertFalse( fs.storeFile( "t.txt", "my_test", new byte[50], "User" ) );
+    Assert.assertFalse( fs.storeFile( "t.txt", "my_test", new byte[ 50 ], "User" ) );
 
-    PersistenceEngine pe = PersistenceEngine.getInstance();
+    PersistenceEngine pe = PersistenceEngineForTests.getInstance();
     JSONObject result = pe.query( "select from " + FileStorer.FILE_METADATA_STORE_CLASS, null );
 
     JSONArray resultArray = result.getJSONArray( "object" );
     Assert.assertEquals( 1, resultArray.length() ); // There should be only the result of the first test
-  }
-
-  public class DefaultFileRepositoryForTests extends DefaultFileRepository {
-
-    private boolean result;
-
-    public DefaultFileRepositoryForTests() {
-      this.result = true;
-    }
-
-    public DefaultFileRepositoryForTests( boolean expectedResult ) {
-      this.result = expectedResult;
-    }
-
-    @Override
-    protected String getBasePath() {
-      return "./test-resources";
-    }
-
-    @Override
-    public boolean storeFile( byte[] content, String fileName, String relativePath ) {
-      return this.result;
-    }
   }
 
 }

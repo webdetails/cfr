@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -35,7 +35,7 @@ public class PentahoRepositoryFileRepositoryTest {
   @Test
   public void testFileDeletion() {
     PentahoRepositoryFileRepositoryForTests fileRep = new PentahoRepositoryFileRepositoryForTests();
-    Assert.assertTrue( fileRep.storeFile( new byte[2], "t.txt", "my_tests" ) );
+    Assert.assertTrue( fileRep.storeFile( new byte[ 2 ], "t.txt", "my_tests" ) );
 
     Assert.assertTrue( fileRep.deleteFile( "my_tests/t.txt" ) );
   }
@@ -59,7 +59,7 @@ public class PentahoRepositoryFileRepositoryTest {
   public void testFileCreation() {
     PentahoRepositoryFileRepositoryForTests fileRep = new PentahoRepositoryFileRepositoryForTests();
 
-    byte[] content = new byte[100];
+    byte[] content = new byte[ 100 ];
     Assert.assertTrue( fileRep.storeFile( content, "t.txt", "my_tests" ) );
 
   }
@@ -102,7 +102,7 @@ public class PentahoRepositoryFileRepositoryTest {
   public void testListFiles() {
     PentahoRepositoryFileRepositoryForTests fileRep = new PentahoRepositoryFileRepositoryForTests();
 
-    byte[] content = new byte[100];
+    byte[] content = new byte[ 100 ];
 
     Assert.assertTrue( fileRep.storeFile( content, "first.txt", "list_tests" ) );
 
@@ -114,8 +114,8 @@ public class PentahoRepositoryFileRepositoryTest {
     Assert.assertEquals( 2, files.length );
 
 
-    Assert.assertEquals( "first.txt", files[0].getName() );
-    Assert.assertEquals( "newLevel", files[1].getName() );
+    Assert.assertEquals( "first.txt", files[ 0 ].getName() );
+    Assert.assertEquals( "newLevel", files[ 1 ].getName() );
 
   }
 

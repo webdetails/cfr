@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -11,12 +11,30 @@
 * the license for the specific language governing your rights and limitations.
 */
 
-package pt.webdetails.cfr.repository;
+package pt.webdetails.cfr.persistence;
 
-public class DefaultFileRepositoryForTests extends DefaultFileRepository {
+import pt.webdetails.cpf.persistence.PersistenceEngine;
+
+
+public class PersistenceEngineForTests extends PersistenceEngine {
+
+  private static PersistenceEngineForTests _instance;
+
+  public static PersistenceEngineForTests getInstance() {
+    if ( _instance == null ) {
+      _instance = new PersistenceEngineForTests();
+    }
+    return _instance;
+  }
 
   @Override
-  protected String getBasePath() {
-    return "./test-resources";
+  protected String getOrientPath() {
+    return ".";
+  }
+
+  @Override
+  protected String getUserName() {
+    return "test";
   }
 }
+
