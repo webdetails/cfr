@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -78,7 +78,7 @@ public class DefaultFileRepositoryTest {
   @Test
   public void testFileDeletion() {
     DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
-    Assert.assertTrue( fileRep.storeFile( new byte[2], "t.txt", "my_tests" ) );
+    Assert.assertTrue( fileRep.storeFile( new byte[ 2 ], "t.txt", "my_tests" ) );
 
     Assert.assertTrue( fileRep.deleteFile( "my_tests/t.txt" ) );
   }
@@ -102,7 +102,7 @@ public class DefaultFileRepositoryTest {
   public void testFileCreation() {
     DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
 
-    byte[] content = new byte[100];
+    byte[] content = new byte[ 100 ];
     Assert.assertTrue( fileRep.storeFile( content, "t.txt", "my_tests" ) );
 
   }
@@ -154,7 +154,7 @@ public class DefaultFileRepositoryTest {
   public void testListFiles() {
     DefaultFileRepositoryForTests fileRep = new DefaultFileRepositoryForTests();
 
-    byte[] content = new byte[100];
+    byte[] content = new byte[ 100 ];
     Assert.assertTrue( fileRep.storeFile( content, "first.txt", "list_tests" ) );
 
     Assert.assertTrue( fileRep.storeFile( content, "second.txt", "list_tests/newLevel" ) );
@@ -164,26 +164,26 @@ public class DefaultFileRepositoryTest {
 
     Assert.assertEquals( 2, files.length );
 
-    if ( "first.txt".equals( files[0].getName() ) ) {
-      Assert.assertEquals( true, files[0].isFile() );
-      Assert.assertEquals( "first.txt", files[0].getName() );
-      Assert.assertEquals( true, files[1].isDirectory() );
-      Assert.assertEquals( "newLevel", files[1].getName() );
+    if ( "first.txt".equals( files[ 0 ].getName() ) ) {
+      Assert.assertEquals( true, files[ 0 ].isFile() );
+      Assert.assertEquals( "first.txt", files[ 0 ].getName() );
+      Assert.assertEquals( true, files[ 1 ].isDirectory() );
+      Assert.assertEquals( "newLevel", files[ 1 ].getName() );
     } else {
-      Assert.assertEquals( true, files[1].isFile() );
-      Assert.assertEquals( "first.txt", files[1].getName() );
-      Assert.assertEquals( true, files[0].isDirectory() );
-      Assert.assertEquals( "newLevel", files[0].getName() );
+      Assert.assertEquals( true, files[ 1 ].isFile() );
+      Assert.assertEquals( "first.txt", files[ 1 ].getName() );
+      Assert.assertEquals( true, files[ 0 ].isDirectory() );
+      Assert.assertEquals( "newLevel", files[ 0 ].getName() );
     }
 
     files = fileRep.listFiles( "list_tests/newLevel" );
 
     final List<String> expectedFileNames = com.google.common.collect.ImmutableList.of( "second.txt", "third.txt" );
     Assert.assertEquals( "files count", 2, files.length );
-    Assert.assertEquals( true, files[0].isFile() );
-    Assert.assertEquals( true, files[1].isFile() );
-    Assert.assertTrue( expectedFileNames.contains( files[0].getName() ) );
-    Assert.assertTrue( expectedFileNames.contains( files[1].getName() ) );
+    Assert.assertEquals( true, files[ 0 ].isFile() );
+    Assert.assertEquals( true, files[ 1 ].isFile() );
+    Assert.assertTrue( expectedFileNames.contains( files[ 0 ].getName() ) );
+    Assert.assertTrue( expectedFileNames.contains( files[ 1 ].getName() ) );
 
   }
 

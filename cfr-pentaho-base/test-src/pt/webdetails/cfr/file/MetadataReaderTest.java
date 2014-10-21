@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -30,14 +30,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import pt.webdetails.cfr.CfrEnvironment;
 import pt.webdetails.cfr.CfrEnvironmentForTests;
 import pt.webdetails.cfr.CfrService;
 import pt.webdetails.cfr.auth.FilePermissionEnum;
+import pt.webdetails.cfr.persistence.PersistenceEngineForTests;
 import pt.webdetails.cfr.repository.DefaultFileRepositoryForTests;
 import pt.webdetails.cpf.PluginEnvironment;
 import pt.webdetails.cpf.messaging.JsonSerializable;
-import pt.webdetails.cpf.persistence.PersistenceEngine;
 
 import com.google.common.collect.ImmutableList;
 
@@ -49,7 +48,7 @@ public class MetadataReaderTest {
     obj.put( "user", owner );
     obj.put( "file", file );
     obj.put( "uploadDate", date );
-    PersistenceEngine.getInstance().store( null, FileStorer.FILE_METADATA_STORE_CLASS, obj );
+    PersistenceEngineForTests.getInstance().store( null, FileStorer.FILE_METADATA_STORE_CLASS, obj );
 
   }
 
@@ -78,12 +77,12 @@ public class MetadataReaderTest {
   @BeforeClass
   public static void setUp() throws Exception {
     PluginEnvironment.init( new CfrEnvironmentForTests() );
-    PersistenceEngine.getInstance().startOrient();
-    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
-    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().startOrient();
+    PersistenceEngineForTests.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
 
-    PersistenceEngine.getInstance().initializeClass( FileStorer.FILE_METADATA_STORE_CLASS );
-    PersistenceEngine.getInstance().initializeClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().initializeClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().initializeClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
 
     createFile( USER_1, FILE_1, FILE_1_DATE );
     createFile( USER_1, FILE_2, FILE_2_DATE );
@@ -92,8 +91,8 @@ public class MetadataReaderTest {
 
   @AfterClass
   public static void setDown() throws Exception {
-    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
-    PersistenceEngine.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
+    PersistenceEngineForTests.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
   }
 
   @Mock
@@ -111,7 +110,7 @@ public class MetadataReaderTest {
     when( cs.getUserRoles() ).thenReturn( USER_1_ROLES );
     when( cs.isCurrentUserAdmin() ).thenReturn( true );
 
-    mr = new MetadataReader( cs );
+    mr = new MetadataReaderForTests( cs );
 
   }
 
@@ -213,24 +212,24 @@ public class MetadataReaderTest {
     when( cs.getCurrentUserName() ).thenReturn( USER_2 );
     FilePermissionEnum permission = FilePermissionEnum.READ;
     assertFalse(
-        String.format( "current user %s isn't allowed to %s %s", cs.getCurrentUserName(), permission, FILE_1 ), mr
-            .isCurrentUserAllowed( permission, FILE_1 ) );
+      String.format( "current user %s isn't allowed to %s %s", cs.getCurrentUserName(), permission, FILE_1 ), mr
+      .isCurrentUserAllowed( permission, FILE_1 ) );
 
     when( cs.getCurrentUserName() ).thenReturn( USER_1 );
     assertTrue(
-        String.format( "current user %s is allowed to %s file %s", cs.getCurrentUserName(), permission, FILE_1 ), mr
-            .isCurrentUserAllowed( permission, FILE_1 ) );
+      String.format( "current user %s is allowed to %s file %s", cs.getCurrentUserName(), permission, FILE_1 ), mr
+      .isCurrentUserAllowed( permission, FILE_1 ) );
   }
 
   @Test
   public void testIsCurrentUserOwner() {
     when( cs.getCurrentUserName() ).thenReturn( USER_1 );
     assertTrue( String.format( "current user %s is supposed to be the owner of the file %s", cs.getCurrentUserName(),
-        FILE_1 ), mr.isCurrentUserOwner( FILE_1 ) );
+      FILE_1 ), mr.isCurrentUserOwner( FILE_1 ) );
 
     when( cs.getCurrentUserName() ).thenReturn( USER_2 );
     assertFalse( String.format( "current user %s isn't supposed to be the owner of the file %s", cs
-        .getCurrentUserName(), FILE_1 ), mr.isCurrentUserOwner( FILE_1 ) );
+      .getCurrentUserName(), FILE_1 ), mr.isCurrentUserOwner( FILE_1 ) );
   }
 
   @Test
