@@ -196,8 +196,8 @@
     ]
    },
    {
-    "id": "60522dd2-26ad-eb0a-a2aa-c5aaa2a2d96d",
-    "type": "LayoutColumn",
+    "id": "b7689330-4853-957d-6387-50d5cf7524de",
+    "type": "LayoutBootstrapColumn",
     "typeDesc": "Column",
     "parent": "9b2f1628-d24b-5687-c9b7-9950947d6396",
     "properties": [
@@ -207,39 +207,29 @@
       "type": "Id"
      },
      {
-      "name": "columnSpan",
-      "value": "12",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
+      "name": "bootstrapExtraSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnAppend",
+      "name": "bootstrapSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapMedium",
+      "value": "6",
+      "type": "String"
      },
      {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapLarge",
+      "value": "",
+      "type": "String"
      },
      {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapCssClass",
+      "value": "",
+      "type": "String"
      },
      {
       "name": "height",
@@ -307,8 +297,8 @@
     ]
    },
    {
-    "id": "dcbf5f6d-550a-e995-c51b-0d026697d2b6",
-    "type": "LayoutColumn",
+    "id": "c5956666-4dbd-fc2a-4796-002564fbe025",
+    "type": "LayoutBootstrapColumn",
     "typeDesc": "Column",
     "parent": "50c05015-adc0-d2af-f20e-44c1453a3538",
     "properties": [
@@ -318,39 +308,29 @@
       "type": "Id"
      },
      {
-      "name": "columnSpan",
-      "value": "24",
-      "type": "Integer"
+      "name": "bootstrapExtraSmall",
+      "value": "",
+      "type": "String"
      },
      {
-      "name": "columnPrepend",
-      "value": "6",
-      "type": "Integer"
+      "name": "bootstrapSmall",
+      "value": "",
+      "type": "String"
      },
      {
-      "name": "columnAppend",
-      "value": "6",
-      "type": "Integer"
+      "name": "bootstrapMedium",
+      "value": "9",
+      "type": "String"
      },
      {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapLarge",
+      "value": "",
+      "type": "String"
      },
      {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapCssClass",
+      "value": "col-md-offset-3",
+      "type": "String"
      },
      {
       "name": "height",
@@ -418,8 +398,8 @@
     ]
    },
    {
-    "id": "752e163f-078d-3957-a789-d45e7b6d1289",
-    "type": "LayoutColumn",
+    "id": "05149ae9-52b3-2604-9a93-614c1ce590e6",
+    "type": "LayoutBootstrapColumn",
     "typeDesc": "Column",
     "parent": "b8f79396-aaa9-385e-c712-09179f286bca",
     "properties": [
@@ -429,39 +409,29 @@
       "type": "Id"
      },
      {
-      "name": "columnSpan",
-      "value": "24",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
+      "name": "bootstrapExtraSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnAppend",
+      "name": "bootstrapSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapMedium",
+      "value": "12",
+      "type": "String"
      },
      {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapLarge",
+      "value": "",
+      "type": "String"
      },
      {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapCssClass",
+      "value": "",
+      "type": "String"
      },
      {
       "name": "height",
@@ -485,16 +455,16 @@
      },
      {
       "name": "cssClass",
-      "value": "comment",
+      "value": "",
       "type": "String"
      }
     ]
    },
    {
-    "id": "a7f6fb74-e7f8-1593-0306-22d7b19f84e5",
+    "id": "a1257a5f-e3ed-39eb-5e98-0fbec35e1d01",
     "type": "LayoutHtml",
     "typeDesc": "Html",
-    "parent": "752e163f-078d-3957-a789-d45e7b6d1289",
+    "parent": "05149ae9-52b3-2604-9a93-614c1ce590e6",
     "properties": [
      {
       "name": "name",
@@ -544,7 +514,7 @@
    {
     "id": "aa426e8b-cc21-eb7d-8ce1-1b8556126bdd",
     "type": "ComponentsParameter",
-    "typeDesc": "Parameter",
+    "typeDesc": "Simple parameter",
     "parent": "GENERIC",
     "properties": [
      {
@@ -572,7 +542,7 @@
    {
     "id": "b24b65db-218e-9160-ecf5-3687ab965ea3",
     "type": "ComponentsDateParameter",
-    "typeDesc": "DateParameter",
+    "typeDesc": "Date Parameter",
     "parent": "GENERIC",
     "properties": [
      {
@@ -595,7 +565,7 @@
    {
     "id": "53ee4392-4f1e-1f38-669e-ca2067ae53ed",
     "type": "ComponentsParameter",
-    "typeDesc": "Parameter",
+    "typeDesc": "Simple parameter",
     "parent": "GENERIC",
     "properties": [
      {
@@ -623,7 +593,7 @@
    {
     "id": "623f7242-d3cd-3428-994e-b8565d557889",
     "type": "ComponentsParameter",
-    "typeDesc": "Parameter",
+    "typeDesc": "Simple parameter",
     "parent": "GENERIC",
     "properties": [
      {
@@ -823,7 +793,7 @@
    {
     "id": "e9c225bc-1b25-b017-95d7-efa87b7b458b",
     "type": "ComponentsFunction",
-    "typeDesc": "Function",
+    "typeDesc": "JavaScript function",
     "parent": "SCRIPT",
     "properties": [
      {
@@ -1088,13 +1058,13 @@
       "type": "Id"
      },
      {
-      "name": "initscript",
-      "value": "",
+      "name": "language",
+      "value": "beanshell",
       "type": "String"
      },
      {
-      "name": "language",
-      "value": "beanshell",
+      "name": "initscript",
+      "value": "",
       "type": "String"
      },
      {
