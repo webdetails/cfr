@@ -196,8 +196,8 @@
     ]
    },
    {
-    "id": "60522dd2-26ad-eb0a-a2aa-c5aaa2a2d96d",
-    "type": "LayoutColumn",
+    "id": "848a9484-06f8-9561-82b2-0d18c289b88f",
+    "type": "LayoutBootstrapColumn",
     "typeDesc": "Column",
     "parent": "9b2f1628-d24b-5687-c9b7-9950947d6396",
     "properties": [
@@ -207,39 +207,29 @@
       "type": "Id"
      },
      {
-      "name": "columnSpan",
-      "value": "24",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
+      "name": "bootstrapExtraSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnAppend",
+      "name": "bootstrapSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapMedium",
+      "value": "12",
+      "type": "String"
      },
      {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapLarge",
+      "value": "",
+      "type": "String"
      },
      {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapCssClass",
+      "value": "",
+      "type": "String"
      },
      {
       "name": "height",
@@ -307,8 +297,8 @@
     ]
    },
    {
-    "id": "44e767fe-d650-d329-e377-766d19bb1d46",
-    "type": "LayoutColumn",
+    "id": "90c17b07-b703-4f70-5c77-203d3be53dc2",
+    "type": "LayoutBootstrapColumn",
     "typeDesc": "Column",
     "parent": "ca87789f-1347-14df-146d-930cb4f01580",
     "properties": [
@@ -318,39 +308,29 @@
       "type": "Id"
      },
      {
-      "name": "columnSpan",
-      "value": "24",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
+      "name": "bootstrapExtraSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnAppend",
+      "name": "bootstrapSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapMedium",
+      "value": "12",
+      "type": "String"
      },
      {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapLarge",
+      "value": "",
+      "type": "String"
      },
      {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapCssClass",
+      "value": "",
+      "type": "String"
      },
      {
       "name": "height",
@@ -418,8 +398,8 @@
     ]
    },
    {
-    "id": "bf261534-f78d-2d57-053e-532a0265a93c",
-    "type": "LayoutColumn",
+    "id": "5528a013-03f1-81f3-a32c-2be7e106f983",
+    "type": "LayoutBootstrapColumn",
     "typeDesc": "Column",
     "parent": "1768ef34-0ddb-6989-f54f-e024df4ab78f",
     "properties": [
@@ -429,39 +409,29 @@
       "type": "Id"
      },
      {
-      "name": "columnSpan",
-      "value": "24",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
+      "name": "bootstrapExtraSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnAppend",
+      "name": "bootstrapSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapMedium",
+      "value": "12",
+      "type": "String"
      },
      {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapLarge",
+      "value": "",
+      "type": "String"
      },
      {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapCssClass",
+      "value": "",
+      "type": "String"
      },
      {
       "name": "height",
@@ -494,7 +464,7 @@
     "id": "e7c61f0e-db42-aaad-462e-6108e174fa2f",
     "type": "LayoutHtml",
     "typeDesc": "Html",
-    "parent": "bf261534-f78d-2d57-053e-532a0265a93c",
+    "parent": "5528a013-03f1-81f3-a32c-2be7e106f983",
     "properties": [
      {
       "name": "name",
@@ -562,8 +532,8 @@
     ]
    },
    {
-    "id": "c2d3d57d-fa03-c448-83c5-dc504ac20d19",
-    "type": "LayoutColumn",
+    "id": "2288d434-dd54-63fe-92f4-7655922e466c",
+    "type": "LayoutBootstrapColumn",
     "typeDesc": "Column",
     "parent": "5949cedd-456e-ccc8-d075-ff93260d8b3c",
     "properties": [
@@ -573,39 +543,29 @@
       "type": "Id"
      },
      {
-      "name": "columnSpan",
-      "value": "24",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
+      "name": "bootstrapExtraSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnAppend",
+      "name": "bootstrapSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapMedium",
+      "value": "12",
+      "type": "String"
      },
      {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapLarge",
+      "value": "",
+      "type": "String"
      },
      {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapCssClass",
+      "value": "",
+      "type": "String"
      },
      {
       "name": "height",
@@ -673,8 +633,8 @@
     ]
    },
    {
-    "id": "752e163f-078d-3957-a789-d45e7b6d1289",
-    "type": "LayoutColumn",
+    "id": "e21f7858-4064-4372-3e26-29341a082085",
+    "type": "LayoutBootstrapColumn",
     "typeDesc": "Column",
     "parent": "b8f79396-aaa9-385e-c712-09179f286bca",
     "properties": [
@@ -684,39 +644,29 @@
       "type": "Id"
      },
      {
-      "name": "columnSpan",
-      "value": "24",
-      "type": "Integer"
-     },
-     {
-      "name": "columnPrepend",
+      "name": "bootstrapExtraSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnAppend",
+      "name": "bootstrapSmall",
       "value": "",
-      "type": "Integer"
+      "type": "String"
      },
      {
-      "name": "columnPrependTop",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapMedium",
+      "value": "12",
+      "type": "String"
      },
      {
-      "name": "columnAppendBottom",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapLarge",
+      "value": "",
+      "type": "String"
      },
      {
-      "name": "columnBorder",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "columnBigBorder",
-      "value": "false",
-      "type": "Boolean"
+      "name": "bootstrapCssClass",
+      "value": "",
+      "type": "String"
      },
      {
       "name": "height",
@@ -749,7 +699,7 @@
     "id": "a7f6fb74-e7f8-1593-0306-22d7b19f84e5",
     "type": "LayoutHtml",
     "typeDesc": "Html",
-    "parent": "752e163f-078d-3957-a789-d45e7b6d1289",
+    "parent": "e21f7858-4064-4372-3e26-29341a082085",
     "properties": [
      {
       "name": "name",
@@ -829,7 +779,7 @@
      },
      {
       "name": "html",
-      "value": "<p>Please press Ctrl+C (Windows/Linux) or Cmd+c (Mac) to copy the link below to clipboard</p> \n<textarea id=\"popup_prompt\" rows=\"4\" readonly=\"true\"></textarea> ",
+      "value": "<p class=\"text-normal\">Please press Ctrl+C (Windows/Linux) or Cmd+c (Mac) to copy the link below to clipboard</p> \n<textarea id=\"popup_prompt\" rows=\"4\" readonly=\"true\"></textarea> ",
       "type": "Html"
      },
      {
@@ -1012,7 +962,7 @@
    {
     "id": "aa426e8b-cc21-eb7d-8ce1-1b8556126bdd",
     "type": "ComponentsParameter",
-    "typeDesc": "Parameter",
+    "typeDesc": "Simple parameter",
     "parent": "GENERIC",
     "properties": [
      {
@@ -1040,7 +990,7 @@
    {
     "id": "b24b65db-218e-9160-ecf5-3687ab965ea3",
     "type": "ComponentsDateParameter",
-    "typeDesc": "DateParameter",
+    "typeDesc": "Date Parameter",
     "parent": "GENERIC",
     "properties": [
      {
@@ -1063,7 +1013,7 @@
    {
     "id": "53ee4392-4f1e-1f38-669e-ca2067ae53ed",
     "type": "ComponentsParameter",
-    "typeDesc": "Parameter",
+    "typeDesc": "Simple parameter",
     "parent": "GENERIC",
     "properties": [
      {
@@ -1091,7 +1041,7 @@
    {
     "id": "623f7242-d3cd-3428-994e-b8565d557889",
     "type": "ComponentsParameter",
-    "typeDesc": "Parameter",
+    "typeDesc": "Simple parameter",
     "parent": "GENERIC",
     "properties": [
      {
@@ -1301,6 +1251,11 @@
       "type": "JavaScript"
      },
      {
+      "name": "language",
+      "value": "",
+      "type": "JavaScript"
+     },
+     {
       "name": "expandParameters",
       "value": "[]",
       "type": "ValuesArray"
@@ -1314,11 +1269,6 @@
       "name": "colHeaders",
       "value": "[]",
       "type": "Array"
-     },
-     {
-      "name": "parameters",
-      "value": "[[\"userParam\",\"userParam\"]]",
-      "type": "ValuesArray"
      },
      {
       "name": "colFormats",
@@ -1336,17 +1286,12 @@
       "type": "Array"
      },
      {
-      "name": "info",
-      "value": "false",
-      "type": "Boolean"
+      "name": "parameters",
+      "value": "[[\"userParam\",\"userParam\"]]",
+      "type": "ValuesArray"
      },
      {
       "name": "sort",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "expandOnClick",
       "value": "false",
       "type": "Boolean"
      },
@@ -1371,9 +1316,14 @@
       "type": "Boolean"
      },
      {
-      "name": "colSearchable",
-      "value": "[]",
-      "type": "Array"
+      "name": "info",
+      "value": "false",
+      "type": "Boolean"
+     },
+     {
+      "name": "expandOnClick",
+      "value": "false",
+      "type": "Boolean"
      },
      {
       "name": "drawCallback",
@@ -1381,9 +1331,9 @@
       "type": "JavaScript"
      },
      {
-      "name": "sortBy",
+      "name": "colSearchable",
       "value": "[]",
-      "type": "SortByArray"
+      "type": "Array"
      },
      {
       "name": "dataSource",
@@ -1391,14 +1341,14 @@
       "value": "uploadsQuery"
      },
      {
+      "name": "sortBy",
+      "value": "[]",
+      "type": "SortByArray"
+     },
+     {
       "name": "sDom",
       "value": "",
       "type": "JavaScript"
-     },
-     {
-      "name": "priority",
-      "value": 5,
-      "type": "Integer"
      },
      {
       "name": "refreshPeriod",
@@ -1406,14 +1356,19 @@
       "type": "Integer"
      },
      {
-      "name": "paginationType",
-      "value": "two_button",
-      "type": "PaginationType"
+      "name": "priority",
+      "value": 5,
+      "type": "Integer"
      },
      {
       "name": "tableStyle",
-      "value": "classic",
+      "value": "bootstrap",
       "type": "TableStyle"
+     },
+     {
+      "name": "paginationType",
+      "value": "two_button",
+      "type": "PaginationType"
      },
      {
       "name": "htmlObject",
@@ -1436,13 +1391,13 @@
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
-      "value": "function f() {\n    \n    \n    var $ph = $('#' + this.htmlObject),\n        $header = $ph.find('thead');\n    \n    $.each( $header.find(\"th.column0\"), function(i,d){ $(d).text(\"User\"); });\n    $.each( $header.find(\"th.column1\"), function(i,d){ $(d).text(\"File\"); });\n    $.each( $header.find(\"th.column2\"), function(i,d){ $(d).text(\"Date\"); });\n    \n    // hook click event on each file row\n    var $pb = $('#' + this.htmlObject),\n        $body = $pb.find('tbody');\n        \n    // selected file css class\n    var selectedCssClass = 'selected';\n    var selectedFileParamName = 'selectedFileParam'\n    \n        \n    $.each( $body.find('tr'), function(index, element) {\n        $(element).click(function() {\n            // remove selected class from any other row\n            $.each( $body.find('tr'), function(i, e) {\n                if (!$(e).is(element)) $(e).removeClass(selectedCssClass);\n            });\n            \n            // toggle state for\n            $(element).toggleClass(selectedCssClass);\n            \n            if ($(element).hasClass(selectedCssClass)) {\n                Dashboards.fireChange(selectedFileParamName, $(element).find('.column0').text());\n            } \n            else {\n                Dashboards.fireChange(selectedFileParamName, \"\");\n            }\n        });\n    });\n    \n    \n}\n\n\n",
+      "name": "postFetch",
+      "value": "function filterData(data) {\n    \n    $('button#copyBtn').attr('disabled', 'disabled');\n    $('button#removeBtn').attr('disabled', 'disabled');\n    $('button#downloadBtn').attr('disabled', 'disabled');\n\n    \n    if (data.resultset.length === 0)\n    {\n        $('table#uploadsTableObj').attr('disabled', 'disabled');\n    }\n    \n    if ($.inArray(\"Admin\", Dashboards.context.roles)>-1) {\n        return data;\n    }\n\n    var array = [];\n    var j = 0;\n    for ( i = 0; i < data.resultset.length; i++ ){\n        \n        if ( Dashboards.context.user == data.resultset[i][1] ){\n            array[j] = data.resultset[i];\n            j++;\n        }\n    }\n    \n    \n    \n    \n    data.queryInfo.totalRows = j;\n    data.resultset = array;\n    return data;\n}",
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
-      "value": "function filterData(data) {\n    \n    $('button#copyBtn').attr('disabled', 'disabled');\n    $('button#removeBtn').attr('disabled', 'disabled');\n    $('button#downloadBtn').attr('disabled', 'disabled');\n\n    \n    if (data.resultset.length === 0)\n    {\n        $('table#uploadsTableObj').attr('disabled', 'disabled');\n    }\n    \n    if ($.inArray(\"Admin\", Dashboards.context.roles)>-1) {\n        return data;\n    }\n\n    var array = [];\n    var j = 0;\n    for ( i = 0; i < data.resultset.length; i++ ){\n        \n        if ( Dashboards.context.user == data.resultset[i][1] ){\n            array[j] = data.resultset[i];\n            j++;\n        }\n    }\n    \n    \n    \n    \n    data.queryInfo.totalRows = j;\n    data.resultset = array;\n    return data;\n}",
+      "name": "postExecution",
+      "value": "function f() {\n    \n    \n    var $ph = $('#' + this.htmlObject),\n        $header = $ph.find('thead');\n    \n    $.each( $header.find(\"th.column0\"), function(i,d){ $(d).text(\"User\"); });\n    $.each( $header.find(\"th.column1\"), function(i,d){ $(d).text(\"File\"); });\n    $.each( $header.find(\"th.column2\"), function(i,d){ $(d).text(\"Date\"); });\n    \n    // hook click event on each file row\n    var $pb = $('#' + this.htmlObject),\n        $body = $pb.find('tbody');\n        \n    // selected file css class\n    var selectedCssClass = 'selected';\n    var selectedFileParamName = 'selectedFileParam'\n    \n        \n    $.each( $body.find('tr'), function(index, element) {\n        $(element).click(function() {\n            // remove selected class from any other row\n            $.each( $body.find('tr'), function(i, e) {\n                if (!$(e).is(element)) $(e).removeClass(selectedCssClass);\n            });\n            \n            // toggle state for\n            $(element).toggleClass(selectedCssClass);\n            \n            if ($(element).hasClass(selectedCssClass)) {\n                Dashboards.fireChange(selectedFileParamName, $(element).find('.column0').text());\n            } \n            else {\n                Dashboards.fireChange(selectedFileParamName, \"\");\n            }\n        });\n    });\n    \n    \n}\n\n\n",
       "type": "JavaScript"
      },
      {
@@ -1489,7 +1444,7 @@
    {
     "id": "e9c225bc-1b25-b017-95d7-efa87b7b458b",
     "type": "ComponentsFunction",
-    "typeDesc": "Function",
+    "typeDesc": "JavaScript function",
     "parent": "SCRIPT",
     "properties": [
      {
@@ -1686,13 +1641,13 @@
       "type": "Id"
      },
      {
-      "name": "initscript",
-      "value": "",
+      "name": "language",
+      "value": "beanshell",
       "type": "String"
      },
      {
-      "name": "language",
-      "value": "beanshell",
+      "name": "initscript",
+      "value": "",
       "type": "String"
      },
      {
