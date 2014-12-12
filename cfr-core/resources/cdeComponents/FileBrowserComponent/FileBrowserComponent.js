@@ -11,7 +11,7 @@ var FileBrowserComponent = BaseComponent.extend({
     if (!this.fileExtensions)
         this.fileExtensions = "";
 
-    $ph.addClass('fileBrowser');
+    $ph.addClass('fileBrowserComponent');
     if(this.chartDefinition.height != undefined){
       $ph.css('height',this.chartDefinition.height+'px');
     }
