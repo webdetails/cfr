@@ -8,7 +8,7 @@ var FileUploaderComponent = BaseComponent.extend({
 
     var $fileSelect = $('<div>').addClass('fileSelect');
     $ph.empty();
-    $ph.addClass('uploadRow');
+    $ph.addClass('fileUploaderComponent');
     $ph.append($fileSelect);
 
     var $selectFile = $('<div>').addClass('uploadButton');
@@ -60,8 +60,9 @@ var FileUploaderComponent = BaseComponent.extend({
     popup.htmlObject = "uploaderPopupContainer";
     popup.draggable = false;
     popup.closeOnClickOutside = true;
+    popup.popupClass = "uploadPopup";
+    popup.popupOverlayClass = "fileUploaderComponentOverlay";
     popup.update();
-    popup.ph.addClass('uploadPopup');
     popup.ph.find(".close").remove();
 
     $uploadPopupCloseButton.click(function(event) {

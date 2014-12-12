@@ -56,22 +56,22 @@
   filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
 }
 
-.zeroHeight {
+.fileUploaderComponent .zeroHeight {
   height: 0px;
 }
 
-.select {
+.fileUploaderComponent .select {
   position: relative;
   left: 35%;
   top: 22px;
 }
 
-.cancelButton {
+.fileUploaderComponent .cancelButton {
   margin-left: 5px;
   float: left;
 }
 
-.cancelButton button {
+.fileUploaderComponent .cancelButton button {
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkYWRhZGEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
   background: -moz-linear-gradient(top, white 0%, #dadada 100%);
   /* FF3.6+ */
@@ -94,7 +94,7 @@
   -webkit-border-radius: 3px 3px 3px 3px;
 }
 
-.cancelButton button:hover {
+.fileUploaderComponent .cancelButton button:hover {
   cursor: pointer;
   color: #56ACF5;
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2RhZGFkYSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
@@ -115,22 +115,22 @@
   -o-transition: all 0.25s linear 0s;
 }
 
-.cancelButton button:hover {
+.fileUploaderComponent .cancelButton button:hover {
   cursor: pointer;
 }
 
-.hide {
+.fileUploaderComponent .hide {
   display: none !important;
 }
 
-.fileName {
+.fileUploaderComponent .fileName {
   color: #DCDCDC;
   margin-top: 17px;
   text-indent: 20px;
   width: 80px;
 }
 
-.fileTextRow {
+.fileUploaderComponent .fileTextRow {
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkYWRhZGEiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
   background: -moz-linear-gradient(top, white 0%, #dadada 100%);
   /* FF3.6+ */
@@ -172,7 +172,7 @@
   cursor: pointer;
 }
 
-.uploadButtonRow {
+.fileUploaderComponent .uploadButtonRow {
   background-color: #4F9ADB;
   /* Old browsers */
   background-color: -moz-linear-gradient(top, #4f9adb 10%, #4587c0 90%);
@@ -198,7 +198,7 @@
   -webkit-border-radius: 3px 3px 3px 3px;
 }
 
-.fileSelect {
+.fileUploaderComponent .fileSelect {
   position: relative;
   width: 100%;
   height: 60px;
@@ -207,21 +207,21 @@
   box-sizing: border-box;
   background-color: #cad2d6;
 }
-.fileSelect .uploadButton {
+.fileUploaderComponent .fileSelect .uploadButton {
   height: inherit;
 }
-.fileSelect form {
+.fileUploaderComponent .fileSelect form {
   width: inherit;
   height: inherit;
 }
-.fileSelect form .cabinet {
+.fileUploaderComponent .fileSelect form .cabinet {
   margin: 10px;
   position: absolute;
   top: 0;
   left: 0;
   width: 40%;
 }
-.fileSelect form .file {
+.fileUploaderComponent .fileSelect form .file {
   position: absolute;
   top: 0;
   left: 0;
@@ -230,7 +230,7 @@
   box-sizing: border-box;
   border: none;
 }
-.fileSelect .select {
+.fileUploaderComponent .fileSelect .select {
   font-size: 16px;
   color: #cad2d6;
   position: absolute;
@@ -252,7 +252,7 @@
   background-position: center right;
   background-color: white;
 }
-.fileSelect .select:hover {
+.fileUploaderComponent .fileSelect .select:hover {
   color: white;
   -webkit-transition: all 0.25s linear;
   -webkit-transition-delay: 0s;
@@ -264,7 +264,7 @@
   background-position: center right;
   background-color: #2d3a3f;
 }
-.fileSelect .fileTextRow {
+.fileUploaderComponent .fileSelect .fileTextRow {
   font-size: 16px;
   background-image: url("../images/selector_3.png");
   background-repeat: no-repeat;
@@ -287,14 +287,14 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.fileSelect .cancelButton {
+.fileUploaderComponent .fileSelect .cancelButton {
   position: absolute;
   right: 0;
   top: 0;
   margin: 10px;
   width: 15%;
 }
-.fileSelect .cancelButton button {
+.fileUploaderComponent .fileSelect .cancelButton button {
   background: none;
   background-color: #2d3a3f;
   color: #cad2d6;
@@ -308,13 +308,13 @@
   border: none;
   float: right;
 }
-.fileSelect .cancelButton button:hover {
+.fileUploaderComponent .fileSelect .cancelButton button:hover {
   background: none;
   background-color: white;
   color: #2d3a3f;
   border: none;
 }
-.fileSelect .submitBtn {
+.fileUploaderComponent .fileSelect .submitBtn {
   position: absolute;
   background-image: url("../images/upload_normal.png");
   background-repeat: no-repeat;
@@ -334,7 +334,7 @@
   -o-border-radius: 0;
   border-radius: 0;
 }
-.fileSelect .submitBtn:hover {
+.fileUploaderComponent .fileSelect .submitBtn:hover {
   background-color: #4d94e0;
   color: white;
   background-image: url("../images/upload_over.png");
@@ -402,7 +402,7 @@
   color: #a94442;
 }
 
-#popupComponentOverlay {
+.fileUploaderComponentOverlay {
   opacity: 0.5;
   background-color: #000000;
 }
