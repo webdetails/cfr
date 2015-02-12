@@ -79,7 +79,7 @@ var FileBrowserComponent = BaseComponent.extend({
       var rel = $(this).attr('rel');
       //$(this).attr({target: '_blank', href  : myself.buildGetURL(rel)});
       $(this).click(function(){
-        window.open(myself.buildGetURL(rel),'_blank');
+        window.location.assign(myself.buildGetURL(rel),'_blank');
       });
     });
 
