@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2015 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -19,24 +19,16 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import pt.webdetails.cfr.repository.DefaultFileRepositoryForTests;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class CfrApiTest {
 
-  static String result = "";
-  static ServletOutputStream outputStreamMock;
-  static HttpServletResponse responseMock;
   static CfrService cfrServiceMock;
   static final String[] dirStructure = { "dir1", "dir1/dir", "dir2", "a folder" };
   static final String[] fileStructure = { "dir1/file1", "file2", "file3", "dir1/dir/file4", "a folder/a file.txt" };
@@ -71,8 +63,8 @@ public class CfrApiTest {
     CfrApiForTests cfrApi = new CfrApiForTests();
     cfrApi.setIsAdmin( true );
     String top = "{"
-      + "  \"status\": \"Operation finished. Check statusArray for details.\","
-      + "  \"statusArray\": [";
+        + "  \"status\": \"Operation finished. Check statusArray for details.\","
+        + "  \"statusArray\": [";
     String bot = "  ]}";
     String singleBot = "]}";
     String setOnDirRecur;
@@ -85,13 +77,16 @@ public class CfrApiTest {
       sbAllDir.replace( setOnDirRecur.lastIndexOf( "," ), setOnDirRecur.lastIndexOf( "," ) + 1, "" ).toString();
 
     String setOnDir =
-      "{\"status\": \"Added permission for path " + dirStructure[ 0 ] + " and user/role Authenticated\"}";
+        "{\"status\": \"Added permission for path " + dirStructure[ 0 ] + " and user/role Authenticated\"}";
     String setOnFile =
-      "{\"status\": \"Added permission for path " + fileStructure[ 0 ] + " and user/role Authenticated\"}";
+        "{\"status\": \"Added permission for path " + fileStructure[ 0 ] + " and user/role Authenticated\"}";
     String path = "/";
-    String[] id = { "Authenticated" };
-    String[] permission = { "read", "write" };
-    String recursive = "true";
+    List<String> ids = new ArrayList<String>();
+    ids.add( "Authenticated" );
+    List<String> permissions = new ArrayList<String>();
+    permissions.add( "read" );
+    permissions.add( "write" );
+    boolean recursive = true;
     List<String> files = new ArrayList<String>();
     files.addAll( Arrays.asList( fileStructure ) );
     files.addAll( Arrays.asList( dirStructure ) );
@@ -100,46 +95,27 @@ public class CfrApiTest {
     createCfrServiceMock();
     cfrApi.setCfrService( cfrServiceMock );
 
-    // setting up Map mock
-    Map mapMock = Mockito.mock( Map.class );
-    Mockito.when( mapMock.get( "id" ) ).thenReturn( id );
-    Mockito.when( mapMock.get( "permission" ) ).thenReturn( permission );
-
-    createOutputStreamMock();
-
-    // setting up request mock
-    HttpServletRequest requestMock = Mockito.mock( HttpServletRequest.class );
-    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
-    Mockito.when( requestMock.getParameterMap() ).thenReturn( mapMock );
-    Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
-
-    createResponseMock();
     // setPermissions on a dir, with recursive = true
-    cfrApi.setPermissions( requestMock, responseMock );
+    String result = cfrApi.setPermissions( path, ids, permissions, recursive );
     Assert.assertEquals( top + setOnDirRecur + bot, result.replaceAll( "\n", "" ) );
 
     //set permissions on a file, with recursive = true
     path = fileStructure[ 0 ];
-    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
     files = new ArrayList<String>();
     files.addAll( Arrays.asList( fileStructure[ 0 ] ) );
     cfrApi.setFileNames( files );
-    cfrApi.setPermissions( requestMock, responseMock );
+    result = cfrApi.setPermissions( path, ids, permissions, recursive );
     Assert.assertEquals( top + setOnFile + singleBot, result.replaceAll( "\n", "" ) );
 
     // setPermissions on a dir, with recursive = false
     path = dirStructure[ 0 ];
-    recursive = "false";
-    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
-    Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
-    cfrApi.setPermissions( requestMock, responseMock );
+    recursive = false;
+    result = cfrApi.setPermissions( path, ids, permissions, recursive );
     Assert.assertEquals( top + setOnDir + singleBot, result.replaceAll( "\n", "" ) );
 
     //set permissions on a file, with recursive = false
     path = fileStructure[ 0 ];
-    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
-    Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
-    cfrApi.setPermissions( requestMock, responseMock );
+    result = cfrApi.setPermissions( path, ids, permissions, recursive );
     Assert.assertEquals( top + setOnFile + singleBot, result.replaceAll( "\n", "" ) );
 
   }
@@ -154,8 +130,8 @@ public class CfrApiTest {
     cfrApi.setIsAdmin( false );
     cfrApi.setNonAdminUserFiles( nonAdminUserFiles );
     String top = "{"
-      + "  \"status\": \"Operation finished. Check statusArray for details.\","
-      + "  \"statusArray\": [";
+        + "  \"status\": \"Operation finished. Check statusArray for details.\","
+        + "  \"statusArray\": [";
     String bot = "  ]}";
     String singleBot = "]}";
     String setOnDirRecur;
@@ -177,14 +153,17 @@ public class CfrApiTest {
     }
 
     String setOnDir =
-      "{\"status\": \"Added permission for path " + dirStructure[ 0 ] + " and user/role Authenticated\"}";
+        "{\"status\": \"Added permission for path " + dirStructure[ 0 ] + " and user/role Authenticated\"}";
     String setOnFile =
-      "{\"status\": \"Added permission for path " + fileStructure[ 0 ] + " and user/role Authenticated\"}";
+        "{\"status\": \"Added permission for path " + fileStructure[ 0 ] + " and user/role Authenticated\"}";
     String permissionsNotSet = "{\"status\": \"Some permissions could not be set\"}";
     String path = "/";
-    String[] id = { "Authenticated" };
-    String[] permission = { "read", "write" };
-    String recursive = "true";
+    List<String> ids = new ArrayList<String>();
+    ids.add( "Authenticated" );
+    List<String> permissions = new ArrayList<String>();
+    permissions.add( "read" );
+    permissions.add( "write" );
+    boolean recursive = true;
     List<String> files = new ArrayList<String>();
     files.addAll( Arrays.asList( fileStructure ) );
     files.addAll( Arrays.asList( dirStructure ) );
@@ -193,103 +172,55 @@ public class CfrApiTest {
     createCfrServiceMock();
     cfrApi.setCfrService( cfrServiceMock );
 
-    // setting up Map mock
-    Map mapMock = Mockito.mock( Map.class );
-    Mockito.when( mapMock.get( "id" ) ).thenReturn( id );
-    Mockito.when( mapMock.get( "permission" ) ).thenReturn( permission );
-
-    createOutputStreamMock();
-
-    // setting up request mock
-    HttpServletRequest requestMock = Mockito.mock( HttpServletRequest.class );
-    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
-    Mockito.when( requestMock.getParameterMap() ).thenReturn( mapMock );
-    Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
-
-    createResponseMock();
     // setPermissions on a dir, with recursive = true
-    cfrApi.setPermissions( requestMock, responseMock );
+    String result = cfrApi.setPermissions( path, ids, permissions, recursive );
     Assert.assertEquals( top + setOnDirRecur + bot, result.replaceAll( "\n", "" ) );
 
     //set permissions on a file, with recursive = true
     path = fileStructure[ 0 ];
-    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
     files = new ArrayList<String>();
     files.addAll( Arrays.asList( fileStructure[ 0 ] ) );
     cfrApi.setFileNames( files );
-    cfrApi.setPermissions( requestMock, responseMock );
+    result = cfrApi.setPermissions( path, ids, permissions, recursive );
     Assert.assertEquals( top + setOnFile + singleBot, result.replaceAll( "\n", "" ) );
 
     // setPermissions on a dir, with recursive = false
     path = dirStructure[ 0 ];
-    recursive = "false";
-    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
-    Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
-    cfrApi.setPermissions( requestMock, responseMock );
+    recursive = false;
+    result = cfrApi.setPermissions( path, ids, permissions, recursive );
     Assert.assertEquals( top + setOnDir + singleBot, result.replaceAll( "\n", "" ) );
 
     //set permissions on a file, with recursive = false
     path = fileStructure[ 0 ];
-    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
-    Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
-    cfrApi.setPermissions( requestMock, responseMock );
+    result = cfrApi.setPermissions( path, ids, permissions, recursive );
     Assert.assertEquals( top + setOnFile + singleBot, result.replaceAll( "\n", "" ) );
 
     //set permissions on a file not owned by non-admin user
     path = fileStructure[ 1 ];
-    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
-    Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
-    cfrApi.setPermissions( requestMock, responseMock );
+    result = cfrApi.setPermissions( path, ids, permissions, recursive );
     Assert.assertEquals( top + permissionsNotSet + singleBot, result.replaceAll( "\n", "" ) );
 
     //set permissions on a dir not owned by non-admin user
     path = dirStructure[ 1 ];
-    Mockito.when( requestMock.getParameter( "path" ) ).thenReturn( path );
-    Mockito.when( requestMock.getParameter( "recursive" ) ).thenReturn( recursive );
-    cfrApi.setPermissions( requestMock, responseMock );
+    result = cfrApi.setPermissions( path, ids, permissions, recursive );
     Assert.assertEquals( top + permissionsNotSet + singleBot, result.replaceAll( "\n", "" ) );
 
   }
 
   @Test
   public void testListFiles() throws IOException {
-    String correctResult = "<ul class=\"jqueryFileTree\" style=\"display: none;\"><li class=\"file ext_txt\"><a " +
-      "href=\"#\" rel=\"/a folder/a file.txt\">a file.txt</a></li></ul>";
+    String correctResult = "<ul class=\"jqueryFileTree\" style=\"display: none;\"><li class=\"file ext_txt\"><a "
+        + "href=\"#\" rel=\"/a folder/a file.txt\">a file.txt</a></li></ul>";
     CfrApiForTests cfrApi = new CfrApiForTests();
     createCfrServiceMock();
-    createOutputStreamMock();
-    createResponseMock();
     cfrApi.setCfrService( cfrServiceMock );
     cfrApi.reloadMetadataReader();
     HttpServletRequest requestMock = Mockito.mock( HttpServletRequest.class );
     Mockito.when( requestMock.getParameter( "fileExtensions" ) ).thenReturn( "" );
 
-    cfrApi.listFiles( "/a%20folder/", requestMock, responseMock );
+    String result = cfrApi.listFiles( "", "/a%20folder/" );
     Assert.assertEquals( result, correctResult );
 
-  }
-
-  private static void createOutputStreamMock() throws IOException {
-    // setting up outputStream mock
-    if ( outputStreamMock == null ) {
-      outputStreamMock = Mockito.mock( ServletOutputStream.class );
-      Mockito.doAnswer( new Answer() {
-        @Override public Object answer( InvocationOnMock invocation ) throws Throwable {
-          Object[] args = invocation.getArguments();
-          byte[] b = (byte[]) args[ 0 ];
-          result = new String( b );
-          return null;
-        }
-      } ).when( outputStreamMock ).write( Mockito.any( byte[].class ) );
-    }
-  }
-
-  private static void createResponseMock() throws IOException {
-    //setting up response mock
-    if ( responseMock == null ) {
-      responseMock = Mockito.mock( HttpServletResponse.class );
-      Mockito.when( responseMock.getOutputStream() ).thenReturn( outputStreamMock );
-    }
   }
 
   private static void createCfrServiceMock() throws IOException {

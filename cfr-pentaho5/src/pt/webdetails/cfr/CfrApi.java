@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2015 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -13,10 +13,12 @@
 
 package pt.webdetails.cfr;
 
-import java.io.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,14 +29,25 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
-import com.orientechnologies.orient.core.record.impl.ODocument;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,11 +59,11 @@ import pt.webdetails.cfr.file.FileStorer;
 import pt.webdetails.cfr.file.IFile;
 import pt.webdetails.cfr.file.MetadataReader;
 import pt.webdetails.cfr.repository.IFileRepository;
-import pt.webdetails.cpf.InvalidOperationException;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 import pt.webdetails.cpf.utils.CharsetHelper;
 import pt.webdetails.cpf.VersionChecker;
 import pt.webdetails.cpf.utils.MimeTypes;
+
 import com.sun.jersey.multipart.FormDataParam;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 
@@ -128,24 +141,23 @@ public class CfrApi {
 
   @GET
   @Path( "/createFolder" )
-  public void createFolder( @Context HttpServletRequest request,
-                            @Context HttpServletResponse response ) throws Exception {
-    String path = checkRelativePathSanity( getParameter( "path", request ) );
+  @Produces( MimeTypes.JSON )
+  public String createFolder( @QueryParam( MethodParams.PATH ) String path ) throws Exception {
+    path = checkRelativePathSanity( path );
 
     if ( path == null || StringUtils.isBlank( path ) ) {
       throw new Exception( "path is null or empty" );
     }
 
     boolean createResult = getRepository().createFolder( path );
-    writeMessage( new JSONObject().put( "result", createResult ).toString(), response.getOutputStream() );
-
+    return new JSONObject().put( "result", createResult ).toString();
   }
 
   @POST
   @Path( "/remove" )
-  public void remove( @Context HttpServletRequest request, @Context HttpServletResponse response ) throws Exception {
-    String fullFileName =
-      checkRelativePathSanity( getParameter( "fileName", request ) );
+  @Produces( MimeTypes.JSON )
+  public String remove( @QueryParam( MethodParams.FILENAME ) String filename ) throws Exception {
+    String fullFileName = checkRelativePathSanity( filename );
 
     if ( fullFileName == null || StringUtils.isBlank( fullFileName ) ) {
       throw new Exception( "fileName is null or empty" );
@@ -158,17 +170,17 @@ public class CfrApi {
       result = FileStorer.removeFile( fullFileName, null );
     }
 
-    writeMessage( new JSONObject().put( "result", result ).toString(), response.getOutputStream() );
+    return new JSONObject().put( "result", result ).toString();
   }
 
   @POST
   @Path( "/store" )
   @Consumes( "multipart/form-data" )
-  public void store( @FormDataParam( "file" ) InputStream uploadedInputStream,
-                     @FormDataParam( "file" ) FormDataContentDisposition fileDetail,
-                     @FormDataParam( "path" ) String path,
-                     @Context HttpServletRequest request, @Context HttpServletResponse response )
-    throws IOException, InvalidOperationException, Exception {
+  @Produces( MimeTypes.JSON )
+  public String store( @FormDataParam( "file" ) InputStream uploadedInputStream,
+                       @FormDataParam( "file" ) FormDataContentDisposition fileDetail,
+                       @FormDataParam( "path" ) String path )
+    throws IOException, JSONException, Exception {
 
 
     String fileName = fileDetail.getFileName(), savePath = path;
@@ -193,24 +205,22 @@ public class CfrApi {
 
     FileStorer fileStorer = new FileStorer( getRepository() );
 
-    boolean stored =
-      fileStorer
-        .storeFile( checkRelativePathSanity( fileName ), checkRelativePathSanity( savePath ), contents,
-          service.getCurrentUserName() );
+    boolean stored = fileStorer.storeFile( checkRelativePathSanity( fileName ), checkRelativePathSanity( savePath ),
+      contents, service.getCurrentUserName() );
 
     JSONObject result = new JSONObject().put( "result", stored );
-    writeMessage( result.toString(), response.getOutputStream() );
+    return result.toString();
   }
 
   @POST
   @Path( "/listFiles" )
-  public void listFiles( @FormParam( "dir" ) @DefaultValue( "" ) String baseDir,
-                         @Context HttpServletRequest request, @Context HttpServletResponse response )
+  @Produces( MimeTypes.HTML )
+  public String listFiles( @QueryParam( MethodParams.FILEEXTENSIONS ) @DefaultValue( "" ) String extensions,
+                           @FormParam( "dir" ) @DefaultValue( "" ) String baseDir )
     throws IOException {
     baseDir = URLDecoder.decode( baseDir, CharsetHelper.getEncoding() );
     IFile[] files = getRepository().listFiles( baseDir );
     List<IFile> allowedFiles = new ArrayList<IFile>( files.length );
-    String extensions = getParameter( "fileExtensions", request );
 
     // checks permissions
     /*
@@ -229,17 +239,15 @@ public class CfrApi {
     }
 
     IFile[] allowedFilesArray = new IFile[ allowedFiles.size() ];
-    response.setContentType( MimeTypes.HTML );
-    writeMessage( toJQueryFileTree( baseDir, allowedFiles.toArray( allowedFilesArray ), exts ),
-      response.getOutputStream() );
+    return toJQueryFileTree( baseDir, allowedFiles.toArray( allowedFilesArray ), exts );
 
   }
 
   @GET
   @Path( "/getFile" )
-  public void getFile( @Context HttpServletRequest request, @Context HttpServletResponse response )
-    throws IOException, JSONException, Exception {
-    String fullFileName = checkRelativePathSanity( getParameter( "fileName", null, request ) );
+  @Produces( MediaType.APPLICATION_OCTET_STREAM )
+  public Response getFile( @QueryParam( MethodParams.FILENAME ) String fileName ) throws Exception {
+    String fullFileName = checkRelativePathSanity( fileName );
 
     if ( fullFileName == null ) {
       logger.error( "request query parameter fileName must not be null" );
@@ -248,25 +256,22 @@ public class CfrApi {
 
     if ( mr.isCurrentUserAllowed( FilePermissionEnum.READ, fullFileName ) ) {
       CfrFile file = getRepository().getFile( fullFileName );
-
-
-      setResponseHeaders( getMimeType( file.getFileName() ), -1, URLEncoder.encode( file.getFileName(),
-        CharsetHelper.getEncoding() ), response );
-      ByteArrayInputStream bais = new ByteArrayInputStream( file.getContent() );
-      IOUtils.copy( bais, response.getOutputStream() );
-      response.getOutputStream().flush();
-      IOUtils.closeQuietly( bais );
+      ResponseBuilder rsp = Response.ok( file.getContent() );
+      rsp.type( getMimeType( file.getFileName() ) );
+      return buildResponseOk( file, -1, true );
     } else {
-      response.sendError( HttpServletResponse.SC_UNAUTHORIZED, "you don't have permissions to access the file" );
+      return buildResponseError( Status.UNAUTHORIZED,
+        "User \"" + getCfrService().getCurrentUserName() + "\" doesn't have permissions to access the file \""
+          + fileName + "\"" );
     }
   }
 
   @GET
   @Path( "/viewFile" )
-  public void viewFile( @Context HttpServletRequest request, @Context HttpServletResponse response )
+  @Produces( "*/*" )
+  public Response viewFile( @QueryParam( MethodParams.FILENAME ) String fileName )
     throws Exception {
-    String fullFileName =
-      checkRelativePathSanity( getParameter( "fileName", null, request ) );
+    String fullFileName = checkRelativePathSanity( fileName );
 
     if ( fullFileName == null ) {
       logger.error( "request query parameter fileName must not be null" );
@@ -275,56 +280,52 @@ public class CfrApi {
 
     if ( mr.isCurrentUserAllowed( FilePermissionEnum.READ, fullFileName ) ) {
       CfrFile file = getRepository().getFile( fullFileName );
-
-      setResponseHeaders( getMimeType( file.getFileName() ), -1, null, response );
-      ByteArrayInputStream bais = new ByteArrayInputStream( file.getContent() );
-      IOUtils.copy( bais, response.getOutputStream() );
-      response.getOutputStream().flush();
-      IOUtils.closeQuietly( bais );
+      return buildResponseOk( file, -1, false );
     } else {
-      response.sendError( HttpServletResponse.SC_UNAUTHORIZED, "you don't have permissions to access the file" );
+      return buildResponseError( Status.UNAUTHORIZED,
+        "User \"" + getCfrService().getCurrentUserName() + "\" doesn't have permissions to access the file \""
+          + fileName + "\"" );
     }
   }
 
   @GET
   @Path( "/listFilesJson" )
-  public void listFilesJson( @Context HttpServletRequest request, @Context HttpServletResponse response )
-    throws IOException, JSONException {
-    String baseDir = checkRelativePathSanity( getParameter( "dir", request ) );
-
+  @Produces( MimeTypes.JSON )
+  public String listFilesJson( @QueryParam( MethodParams.DIR ) @DefaultValue( "" ) String dir ) throws JSONException {
+    String baseDir = checkRelativePathSanity( dir );
     JSONArray array = getFileListJson( baseDir );
-    writeMessage( array.toString( 2 ), response.getOutputStream() );
+    return array.toString( 2 );
   }
 
   @GET
   @Path( "/listFilesJSON" )
-  public void listFilesJSON( @Context HttpServletRequest request, @Context HttpServletResponse response )
-    throws IOException, JSONException {
-    String baseDir = checkRelativePathSanity( getParameter( "dir", request ) );
-
-    JSONArray array = getFileListJson( baseDir );
-    writeMessage( array.toString( 2 ), response.getOutputStream() );
+  @Produces( MimeTypes.JSON )
+  public String listFilesJSON( @QueryParam( MethodParams.DIR ) @DefaultValue( "" ) String dir ) throws JSONException {
+    return listFilesJson( dir );
   }
 
   @GET
   @Path( "/listUploads" )
-  public void listUploads( @Context HttpServletRequest request,
-                           @Context HttpServletResponse response )
-    throws IOException, JSONException {
-    String path = checkRelativePathSanity( getParameter( "fileName", request ) );
-    writeMessage( mr.listFiles( path, getParameter( "user", request ), getParameter( "startDate", request ),
-      getParameter( "endDate", request ) ).toString(), response.getOutputStream() );
+  @Produces( MimeTypes.JSON )
+  public String listUploads( @QueryParam( MethodParams.FILENAME ) @DefaultValue( "" ) String filename,
+                             @QueryParam( MethodParams.USER ) @DefaultValue( "" ) String user,
+                             @QueryParam( MethodParams.STARTDATE ) @DefaultValue( "" ) String startDate,
+                             @QueryParam( MethodParams.ENDDATE ) @DefaultValue( "" ) String endDate )
+    throws JSONException {
+    String path = checkRelativePathSanity( filename );
+    return mr.listFiles( path, user, startDate, endDate ).toString();
   }
 
   @GET
   @Path( "/listUploadsFlat" )
-  public void listUploadsFlat( @Context HttpServletRequest request,
-                               @Context HttpServletResponse response )
-    throws IOException, JSONException {
-    String path = checkRelativePathSanity( getParameter( "fileName", request ) );
-
-    writeMessage( mr.listFilesFlat( path, getParameter( "user", request ), getParameter( "startDate", request ),
-      getParameter( "endDate", request ) ).toString(), response.getOutputStream() );
+  @Produces( MimeTypes.JSON )
+  public String listUploadsFlat( @QueryParam( MethodParams.FILENAME ) @DefaultValue( "" ) String filename,
+                                 @QueryParam( MethodParams.USER ) @DefaultValue( "" ) String user,
+                                 @QueryParam( MethodParams.STARTDATE ) @DefaultValue( "" ) String startDate,
+                                 @QueryParam( MethodParams.ENDDATE ) @DefaultValue( "" ) String endDate )
+    throws JSONException {
+    String path = checkRelativePathSanity( filename );
+    return mr.listFilesFlat( path, user, startDate, endDate ).toString();
   }
 
   private static String toJQueryFileTree( String baseDir, IFile[] files, String[] extensions ) {
@@ -334,7 +335,7 @@ public class CfrApi {
     for ( IFile file : files ) {
       if ( file.isDirectory() ) {
         out.append( "<li class=\"directory collapsed\"><a href=\"#\" rel=\"" + baseDir + file.getName() + "/\">"
-          + file.getName() + "</a></li>" );
+            + file.getName() + "</a></li>" );
       }
     }
 
@@ -357,7 +358,7 @@ public class CfrApi {
         }
         if ( accepted ) {
           out.append( "<li class=\"file ext_" + ext + "\"><a href=\"#\" rel=\"" + baseDir + file.getName() + "\">"
-            + file.getName() + "</a></li>" );
+              + file.getName() + "</a></li>" );
         }
       }
     }
@@ -367,13 +368,16 @@ public class CfrApi {
 
   @GET
   @Path( "/setPermissions" )
-  public void setPermissions( @Context HttpServletRequest request, @Context HttpServletResponse response )
-    throws JSONException, IOException {
-    String path = checkRelativePathSanity( getParameter( pathParameterPath, null, request ) );
-    String[] userOrGroupId = getStringArrayParameter( pathParameterGroupOrUserId, request );
-    String[] _permissions = getStringArrayParameter( pathParameterPermission, request );
-    boolean recursive = Boolean.parseBoolean( getParameter( pathParameterRecursive, "false", request ) );
-    boolean isDir = false;
+  @Produces( MimeTypes.JSON )
+  public String setPermissions( @QueryParam( MethodParams.PATH ) String path,
+                                @QueryParam( MethodParams.ID ) @DefaultValue( "" ) List<String> ids,
+                                @QueryParam( MethodParams.PERMISSION ) @DefaultValue( "" ) List<String> permissions,
+                                @QueryParam( MethodParams.RECURSIVE ) @DefaultValue( "false" ) Boolean recursive )
+    throws JSONException {
+    path = checkRelativePathSanity( path );
+    String[] userOrGroupId = ids.toArray( new String[ ids.size() ] );
+    String[] _permissions = permissions.toArray( new String[ permissions.size() ] );
+    boolean isDir;
     boolean admin = isUserAdmin();
     boolean errorSetting = false;
     JSONObject result = new JSONObject();
@@ -403,12 +407,12 @@ public class CfrApi {
           boolean storeResult = storeFile( file, id, validPermissions );
           if ( storeResult ) {
             permissionAddResultArray.put( new JSONObject()
-              .put( "status", String.format( "Added permission for path %s and user/role %s", file, id ) ) );
+                .put( "status", String.format( "Added permission for path %s and user/role %s", file, id ) ) );
           } else {
             if ( admin ) {
               permissionAddResultArray.put( new JSONObject()
-                .put( "status", String.format( "Failed to add permission for path %s and user/role %s", file,
-                  id ) ) );
+                  .put( "status", String.format( "Failed to add permission for path %s and user/role %s", file,
+                    id ) ) );
             } else {
               errorSetting = true;
             }
@@ -424,16 +428,18 @@ public class CfrApi {
       result.put( "status", "Path or user group parameters not found" );
     }
 
-    writeMessage( result.toString( 2 ), response.getOutputStream() );
+    return result.toString( 2 );
   }
 
   @GET
   @Path( "/deletePermissions" )
-  public void deletePermissions( @Context HttpServletRequest request, @Context HttpServletResponse response )
+  @Produces( MimeTypes.JSON )
+  public String deletePermissions( @QueryParam( MethodParams.PATH ) String path,
+                                   @QueryParam( MethodParams.ID ) @DefaultValue( "" ) List<String> ids,
+                                   @QueryParam( MethodParams.RECURSIVE ) @DefaultValue( "false" ) Boolean recursive )
     throws JSONException, IOException {
-    String path = checkRelativePathSanity( getParameter( pathParameterPath, null, request ) );
-    String[] userOrGroupId = getStringArrayParameter( pathParameterGroupOrUserId, request );
-    boolean recursive = Boolean.parseBoolean( getParameter( pathParameterRecursive, "false", request ) );
+    path = checkRelativePathSanity( path );
+    String[] userOrGroupId = ids.toArray( new String[ ids.size() ] );
     JSONObject result = new JSONObject();
     boolean admin = isUserAdmin();
     boolean errorDeleting = false;
@@ -486,19 +492,21 @@ public class CfrApi {
       result.put( "status", "Required arguments user/role and path not found" );
     }
 
-    writeMessage( result.toString( 2 ), response.getOutputStream() );
+    return result.toString( 2 );
   }
 
   @GET
   @Path( "/getPermissions" )
-  public void getPermissions( @Context HttpServletRequest request, @Context HttpServletResponse response )
-    throws IOException, JSONException {
-    String path = checkRelativePathSanity( getParameter( pathParameterPath, null, request ) );
-    String id = getParameter( pathParameterGroupOrUserId, null, request );
+  @Produces( MimeTypes.JSON )
+  public String getPermissions( @QueryParam( MethodParams.PATH ) String path, @QueryParam( MethodParams.ID ) String id )
+    throws JSONException {
+    path = checkRelativePathSanity( path );
     if ( path != null || id != null ) {
       JSONArray permissions = mr.getPermissions( path, id, FilePermissionMetadata.DEFAULT_PERMISSIONS );
-      writeMessage( permissions.toString( 0 ), response.getOutputStream() );
+      return permissions.toString( 0 );
     }
+    return "{\n  \"status\": \"error\",\n  \"result\": \"false\",\n  \"message\": \"Must supply a path and/or an "
+      + "id\"\n}";
   }
 
   @GET
@@ -526,18 +534,11 @@ public class CfrApi {
 
   }
 
-  private static final String pathParameterGroupOrUserId = "id";
-
-  private static final String pathParameterPath = "path";
-
-  private static final String pathParameterPermission = "permission";
-
-  private static final String pathParameterRecursive = "recursive";
-
   @GET
   @Path( "/checkVersion" )
-  public void checkVersion( @Context HttpServletResponse response ) throws IOException, JSONException {
-    writeMessage( getVersionChecker().checkVersion().toJSON().toString(), response.getOutputStream() );
+  @Produces( MimeTypes.JSON )
+  public String checkVersion() throws JSONException {
+    return getVersionChecker().checkVersion().toJSON().toString();
   }
 
   @GET
@@ -566,10 +567,10 @@ public class CfrApi {
 
       @Override
       protected String getVersionCheckUrl( VersionChecker.Branch branch ) {
-        switch( branch ) {
+        switch ( branch ) {
           case TRUNK:
-            return "http://ci.pentaho.com/job/pentaho-cfr/lastSuccessfulBuild/artifact/cfr-pentaho5/dist/marketplace" +
-              ".xml";
+            return "http://ci.pentaho.com/job/pentaho-cfr/lastSuccessfulBuild/artifact/cfr-pentaho5/dist/marketplace"
+              + ".xml";
           //          case STABLE:
           //            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
           //              + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
@@ -607,44 +608,33 @@ public class CfrApi {
     return params;
   }
 
-  private String getParameter( String param, HttpServletRequest request ) {
-    return getParameter( param, "", request );
-  }
+  private Response buildResponseOk( CfrFile file, int cacheDuration, boolean download ) {
+    ResponseBuilder responseBuilder = Response.ok( file.getContent() );
 
-  private String getParameter( String param, String dflt, HttpServletRequest request ) {
-    return request.getParameter( param ) != null ? request.getParameter( param ) : dflt;
-  }
+    responseBuilder.header( "Content-Type", getMimeType( file.getName() ) );
 
-  private String[] getStringArrayParameter( String param, HttpServletRequest request ) {
-    String[] result = (String[]) request.getParameterMap().get( param );
-    return result;
-  }
-
-  private void setResponseHeaders( String mimeType, int cacheDuration, String attachmentName,
-                                   HttpServletResponse response ) {
-
-    if ( response == null ) {
-      logger.warn( "Parameter 'httpresponse' not found!" );
-      return;
-    }
-
-    response.setHeader( "Content-Type", mimeType );
-
-    if ( attachmentName != null ) {
-      response.setHeader( "content-disposition", "attachment; filename=" + attachmentName );
+    if ( download ) {
+      responseBuilder.header( "Content-Disposition", "attachment; filename=" + file.getName() );
     } // Cache?
 
     if ( cacheDuration > 0 ) {
-      response.setHeader( "Cache-Control", "max-age=" + cacheDuration );
+      responseBuilder.header( "Cache-Control", "max-age=" + cacheDuration );
     } else {
-      response.setHeader( "Cache-Control", "max-age=0, no-store" );
+      responseBuilder.header( "Cache-Control", "max-age=0, no-store" );
     }
+    return responseBuilder.build();
 
   }
 
+  private Response buildResponseError( Status status, String message ) {
+    ResponseBuilder responseBuilder = Response.status( status );
+    responseBuilder.entity( message );
+    responseBuilder.type( "text/plain" );
+    return responseBuilder.build();
+  }
+
   private String getMimeType( String fileName ) {
-    String[] fileNameSplit = StringUtils.split( fileName, '.' );
-    return MimeTypes.getMimeType( fileNameSplit[ fileNameSplit.length - 1 ].toUpperCase() );
+    return MimeTypes.getMimeType( fileName );
   }
 
   private void writeMessage( String message, OutputStream out ) throws IOException {
@@ -723,6 +713,19 @@ public class CfrApi {
 
   protected boolean isUserAdmin() {
     return this.service.isCurrentUserAdmin();
+  }
+
+  private class MethodParams {
+    public static final String PATH = "path";
+    public static final String FILENAME = "fileName";
+    public static final String FILEEXTENSIONS = "fileExtensions";
+    public static final String DIR = "dir";
+    public static final String USER = "user";
+    public static final String STARTDATE = "startDate";
+    public static final String ENDDATE = "endDate";
+    public static final String ID = "id";
+    public static final String PERMISSION = "permission";
+    public static final String RECURSIVE = "recursive";
   }
 
 }
