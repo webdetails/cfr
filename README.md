@@ -31,8 +31,8 @@ Community File Repository.
 
 ### Requirements and Compatibility
 
-This plugin was built and tested against _Pentaho 4.8_, but should be compatible
-with earlier releases.
+This plugin was built and tested against _Pentaho 5.3_, but should be compatible
+with earlier releases up to _Pentaho 4.8_.
 
 As most of the other ctools, it also requires
 [CDE](http://www.webdetails.pt/ctools/cde.html),
