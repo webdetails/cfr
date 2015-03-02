@@ -121,7 +121,7 @@ The plugin can be accessed via a user interface UI or using web requests.
 You can manage the plugin via a friendly user interface
 
 **User interface URL:**
-`http://<pentaho-ba-server-host>:<port>/pentaho/content/cfr/home`
+`http://<pentaho-ba-server-host>:<port>/pentaho/plugin/cfr/api/home`
 
 It will be presented a page where you can upload or download files (choosing a
 folder outside the pentaho repository allows you to manage the files with
@@ -138,7 +138,7 @@ interfaces you can use.
 
 ###### Exposed Interfaces 
 
-_Base URL:_ `http://<pentaho-ba-server-host>:<port>/pentaho/content/cfr`
+_Base URL:_ `http://<pentaho-ba-server-host>:<port>/pentaho/plugin/cfr/api/`
 
 * */createFolder* --> creates a folder
 
