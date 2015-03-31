@@ -6,22 +6,22 @@ var FileUploaderComponent = BaseComponent.extend({
       $ph = $("#" + this.htmlObject),
       root = this.rootFolder.charAt(this.rootFolder.length - 1) === "/" ? this.rootFolder.substring(0, this.rootFolder.length - 1) : this.rootFolder;
 
-    var $fileSelect = $('<div>').addClass('fileSelect');
+    var $fileSelect = $('<div></div>').addClass('fileSelect');
     $ph.empty();
     $ph.addClass('fileUploaderComponent');
     $ph.append($fileSelect);
 
-    var $selectFile = $('<div>').addClass('uploadButton');
-    var $fileObj = $('<div>').addClass('hide').addClass('fileTextRow');
-    var $cancelButtonDiv = $('<div>').addClass('cancelButton');
+    var $selectFile = $('<div></div>').addClass('uploadButton');
+    var $fileObj = $('<div></div>').addClass('hide').addClass('fileTextRow');
+    var $cancelButtonDiv = $('<div></div>').addClass('cancelButton');
 
     /*
      * initialize upload dialog container
      */
     var $uploadDialogContainer = $('<div id="uploaderPopupContainer" class="content"></div>');
-    var $uploadDialogHeader = $('<div>').addClass('popupHeader');
-    var $uploadDialogBody = $('<div>').addClass('popupBody');
-    var $uploadDialogFooter = $('<div>').addClass('popupFooter');
+    var $uploadDialogHeader = $('<div></div>').addClass('popupHeader');
+    var $uploadDialogBody = $('<div></div>').addClass('popupBody');
+    var $uploadDialogFooter = $('<div></div>').addClass('popupFooter');
 
     // dialog header
     var $uploadPopupCloseButton = $('<button class="popupButton">&times;</button>');
@@ -32,7 +32,7 @@ var FileUploaderComponent = BaseComponent.extend({
 
 
     // upload progress bar
-    var $uploadProgressBarContainer = $('<div>').addClass('uploadBar');
+    var $uploadProgressBarContainer = $('<div></div>').addClass('uploadBar');
     var $uploadProgressBar = $('<div class="uploadProgress" ></div>');
 
     $uploadProgressBarContainer.append($uploadProgressBar);
@@ -75,9 +75,8 @@ var FileUploaderComponent = BaseComponent.extend({
     $fileSelect.append($selectFile)
       .append($fileObj).append($cancelButtonDiv);
 
-    var $fileSelectTitle = $('<div>').text('Select File').addClass('select');
-    var $uploadForm = $('<form action="' + Endpoints.getStore() + '" method="post" enctype="multipart/form-data">');
-
+    var $fileSelectTitle = $('<div></div>').text('Select File').addClass('select');
+    var $uploadForm = $('<form action="' + Endpoints.getStore() + '" method="post" enctype="multipart/form-data"></form>');
     var resetUploadForm = function() {
       $cancelButton.click();
     };
@@ -145,7 +144,7 @@ var FileUploaderComponent = BaseComponent.extend({
     var $label = $('<label>').addClass('cabinet'),
       $fileInput = $('<input type="file" class="file" name="file"/>'),
       $pathInput = $('<input type="hidden" name="path" value="' + root + '"/>'),
-      $submitInput = $('<button type="submit">').addClass('submitBtn').addClass('hide').text('Upload File');
+      $submitInput = $('<button type="submit" class="submitBtn hide">Upload File</button>');
 
     // bind click event of file name div to input file selector
     $fileSelectTitle.click(function() {
