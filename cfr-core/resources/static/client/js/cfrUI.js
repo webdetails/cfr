@@ -35,7 +35,7 @@ wd.cfrUI = wd.cfrUI ||{
             name: "About",
             link: "about",
             sublinks: []
-        },
+        }
     ]    
 };
 
