@@ -98,13 +98,14 @@ var FileUploaderComponent = BaseComponent.extend({
         fireUploaded();
         resetUploadForm();
       } else {
-        fileUploadErrorCallback()
+        fileUploadErrorCallback(response.message);
       }
     };
 
-    var fileUploadErrorCallback = function() {
+    var fileUploadErrorCallback = function(message) {
       // update alert
-      $uploadAlerts.attr('class', 'alert error').text('Error uploading file');
+      $uploadAlerts.attr('class', 'alert error').text('Error uploading file' + 
+        (typeof message === "string" ? " - " + message : ""));
       // activate upload dialog OK button
       $uploadDialogDismissButton.enable();
     };

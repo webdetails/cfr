@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2015 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -72,7 +72,7 @@ public abstract class AbstractPentahoRepositoryFileRepository implements IFileRe
       startPath = getBasePath() + "/" + startPath;
     }
     List<IBasicFile> repositoryFiles =
-      getReadAccess().listFiles( startPath, new GenericBasicFileFilter( "", "", true ), 1, true, false );
+        getReadAccess().listFiles( startPath, new GenericBasicFileFilter( "", "", true ), 1, true, false );
 
     List<IFile> result = new ArrayList<IFile>();
     for ( final IBasicFile file : repositoryFiles ) {
@@ -142,8 +142,13 @@ public abstract class AbstractPentahoRepositoryFileRepository implements IFileRe
   }
 
   @Override
+  public boolean fileExists( String fullName ) {
+    return getRWAccess().fileExists( fullName );
+  }
+
+  @Override
   public boolean createFolder( String fullPathName ) {
-    if ( getRWAccess().fileExists( fullPathName ) && getRWAccess().fetchFile( fullPathName ).isDirectory() ) {
+    if ( fileExists( fullPathName ) && getRWAccess().fetchFile( fullPathName ).isDirectory() ) {
       return true;
     }
     return getRWAccess().createFolder( fullPathName );
