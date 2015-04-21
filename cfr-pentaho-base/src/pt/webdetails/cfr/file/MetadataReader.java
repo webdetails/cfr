@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2015 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -185,11 +185,10 @@ public class MetadataReader {
 
     if ( path != null ) {
       // build query to retrieve path metadata
-      String query = String.format( "select %s from %s where file = '%s'",
-        ownerField, FileStorer.FILE_METADATA_STORE_CLASS, path );
+      String query = String.format( "select %s from %s where file = :fileName",
+          ownerField, FileStorer.FILE_METADATA_STORE_CLASS );
       Map<String, Object> params = new HashMap<String, Object>();
-      // params.put("owner", ownerField);
-      // params.put("file", file);
+      params.put( "fileName", path );
       List<ODocument> doc = getPersistenceEngine().executeQuery( query, params );
 
       if ( doc.size() > 0 ) {
