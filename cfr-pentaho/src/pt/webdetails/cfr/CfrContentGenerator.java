@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2015 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
@@ -152,7 +151,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     PluginUtils.copyParametersFromProvider( params, WrapperUtils.wrapParamProvider( requestParams ) );
 
     if ( requestParams.hasParameter( "mode" )
-            && requestParams.getStringParameter( "mode", "Render" ).equals( "edit" ) ) {
+        && requestParams.getStringParameter( "mode", "Render" ).equals( "edit" ) ) {
 
       // Send this to CDE
 
@@ -233,13 +232,15 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       throw new Exception( "File content must not be null" );
     }
 
+    JSONObject result = new JSONObject();
     FileStorer fileStorer = new FileStorer( service.getRepository() );
-
-    boolean stored =
-        fileStorer.storeFile( checkRelativePathSanity( fileName ), checkRelativePathSanity( savePath ), contents,
-            userSession.getName() );
-
-    JSONObject result = new JSONObject().put( "result", stored );
+    if ( service.getRepository().fileExists( checkRelativePathSanity( fileName ) ) ) {
+      result.put( "result", false );
+      result.put( "message", "File " + fileName + " already exists!" );
+    } else {
+      result.put( "result", fileStorer.storeFile( checkRelativePathSanity( fileName ),
+          checkRelativePathSanity( savePath ), contents, service.getCurrentUserName() ) );
+    }
     writeOut( out, result.toString() );
   }
 
@@ -266,7 +267,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       exts = extensions.split( " " );
     }
 
-    IFile[] allowedFilesArray = new IFile[allowedFiles.size()];
+    IFile[] allowedFilesArray = new IFile[ allowedFiles.size() ];
     writeOut( out, toJQueryFileTree( baseDir, allowedFiles.toArray( allowedFilesArray ), exts ) );
   }
 
@@ -282,8 +283,8 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     if ( mr.isCurrentUserAllowed( FilePermissionEnum.READ, fullFileName ) ) {
       CfrFile file = service.getRepository().getFile( fullFileName );
 
-      setResponseHeaders(getMimeType( file.getFileName() ), -1,
-              URLEncoder.encode(file.getFileName(), CharsetHelper.getEncoding() ) );
+      setResponseHeaders( getMimeType( file.getFileName() ), -1,
+          URLEncoder.encode( file.getFileName(), CharsetHelper.getEncoding() ) );
       ByteArrayInputStream bais = new ByteArrayInputStream( file.getContent() );
       IOUtils.copy( bais, out );
       IOUtils.closeQuietly( bais );
@@ -410,10 +411,10 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   public void setPermissions( OutputStream out ) throws JSONException, IOException {
     String path = checkRelativePathSanity( getRequestParameters().getStringParameter( pathParameterPath, null ) );
     String[] userOrGroupId =
-        getRequestParameters().getStringArrayParameter( pathParameterGroupOrUserId, new String[] {} );
+      getRequestParameters().getStringArrayParameter( pathParameterGroupOrUserId, new String[] {} );
     String[] _permissions =
-        getRequestParameters().getStringArrayParameter( pathParameterPermission,
-            new String[] { FilePermissionEnum.READ.getId() } );
+      getRequestParameters().getStringArrayParameter( pathParameterPermission,
+        new String[] { FilePermissionEnum.READ.getId() } );
 
     JSONObject result = new JSONObject();
     if ( path != null && userOrGroupId.length > 0 && _permissions.length > 0 ) {
@@ -451,7 +452,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   public void deletePermissions( OutputStream out ) throws JSONException, IOException {
     String path = checkRelativePathSanity( getRequestParameters().getStringParameter( pathParameterPath, null ) );
     String[] userOrGroupId =
-        getRequestParameters().getStringArrayParameter( pathParameterGroupOrUserId, new String[] {} );
+      getRequestParameters().getStringArrayParameter( pathParameterGroupOrUserId, new String[] {} );
 
     JSONObject result = new JSONObject();
 
@@ -471,7 +472,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
             individualResult.put( "status", String.format( "Permission for %s and path %s deleted.", id, path ) );
           } else {
             individualResult
-                .put( "status", String.format( "Failed to delete permission for %s and path %s.", id, path ) );
+              .put( "status", String.format( "Failed to delete permission for %s and path %s.", id, path ) );
           }
 
           permissionDeleteResultArray.put( individualResult );
@@ -546,10 +547,11 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       protected String getVersionCheckUrl( VersionChecker.Branch branch ) {
         switch ( branch ) {
           case TRUNK:
-            return "http://ci.pentaho.com/job/pentaho-cfr-pentaho/lastSuccessfulBuild/artifact/cfr-pentaho/dist/marketplace.xml";
-//          case STABLE:
-//            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
-//                + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
+            return "http://ci.pentaho.com/job/pentaho-cfr-pentaho/lastSuccessfulBuild/artifact/cfr-pentaho/dist"
+              + "/marketplace.xml";
+          //          case STABLE:
+          //            return "http://ci.analytical-labs.com/job/Webdetails-CFR-Release/"
+          //                + "lastSuccessfulBuild/artifact/dist/marketplace.xml";
           default:
             return null;
         }
@@ -581,7 +583,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     ServletRequest request = getRequest();
     @SuppressWarnings( "unchecked" )
     // should always be String
-    Enumeration<String> originalParams = request.getParameterNames();
+      Enumeration<String> originalParams = request.getParameterNames();
     // Iterate and put the values there
     while ( originalParams.hasMoreElements() ) {
       String originalParam = originalParams.nextElement();

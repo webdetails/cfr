@@ -202,13 +202,17 @@ public class CfrApi {
       logger.error( "File content must not be null" );
       throw new Exception( "File content must not be null" );
     }
-
+    JSONObject result = new JSONObject();
     FileStorer fileStorer = new FileStorer( getRepository() );
-
+    if ( getRepository().fileExists( checkRelativePathSanity( fileName ) ) ) {
+      result.put( "result", false );
+      result.put( "message", "File " + fileName + " already exists!" );
+      return result.toString();
+    }
     boolean stored = fileStorer.storeFile( checkRelativePathSanity( fileName ), checkRelativePathSanity( savePath ),
-      contents, service.getCurrentUserName() );
+        contents, service.getCurrentUserName() );
 
-    JSONObject result = new JSONObject().put( "result", stored );
+    result.put( "result", stored );
     return result.toString();
   }
 
@@ -412,7 +416,7 @@ public class CfrApi {
             if ( admin ) {
               permissionAddResultArray.put( new JSONObject()
                   .put( "status", String.format( "Failed to add permission for path %s and user/role %s", file,
-                    id ) ) );
+                  id ) ) );
             } else {
               errorSetting = true;
             }
