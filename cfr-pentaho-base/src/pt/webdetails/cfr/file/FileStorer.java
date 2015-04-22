@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2015 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -15,8 +15,8 @@ package pt.webdetails.cfr.file;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -124,7 +124,7 @@ public class FileStorer {
         if ( service.isCurrentUserAdmin() || reader.isCurrentUserOwner( permission.getFile() ) ) {
 
           logger.debug( String.format( "current user is an administrator or the owner of the file: %s", permission
-            .getFile() ) );
+              .getFile() ) );
 
           JSONObject persistedPermissions = null;
           JSONObject permissionToPersist = permission.toJson();
@@ -151,7 +151,7 @@ public class FileStorer {
 
     if ( result == false ) {
       logger.warn( String.format( "current user doesn't have permissions to set permissions on folder/file: %s",
-        permission.getFile() ) );
+          permission.getFile() ) );
     }
 
     return result;
@@ -166,13 +166,14 @@ public class FileStorer {
     CfrService service = new CfrService();
     MetadataReader reader = new MetadataReader( service );
     if ( service.isCurrentUserAdmin() || reader.isCurrentUserOwner( path ) ) {
-      Map<String, Object> params = Collections.emptyMap();
+      Map<String, Object> params = new HashMap<String, Object>();
       StringBuilder deleteFileBuilder =
-        new StringBuilder( String.format( "delete from %s", FILE_METADATA_STORE_CLASS ) );
+          new StringBuilder( String.format( "delete from %s", FILE_METADATA_STORE_CLASS ) );
       StringBuilder whereBuilder = new StringBuilder();
 
       if ( path != null ) {
-        whereBuilder.append( "file = '" ).append( path ).append( "'" );
+        whereBuilder.append( "file = :fileName" );
+        params.put( "fileName", path );
       }
 
       if ( id != null ) {
@@ -180,7 +181,8 @@ public class FileStorer {
           whereBuilder.append( " and " );
         }
 
-        whereBuilder.append( "id = '" ).append( id ).append( "'" );
+        whereBuilder.append( "id = :id" );
+        params.put( "id", id );
       }
 
       if ( whereBuilder.length() > 0 ) {
@@ -203,13 +205,14 @@ public class FileStorer {
     CfrService service = new CfrService();
     MetadataReader reader = new MetadataReader( service );
     if ( service.isCurrentUserAdmin() || reader.isCurrentUserOwner( path ) ) {
-      Map<String, Object> params = Collections.emptyMap();
+      Map<String, Object> params = new HashMap<String, Object>();
       StringBuilder deleteCommandBuilder =
-        new StringBuilder( String.format( "delete from %s", FILE_PERMISSIONS_METADATA_STORE_CLASS ) );
+          new StringBuilder( String.format( "delete from %s", FILE_PERMISSIONS_METADATA_STORE_CLASS ) );
       StringBuilder whereBuilder = new StringBuilder();
 
       if ( path != null ) {
-        whereBuilder.append( "file = '" ).append( path ).append( "'" );
+        whereBuilder.append( "file = :fileName" );
+        params.put( "fileName", path );
       }
 
       if ( id != null ) {
@@ -217,7 +220,8 @@ public class FileStorer {
           whereBuilder.append( " and " );
         }
 
-        whereBuilder.append( "id = '" ).append( id ).append( "'" );
+        whereBuilder.append( "id = :id" );
+        params.put( "id", id );
       }
 
       if ( whereBuilder.length() > 0 ) {
