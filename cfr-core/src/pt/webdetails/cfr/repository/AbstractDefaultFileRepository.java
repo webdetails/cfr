@@ -1,5 +1,5 @@
 /*!
-* Copyright 2002 - 2013 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2015 Webdetails, a Pentaho company.  All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
@@ -26,7 +26,7 @@ import pt.webdetails.cfr.file.IFile;
 
 /**
  * The default file repository takes system/.cfr as its base path. All files and folders are created here.
- * 
+ *
  * @author pedrovale
  */
 public abstract class AbstractDefaultFileRepository implements IFileRepository {
@@ -35,7 +35,7 @@ public abstract class AbstractDefaultFileRepository implements IFileRepository {
 
   protected String basePath;
 
-  abstract  String getBasePath();
+  abstract String getBasePath();
 
   @Override
   public void init() {
@@ -108,19 +108,19 @@ public abstract class AbstractDefaultFileRepository implements IFileRepository {
   public IFile[] listFiles( String startPath ) {
 
     if ( !checkPath( startPath ) ) {
-      return new IFile[0];
+      return new IFile[ 0 ];
     }
 
     File f = new File( getBasePath() + File.separator + startPath );
     File[] files = f.listFiles();
     if ( files == null ) {
-      return new IFile[0];
+      return new IFile[ 0 ];
     }
 
-    IFile[] result = new IFile[files.length];
+    IFile[] result = new IFile[ files.length ];
     for ( int i = 0; i < files.length; i++ ) {
-      final File listedFile = files[i];
-      result[i] = new IFile() {
+      final File listedFile = files[ i ];
+      result[ i ] = new IFile() {
 
         @Override
         public String getFullPath() {
@@ -171,9 +171,23 @@ public abstract class AbstractDefaultFileRepository implements IFileRepository {
     return result;
   }
 
+  @Override
+  public boolean fileExists( String fullName ) {
+    if ( !checkPath( fullName ) ) {
+      return false;
+    }
+    File f;
+    if ( fullName.startsWith( File.separator ) ) {
+      f = new File( getBasePath() + fullName );
+    } else {
+      f = new File( getBasePath() + File.separator + fullName );
+    }
+    return f.exists();
+  }
+
   /**
    * Checks if path contains ../ - we won't allow any back tracking in paths, even if they might be valid
-   * 
+   *
    * @param path
    * @return <i>true</i> if path does not contain bactracking info
    */
