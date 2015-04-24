@@ -48,9 +48,11 @@ public class MetadataReader {
   }
 
   public List<ODocument> getFileEntities( String file ) throws JSONException {
-    String query = String.format( "select * from %s where file = '%s'", FileStorer.FILE_METADATA_STORE_CLASS, file );
+    String query = String.format( "select * from %s where file = :fileName", FileStorer.FILE_METADATA_STORE_CLASS );
+    Map<String, Object> params = new HashMap<String, Object>();
+    params.put( "fileName", file );
 
-    return getPersistenceEngine().executeQuery( query, null );
+    return getPersistenceEngine().executeQuery( query, params );
   }
 
   public JSONArray listFilesFlat( String fileName, String user, String startDate, String endDate ) {
@@ -141,10 +143,10 @@ public class MetadataReader {
    * @throws JSONException
    */
   public JsonSerializable getPermissions( String path ) throws JSONException {
-    String query = "select * from " + FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS + " where file = :file";
+    String query = "select * from " + FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS + " where file = :fileName";
 
     Map<String, Object> params = new HashMap<String, Object>();
-    params.put( "file", path );
+    params.put( "fileName", path );
 
     JSONArray result = new JSONArray();
     for ( ODocument doc : getPersistenceEngine().executeQuery( query, params ) ) {
@@ -226,16 +228,18 @@ public class MetadataReader {
 
   private List<ODocument> findPermissionsEntities( String path, List<String> ids,
                                                    FilePermissionEnum[] allowedPermissions, boolean lookup ) {
-    final Map<String, Object> params = java.util.Collections.emptyMap();
+    final Map<String, Object> params = new HashMap<String, Object>();
 
     String idsQuery = "";
+    int idCounter = 1;
     if ( ids != null ) {
       idsQuery += " (";
       for ( String id : ids ) {
         if ( idsQuery.indexOf( "id =" ) > -1 ) {
           idsQuery += " or";
         }
-        idsQuery += " id = '" + id + "'";
+        idsQuery += " id = :id" + idCounter;
+        params.put( "id" + idCounter++, id );
       }
       idsQuery += ") ";
     }
@@ -269,7 +273,8 @@ public class MetadataReader {
       }
     }
     if ( !StringUtils.isEmpty( path ) ) {
-      query += " where file = '" + path + "'";
+      query += " where file = :fileName";
+      params.put( "fileName", path );
     }
 
     permissions = getPersistenceEngine().executeQuery( query, params );
