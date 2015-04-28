@@ -1,13 +1,13 @@
 /*!
-* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2015 Webdetails, a Pentaho company. All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
 * this file except in compliance with the license. If you need a copy of the license,
-* please go to  http://mozilla.org/MPL/2.0/. The Initial Developer is Webdetails.
+* please go to http://mozilla.org/MPL/2.0/. The Initial Developer is Webdetails.
 *
 * Software distributed under the Mozilla Public License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or  implied. Please refer to
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. Please refer to
 * the license for the specific language governing your rights and limitations.
 */
 
@@ -74,6 +74,8 @@ public class MetadataReaderTest {
 
   private static final String FILE_NOT_STORED = "fake_test.txt";
 
+  private static final String SQL_INJECTION_OR_TRUE = "' OR '1' = '1";
+
   @BeforeClass
   public static void setUp() throws Exception {
     PluginEnvironment.init( new CfrEnvironmentForTests() );
@@ -139,6 +141,13 @@ public class MetadataReaderTest {
 
     Assert.assertEquals( USER_2, arr.getJSONObject( 0 ).getString( "user" ) );
     Assert.assertEquals( FILE_3, arr.getJSONObject( 0 ).getString( "file" ) );
+
+    //making sure we cannot use SQL Injection
+    JsonSerializable resultInject = mr.listFiles( null, USER_2 + SQL_INJECTION_OR_TRUE, null, null );
+    JSONObject objInject = resultInject.toJSON();
+    JSONArray arrInject = objInject.getJSONArray( "result" );
+
+    Assert.assertEquals( 0, arrInject.length() );
   }
 
   @Test
@@ -155,6 +164,13 @@ public class MetadataReaderTest {
     arr = result.toJSON().getJSONArray( "result" );
 
     assertEquals( 0, arr.length() );
+
+    //making sure we cannot use SQL Injection
+    JsonSerializable resultInject = mr.listFiles( FILE_1 + SQL_INJECTION_OR_TRUE, null, null, null );
+    JSONObject objInject = resultInject.toJSON();
+    JSONArray arrInject = objInject.getJSONArray( "result" );
+
+    Assert.assertEquals( 0, arrInject.length() );
   }
 
   @Test
@@ -171,23 +187,39 @@ public class MetadataReaderTest {
 
   @Test
   public void testMetadataReadByStartDate() throws JSONException {
-    JsonSerializable result = mr.listFiles( null, null, "2012-11-13 16:50:00", null );
+    String startDate = "2012-11-13 16:50:00";
+    JsonSerializable result = mr.listFiles( null, null, startDate, null );
 
     JSONObject obj = result.toJSON();
     JSONArray arr = obj.getJSONArray( "result" );
 
     Assert.assertEquals( 2, arr.length() );
+
+    //making sure we cannot use SQL Injection
+    JsonSerializable resultInject = mr.listFiles( startDate + SQL_INJECTION_OR_TRUE, null, null, null );
+    JSONObject objInject = resultInject.toJSON();
+    JSONArray arrInject = objInject.getJSONArray( "result" );
+
+    Assert.assertEquals( 0, arrInject.length() );
   }
 
   @Test
   public void testMetadataReadByEndDate() throws JSONException {
-    JsonSerializable result = mr.listFiles( null, null, null, "2012-11-13 16:50:00" );
+    String endDate = "2012-11-13 16:50:00";
+    JsonSerializable result = mr.listFiles( null, null, null, endDate );
 
     JSONObject obj = result.toJSON();
 
     JSONArray arr = obj.getJSONArray( "result" );
 
     Assert.assertEquals( 1, arr.length() );
+
+    //making sure we cannot use SQL Injection
+    JsonSerializable resultInject = mr.listFiles( endDate + SQL_INJECTION_OR_TRUE, null, null, null );
+    JSONObject objInject = resultInject.toJSON();
+    JSONArray arrInject = objInject.getJSONArray( "result" );
+
+    Assert.assertEquals( 0, arrInject.length() );
 
   }
 
@@ -212,24 +244,24 @@ public class MetadataReaderTest {
     when( cs.getCurrentUserName() ).thenReturn( USER_2 );
     FilePermissionEnum permission = FilePermissionEnum.READ;
     assertFalse(
-      String.format( "current user %s isn't allowed to %s %s", cs.getCurrentUserName(), permission, FILE_1 ), mr
-      .isCurrentUserAllowed( permission, FILE_1 ) );
+        String.format( "current user %s isn't allowed to %s %s", cs.getCurrentUserName(), permission, FILE_1 ), mr
+        .isCurrentUserAllowed( permission, FILE_1 ) );
 
     when( cs.getCurrentUserName() ).thenReturn( USER_1 );
     assertTrue(
-      String.format( "current user %s is allowed to %s file %s", cs.getCurrentUserName(), permission, FILE_1 ), mr
-      .isCurrentUserAllowed( permission, FILE_1 ) );
+        String.format( "current user %s is allowed to %s file %s", cs.getCurrentUserName(), permission, FILE_1 ), mr
+        .isCurrentUserAllowed( permission, FILE_1 ) );
   }
 
   @Test
   public void testIsCurrentUserOwner() {
     when( cs.getCurrentUserName() ).thenReturn( USER_1 );
     assertTrue( String.format( "current user %s is supposed to be the owner of the file %s", cs.getCurrentUserName(),
-      FILE_1 ), mr.isCurrentUserOwner( FILE_1 ) );
+        FILE_1 ), mr.isCurrentUserOwner( FILE_1 ) );
 
     when( cs.getCurrentUserName() ).thenReturn( USER_2 );
     assertFalse( String.format( "current user %s isn't supposed to be the owner of the file %s", cs
-      .getCurrentUserName(), FILE_1 ), mr.isCurrentUserOwner( FILE_1 ) );
+        .getCurrentUserName(), FILE_1 ), mr.isCurrentUserOwner( FILE_1 ) );
   }
 
   @Test
