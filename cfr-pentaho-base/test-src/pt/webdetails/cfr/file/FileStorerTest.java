@@ -1,13 +1,13 @@
 /*!
-* Copyright 2002 - 2014 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2015 Webdetails, a Pentaho company. All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
 * this file except in compliance with the license. If you need a copy of the license,
-* please go to  http://mozilla.org/MPL/2.0/. The Initial Developer is Webdetails.
+* please go to http://mozilla.org/MPL/2.0/. The Initial Developer is Webdetails.
 *
 * Software distributed under the Mozilla Public License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or  implied. Please refer to
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. Please refer to
 * the license for the specific language governing your rights and limitations.
 */
 
@@ -59,16 +59,23 @@ public class FileStorerTest {
 
     Assert.assertTrue( fs.storeFile( "t.txt", "my_test", new byte[ 50 ], "User" ) );
 
+    Assert.assertTrue( fs.storeFile( "foo'bar.txt", "my_test", new byte[ 50 ], "User2" ) );
+
     PersistenceEngine pe = PersistenceEngineForTests.getInstance();
     JSONObject result = pe.query( "select from " + FileStorer.FILE_METADATA_STORE_CLASS, null );
 
     JSONArray resultArray = result.getJSONArray( "object" );
-    Assert.assertEquals( 1, resultArray.length() );
+    Assert.assertEquals( 2, resultArray.length() );
 
     JSONObject resultElt = resultArray.getJSONObject( 0 );
 
     Assert.assertEquals( "User", resultElt.getString( "user" ) );
     Assert.assertEquals( "my_test" + File.separator + "t.txt", resultElt.getString( "file" ) );
+
+    JSONObject resultElt2 = resultArray.getJSONObject( 1 );
+
+    Assert.assertEquals( "User2", resultElt2.getString( "user" ) );
+    Assert.assertEquals( "my_test" + File.separator + "foo'bar.txt", resultElt2.getString( "file" ) );
 
   }
 
@@ -78,15 +85,19 @@ public class FileStorerTest {
 
     Assert.assertTrue( fs.storeFile( "t.txt", "my_test", new byte[ 50 ], "User" ) );
 
+    Assert.assertTrue( fs.storeFile( "foo'bar.txt", "my_test", new byte[ 50 ], "User2" ) );
+
     fs = new FileStorerForTests( new DefaultFileRepositoryForTests( false ) );
 
     Assert.assertFalse( fs.storeFile( "t.txt", "my_test", new byte[ 50 ], "User" ) );
+
+    Assert.assertFalse( fs.storeFile( "foo'bar.txt", "my_test", new byte[ 50 ], "User2" ) );
 
     PersistenceEngine pe = PersistenceEngineForTests.getInstance();
     JSONObject result = pe.query( "select from " + FileStorer.FILE_METADATA_STORE_CLASS, null );
 
     JSONArray resultArray = result.getJSONArray( "object" );
-    Assert.assertEquals( 1, resultArray.length() ); // There should be only the result of the first test
+    Assert.assertEquals( 2, resultArray.length() ); // There should be only the result of the first test
   }
 
 }
