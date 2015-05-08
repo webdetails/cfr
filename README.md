@@ -88,11 +88,11 @@ some other root folder by editing the configuration file `cfr.spring.xml` and
 adding an attribute for your file repository with the full name of the starting
 folder.
 
-<property name="basePath">
-    <value>
-        path/to/cfr/uploads
-    </value>
-</property
+		<property name="basePath">
+		    <value>
+		        path/to/cfr/uploads
+		    </value>
+		</property>
 
 You can define another class, changing the value of `repositoryClass`. Right
 now, you can choose
@@ -111,6 +111,37 @@ in the `system/cfr/lib` folder and reference the class from `cfr.spring.xml`.
 		pt.webdetails.cfr.repository.IFileRepository
 	</repositoryClass>
 
+#### Security
+
+There is a basic security setting you can activate, to better control what gets uploaded through cfr.
+
+You can edit `cfr.properties` in `pentaho-solutions/system/cfr` to see which options you can activate:
+
+* upload.security.matchers=ext,wht,blk
+* upload.security.whitelist=text/plain
+* upload.security.blacklist=application/pdf
+
+There are currently 3 security matchers:
+* ext - Extension, using Apache Tika, CFR will match the file extension, with the mime type of the content, if they match, the file can be uploaded.
+* wht - Whitelist, this is a mime type list, if the content's mime type is in this list, then the extension won't matter, the file can be uploaded.
+* blk - Blacklist, this is a mime type list, if the content's mime type is in this list, then neither the extension nor the whitelist will matter, the file cannot be uploaded.
+
+They are all comma separated lists, so you can have several whitelisted and/or blacklisted mime types
+
+Ex:
+
+    upload.security.matchers=wht,blk
+    upload.security.whitelist=text/plain,application/pdf,text/html
+    upload.security.blacklist=application/pdf,text/csv
+Note that the blacklist has the final saying in deciding whether the file can or can't be uploaded. So in the example above, "application/pdf" cannot be uploaded, even though it is whitelisted.
+
+You can have multiple matchers active at one time, or just one:
+
+* upload.security.matchers=ext -> Checks content mime type agains the file extension mime type.
+* upload.security.matchers=wht -> Checks if content mime type is in the whitelist.
+* upload.security.matchers=blk -> Checks if content mime type is not in the blacklist.
+
+**By default no verifications are made, you must explicitly activate this configuration.**
 
 ## Working with the plugin
 
