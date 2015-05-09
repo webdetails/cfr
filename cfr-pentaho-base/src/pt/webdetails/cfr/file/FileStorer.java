@@ -1,13 +1,13 @@
 /*!
-* Copyright 2002 - 2015 Webdetails, a Pentaho company.  All rights reserved.
+* Copyright 2002 - 2015 Webdetails, a Pentaho company. All rights reserved.
 *
 * This software was developed by Webdetails and is provided under the terms
 * of the Mozilla Public License, Version 2.0, or any later version. You may not use
 * this file except in compliance with the license. If you need a copy of the license,
-* please go to  http://mozilla.org/MPL/2.0/. The Initial Developer is Webdetails.
+* please go to http://mozilla.org/MPL/2.0/. The Initial Developer is Webdetails.
 *
 * Software distributed under the Mozilla Public License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or  implied. Please refer to
+* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. Please refer to
 * the license for the specific language governing your rights and limitations.
 */
 
@@ -15,13 +15,16 @@ package pt.webdetails.cfr.file;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.tika.Tika;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,12 +35,25 @@ import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 
 import com.orientechnologies.orient.core.record.impl.ODocument;
+import pt.webdetails.cpf.utils.MimeTypes;
+
 
 public class FileStorer {
 
   public static final String FILE_METADATA_STORE_CLASS = "UploadedFiles";
 
   public static final String FILE_PERMISSIONS_METADATA_STORE_CLASS = "UploadedFilesPermissions";
+
+  public static final String UPLOAD_SECURITY_MATCHERS = "upload.security.matchers";
+  public static final String UPLOAD_SECURITY_WHITELIST = "upload.security.whitelist";
+  public static final String UPLOAD_SECURITY_BLACKLIST = "upload.security.blacklist";
+  public static final String EXTENSION_MATCHER = "ext";
+  public static final String WHITELIST_MATCHER = "wht";
+  public static final String BLACKLIST_MATCHER = "blk";
+  public static final String ERR_WHITELIST = "MimeType \"%s\" is not whitelisted!";
+  public static final String ERR_BLACKLIST = "MimeType \"%s\" is blacklisted!";
+  public static final String ERR_EXTENSION = "File content did not match its extension";
+
 
   protected static final Log logger = LogFactory.getLog( FileStorer.class );
 
@@ -67,14 +83,22 @@ public class FileStorer {
    * @param user
    * @return
    */
-  public boolean storeFile( String file, String relativePath, byte[] contents, String user ) {
+  public JSONObject storeFile( String file, String relativePath, byte[] contents, String user ) throws JSONException {
     // Store file in FileRepository
     String path = relativePath;
     String fileName = file;
+    logger.debug( String.format( "Store Operation initiated: User - \"%s\", File - \"%s\", relativePath - \"%s\"",
+        user, fileName, path ) );
+    JSONObject resultObj = checkContents( contents, fileName );
+    if ( !resultObj.getBoolean( "result" ) ) {
+      return resultObj;
+    }
+
     boolean result = this.repository.storeFile( contents, fileName, path );
     if ( !result ) {
-      logger.error( "Could not save file in repository. Returning false" );
-      return false;
+      logger.error( String.format( "Store Operation failed: User - \"%s\", File - \"%s\", relativePath - \"%s\"",
+          user, fileName, path ) );
+      return new JSONObject().put( "result", false );
     }
 
     MetadataReader mr = getMetadataReader();
@@ -92,7 +116,9 @@ public class FileStorer {
       obj.put( "uploadDate", new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" ).format( new Date() ) );
     } catch ( JSONException jse ) {
       logger.error( "An error ocurred while creating json object representing the upload.", jse );
-      return false;
+      logger.error( String.format( "Store Operation failed: User - \"%s\", File - \"%s\", relativePath - \"%s\"",
+          user, fileName, path ) );
+      return new JSONObject().put( "result", false );
     }
 
     String id = null;
@@ -101,8 +127,11 @@ public class FileStorer {
     }
 
     result = getPersistenceEngine().store( id, FILE_METADATA_STORE_CLASS, obj ) != null;
-
-    return result;
+    resultObj.put( "result", result );
+    logger.debug( String
+        .format( "Store Operation over: User - \"%s\", File - \"%s\", relativePath - \"%s\", Status - \"%s\"", user,
+        fileName, path, result ? "OK" : "ERROR" ) );
+    return resultObj;
   }
 
   public String getFullFileName( String path, String filename ) {
@@ -239,4 +268,73 @@ public class FileStorer {
   protected MetadataReader getMetadataReader() {
     return new MetadataReader( new CfrService() );
   }
+
+  protected JSONObject checkContents( byte[] contents, String fileName ) throws JSONException {
+    JSONObject result = new JSONObject();
+    Properties cfrConfig = getConfig();
+    String matchers = cfrConfig.getProperty( UPLOAD_SECURITY_MATCHERS, "" );
+    if ( matchers.length() == 0 ) {
+      result.put( "result", true );
+      return result;
+    }
+    List<String> securityMatchers = Arrays.asList( matchers.split( "," ) );
+
+    boolean success = securityMatchers.size() == 1 && securityMatchers.contains( BLACKLIST_MATCHER );
+    String contentMimeType = detectMimeTypeFromContent( contents, fileName );
+    String inferedMimeType = MimeTypes.getMimeType( fileName );
+    if ( inferedMimeType.equals( "text/javascript" ) ) {
+      inferedMimeType = "application/javascript";
+    }
+    String message = "";
+
+
+    //we start by checking against extension
+    if ( securityMatchers.contains( EXTENSION_MATCHER ) ) {
+      if ( contentMimeType != null && contentMimeType.equals( inferedMimeType ) ) {
+        success = true;
+      } else {
+        message = ERR_EXTENSION;
+        logger.error( message );
+      }
+    }
+    //even if extension fails, the mimeType may be whitelisted
+    if ( !success && securityMatchers.contains( WHITELIST_MATCHER ) ) {
+      if ( Arrays.asList( cfrConfig.getProperty( UPLOAD_SECURITY_WHITELIST, "" ).split( "," ) ).contains(
+          contentMimeType ) ) {
+        success = true;
+        logger.debug( "MimeType " + contentMimeType + " whitelisted" );
+      } else {
+        logger.error( String.format( ERR_WHITELIST, contentMimeType ) );
+        if ( message.length() > 0 ) {
+          message += " and ";
+        }
+        message += String.format( ERR_WHITELIST, contentMimeType );
+      }
+    }
+    //the mimeType may be blacklisted
+    if ( success && securityMatchers.contains( BLACKLIST_MATCHER ) ) {
+      if ( Arrays.asList( cfrConfig.getProperty( UPLOAD_SECURITY_BLACKLIST, "" ).split( "," ) ).contains(
+          contentMimeType ) ) {
+        success = false;
+        message = String.format( ERR_BLACKLIST, contentMimeType );
+        logger.error( message );
+      }
+    }
+
+    result.put( "result", success );
+    result.put( "message", message );
+
+    return result;
+  }
+
+  protected Properties getConfig() {
+    return CfrEnvironment.getConfig();
+  }
+
+  protected String detectMimeTypeFromContent( byte[] contents, String fileName ) {
+    return new Tika().detect( contents, fileName );
+  }
+
 }
+
+
