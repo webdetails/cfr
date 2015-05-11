@@ -403,7 +403,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       }
     }
 
-    urlBuilder.append( StringUtils.join( paramArray, "&" ) );
+    urlBuilder.append( StringUtils.join( paramArray.iterator(), "&" ) );
     redirect( urlBuilder.toString() );
   }
 
