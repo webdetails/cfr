@@ -34,6 +34,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -211,17 +212,17 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       FileItem fi = (FileItem) items.get( i );
 
       if ( "path".equals( fi.getFieldName() ) ) {
-        savePath = fi.getString();
+        savePath = checkRelativePathSanity( fi.getString() );
       }
       if ( "file".equals( fi.getFieldName() ) ) {
         contents = fi.get();
-        fileName = fi.getName();
+        fileName = checkRelativePathSanity( fi.getName() );
       }
     }
 
     if ( fileName == null ) {
       logger.error( "parameter fileName must not be null" );
-      throw new Exception( "paramete fileName must not be null" );
+      throw new Exception( "parameter fileName must not be null" );
     }
     if ( savePath == null ) {
       logger.error( "parameter path must not be null" );
@@ -234,12 +235,12 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
     JSONObject result = new JSONObject();
     FileStorer fileStorer = new FileStorer( service.getRepository() );
-    if ( service.getRepository().fileExists( checkRelativePathSanity( fileName ) ) ) {
+    String fullPath = FilenameUtils.normalize( savePath + "/" + fileName );
+    if ( service.getRepository().fileExists( checkRelativePathSanity( fullPath ) ) ) {
       result.put( "result", false );
       result.put( "message", "File " + fileName + " already exists!" );
     } else {
-      result = fileStorer.storeFile( checkRelativePathSanity( fileName ),
-          checkRelativePathSanity( savePath ), contents, service.getCurrentUserName() );
+      result = fileStorer.storeFile( fileName, savePath , contents, service.getCurrentUserName() );
     }
     writeOut( out, result.toString() );
   }
