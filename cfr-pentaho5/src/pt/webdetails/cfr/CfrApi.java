@@ -48,6 +48,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.apache.commons.io.FilenameUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -182,7 +183,7 @@ public class CfrApi {
                        @FormDataParam( "path" ) String path )
     throws IOException, JSONException, Exception {
 
-    String fileName = fileDetail.getFileName(), savePath = path;
+    String fileName = checkRelativePathSanity( fileDetail.getFileName() ), savePath = checkRelativePathSanity( path );
     ByteArrayOutputStream oStream = new ByteArrayOutputStream();
     IOUtils.copy( uploadedInputStream, oStream );
     oStream.flush();
@@ -203,14 +204,13 @@ public class CfrApi {
     }
     JSONObject result = new JSONObject();
     FileStorer fileStorer = new FileStorer( getRepository() );
-    if ( getRepository().fileExists( checkRelativePathSanity( fileName ) ) ) {
+    String fullPath = FilenameUtils.normalize( savePath + "/" + fileName );
+    if ( getRepository().fileExists( checkRelativePathSanity( fullPath ) ) ) {
       result.put( "result", false );
       result.put( "message", "File " + fileName + " already exists!" );
       return result.toString();
     }
-    result = fileStorer.storeFile( checkRelativePathSanity( fileName ), checkRelativePathSanity( savePath ),
-      contents, service.getCurrentUserName() );
-
+    result = fileStorer.storeFile( fileName, savePath, contents, service.getCurrentUserName() );
     return result.toString();
   }
 
