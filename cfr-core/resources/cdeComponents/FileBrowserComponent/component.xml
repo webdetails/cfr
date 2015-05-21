@@ -33,7 +33,7 @@
       	</Styles>
       	<Dependencies>
           <Dependency src="lib/jqueryFileTree/jqueryFileTree.js" version="1.0">jqueryFileTree</Dependency>
-          <Dependency src="lib/cfr-base.js" version="1.0">cfr-base</Dependency>
+          <Dependency src="../js/cfr-base.js" version="1.0">cfr-base</Dependency>
       	</Dependencies>
       	<CustomProperties>
           <DesignerProperty>
