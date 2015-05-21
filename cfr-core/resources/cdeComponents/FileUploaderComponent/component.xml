@@ -29,7 +29,7 @@
           <Dependency src="lib/jquery.ie.cors.js" version="1.0">jquery.ie.cors</Dependency>
           <Dependency src="lib/jQuery.XDomainRequest.js" version="1.0">jQuery.XDomainRequest</Dependency>
           <Dependency src="lib/jquery.form.js" version="1.0">jquery.form</Dependency>
-          <Dependency src="lib/cfr-base.js" version="1.0">cfr-base</Dependency>
+          <Dependency src="../js/cfr-base.js" version="1.0">cfr-base</Dependency>
       	</Dependencies>
       	<CustomProperties>
           <DesignerProperty>

@@ -1,7 +1,5 @@
 
 var FileBrowserComponent = BaseComponent.extend({
-  CfrDataUrl: Endpoints.getListFiles(),
-      
   update: function(){    
     var myself = this,
         $ph = $("#"+this.htmlObject),
@@ -44,11 +42,11 @@ var FileBrowserComponent = BaseComponent.extend({
 
 
   buildTreeURL: function(){
-    return this.CfrDataUrl + "?" + "fileExtensions="+this.fileExtensions;
+    return Endpoints.getListFiles() + "?fileExtensions=" + this.fileExtensions;
   },
 
   buildGetURL: function(rel){
-    return this.CfrDataUrl.replace('listFiles','getFile') + "?fileName=" + rel;
+    return Endpoints.getFile() + "?fileName=" + rel;
   },
 
   modifyTree: function(content){
