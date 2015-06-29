@@ -13,7 +13,7 @@
 
 package pt.webdetails.cfr;
 
-import pt.webdetails.cfr.bean.ICfrBeanFactory;
+import pt.webdetails.cpf.bean.IBeanFactory;
 import pt.webdetails.cfr.repository.PentahoRepositoryFileRepositoryForTests;
 import pt.webdetails.cpf.repository.api.IReadAccess;
 
@@ -25,7 +25,7 @@ public class CfrEnvironmentForTests extends CfrEnvironment {
   }
 
   @Override
-  public void init( ICfrBeanFactory factory ) {
+  public void init( IBeanFactory factory ) {
 
   }
 

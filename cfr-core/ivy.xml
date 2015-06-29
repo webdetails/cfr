@@ -28,7 +28,6 @@
     <dependency org="dom4j"                 name="dom4j"                rev="1.6.1" transitive="false"/>
     <dependency org="commons-lang"          name="commons-lang"         rev="2.2"   transitive="false"/>
     <dependency org="org.json"              name="json"                 rev="3.1"   transitive="false"/>    
-    <dependency org="org.springframework"   name="spring-context"       rev="3.0.3.RELEASE"/>
 
 
     <!--  internal dependencies -->
