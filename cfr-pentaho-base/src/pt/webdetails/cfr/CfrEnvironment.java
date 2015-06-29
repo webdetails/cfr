@@ -15,12 +15,11 @@ package pt.webdetails.cfr;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import pt.webdetails.cfr.bean.CoreBeanFactory;
-import pt.webdetails.cfr.bean.ICfrBeanFactory;
 import pt.webdetails.cfr.file.FileStorer;
 import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.PentahoPluginEnvironment;
-
+import pt.webdetails.cpf.bean.IBeanFactory;
+import pt.webdetails.cpf.bean.AbstractBeanFactory;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 import pt.webdetails.cpf.repository.api.IReadAccess;
 import pt.webdetails.cpf.session.ISessionUtils;
@@ -35,13 +34,13 @@ public class CfrEnvironment extends PentahoPluginEnvironment implements ICfrEnvi
   private static final String PROPERTIES_FILE = "cfr.properties";
   private static boolean persistenceEngineInitialized = false;
 
-  private ICfrBeanFactory factory;
+  private IBeanFactory factory;
   private IFileRepository repository;
   private static Properties config;
 
   static Log logger = LogFactory.getLog( CfrEnvironment.class );
 
-  public void init( ICfrBeanFactory factory ) {
+  public void init( IBeanFactory factory ) {
     this.factory = factory;
 
     if ( factory.containsBean( IFileRepository.class.getSimpleName() ) ) {
@@ -70,7 +69,10 @@ public class CfrEnvironment extends PentahoPluginEnvironment implements ICfrEnvi
   }
 
   public CfrEnvironment() {
-    init( new CoreBeanFactory() );
+    init( new AbstractBeanFactory(){
+      @Override
+      public String getSpringXMLFilename(){ return "cfr.spring.xml"; }
+    });
   }
 
   @Override public IPluginUtils getPluginUtils() {
