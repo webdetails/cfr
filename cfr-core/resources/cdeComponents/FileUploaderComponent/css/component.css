@@ -405,6 +405,8 @@
 .fileUploaderComponentOverlay {
   opacity: 0.5;
   background-color: #000000;
+  /* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 }
 
 /*Overriding bootstraps styling*/

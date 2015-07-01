@@ -50,7 +50,6 @@ import pt.webdetails.cfr.file.IFile;
 import pt.webdetails.cfr.file.MetadataReader;
 import pt.webdetails.cfr.repository.IFileRepository;
 import pt.webdetails.cpf.InterPluginCall;
-import pt.webdetails.cpf.InvalidOperationException;
 import pt.webdetails.cpf.SimpleContentGenerator;
 import pt.webdetails.cpf.WrapperUtils;
 import pt.webdetails.cpf.annotations.AccessLevel;
@@ -72,6 +71,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   private MetadataReader mr = new MetadataReader( service );
 
   private static final String UI_PATH = "cfr/presentation/";
+  private static final String DEFAULT_STORE_ERROR_MESSAGE = "Something went wrong when trying to upload the file";
 
   static {
     // to keep case-insensitive methods
@@ -200,12 +200,24 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   }
 
   @Exposed( accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON )
-  public void store( OutputStream out ) throws IOException, InvalidOperationException, Exception {
-
+  public void store( OutputStream out ) throws Exception {
     FileItemFactory factory = new DiskFileItemFactory();
     ServletFileUpload upload = new ServletFileUpload( factory );
     List /* FileItem */items = upload.parseRequest( getRequest() );
 
+    writeOut( out, processStore( items ) );
+  }
+
+  @Exposed( accessLevel = AccessLevel.PUBLIC, outputType = MimeType.HTML )
+  public void storeIE( OutputStream out ) throws Exception {
+    FileItemFactory factory = new DiskFileItemFactory();
+    ServletFileUpload upload = new ServletFileUpload( factory );
+    List /* FileItem */items = upload.parseRequest( getRequest() );
+
+    writeOut( out, "<textarea>" + processStore( items ) + "</textarea>" );
+  }
+
+  protected String processStore( List items ) throws JSONException {
     String fileName = null, savePath = null;
     byte[] contents = null;
     for ( int i = 0; i < items.size(); i++ ) {
@@ -222,27 +234,30 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
     if ( fileName == null ) {
       logger.error( "parameter fileName must not be null" );
-      throw new Exception( "parameter fileName must not be null" );
+      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
     }
     if ( savePath == null ) {
       logger.error( "parameter path must not be null" );
-      throw new Exception( "parameter path must not be null" );
+      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
     }
     if ( contents == null ) {
       logger.error( "File content must not be null" );
-      throw new Exception( "File content must not be null" );
+      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
     }
 
-    JSONObject result = new JSONObject();
     FileStorer fileStorer = new FileStorer( service.getRepository() );
     String fullPath = FilenameUtils.normalize( savePath + "/" + fileName );
     if ( service.getRepository().fileExists( checkRelativePathSanity( fullPath ) ) ) {
-      result.put( "result", false );
-      result.put( "message", "File " + fileName + " already exists!" );
-    } else {
-      result = fileStorer.storeFile( fileName, savePath , contents, service.getCurrentUserName() );
+      return buildResponseJson( false, "File " + fileName + " already exists!" );
     }
-    writeOut( out, result.toString() );
+    return fileStorer.storeFile( fileName, savePath , contents, service.getCurrentUserName() ).toString();
+  }
+
+  protected String buildResponseJson( boolean status, String message ) throws JSONException {
+    JSONObject result = new JSONObject();
+    result.put( "result", status );
+    result.put( "message", message );
+    return result.toString();
   }
 
   @Exposed( accessLevel = AccessLevel.PUBLIC )

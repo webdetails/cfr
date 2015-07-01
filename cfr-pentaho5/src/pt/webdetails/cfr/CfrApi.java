@@ -1,15 +1,15 @@
 /*!
-* Copyright 2002 - 2015 Webdetails, a Pentaho company. All rights reserved.
-*
-* This software was developed by Webdetails and is provided under the terms
-* of the Mozilla Public License, Version 2.0, or any later version. You may not use
-* this file except in compliance with the license. If you need a copy of the license,
-* please go to http://mozilla.org/MPL/2.0/. The Initial Developer is Webdetails.
-*
-* Software distributed under the Mozilla Public License is distributed on an "AS IS"
-* basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. Please refer to
-* the license for the specific language governing your rights and limitations.
-*/
+ * Copyright 2002 - 2015 Webdetails, a Pentaho company. All rights reserved.
+ *
+ * This software was developed by Webdetails and is provided under the terms
+ * of the Mozilla Public License, Version 2.0, or any later version. You may not use
+ * this file except in compliance with the license. If you need a copy of the license,
+ * please go to http://mozilla.org/MPL/2.0/. The Initial Developer is Webdetails.
+ *
+ * Software distributed under the Mozilla Public License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. Please refer to
+ * the license for the specific language governing your rights and limitations.
+ */
 
 package pt.webdetails.cfr;
 
@@ -78,6 +78,7 @@ public class CfrApi {
   protected MetadataReader mr = new MetadataReader( service );
 
   private static final String UI_PATH = "cfr/presentation/";
+  private static final String DEFAULT_STORE_ERROR_MESSAGE = "Something went wrong when trying to upload the file";
 
   static String checkRelativePathSanity( String path ) {
     String result = path;
@@ -180,39 +181,53 @@ public class CfrApi {
   @Produces( MimeTypes.JSON )
   public String store( @FormDataParam( "file" ) InputStream uploadedInputStream,
                        @FormDataParam( "file" ) FormDataContentDisposition fileDetail,
-                       @FormDataParam( "path" ) String path )
-    throws IOException, JSONException, Exception {
+                       @FormDataParam( "path" ) String path ) throws JSONException {
 
     String fileName = checkRelativePathSanity( fileDetail.getFileName() ), savePath = checkRelativePathSanity( path );
     ByteArrayOutputStream oStream = new ByteArrayOutputStream();
-    IOUtils.copy( uploadedInputStream, oStream );
-    oStream.flush();
-    byte[] contents = oStream.toByteArray();
-    oStream.close();
+    byte[] contents;
+    try {
+      IOUtils.copy( uploadedInputStream, oStream );
+      oStream.flush();
+      contents = oStream.toByteArray();
+      oStream.close();
+    } catch ( IOException e ) {
+      logger.error( e );
+      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
+    }
 
     if ( fileName == null ) {
       logger.error( "parameter fileName must not be null" );
-      throw new Exception( "parameter fileName must not be null" );
+      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
     }
     if ( savePath == null ) {
       logger.error( "parameter path must not be null" );
-      throw new Exception( "parameter path must not be null" );
+      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
     }
     if ( contents == null ) {
       logger.error( "File content must not be null" );
-      throw new Exception( "File content must not be null" );
+      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
     }
-    JSONObject result = new JSONObject();
+
     FileStorer fileStorer = new FileStorer( getRepository() );
     String fullPath = FilenameUtils.normalize( savePath + "/" + fileName );
     if ( getRepository().fileExists( checkRelativePathSanity( fullPath ) ) ) {
-      result.put( "result", false );
-      result.put( "message", "File " + fileName + " already exists!" );
-      return result.toString();
+      return buildResponseJson( false, "File " + fileName + " already exists!" );
     }
-    result = fileStorer.storeFile( fileName, savePath, contents, service.getCurrentUserName() );
-    return result.toString();
+    return fileStorer.storeFile( fileName, savePath, contents, service.getCurrentUserName() ).toString();
   }
+  @POST
+  @Path( "/storeIE" )
+  @Consumes( "multipart/form-data" )
+  @Produces( MimeTypes.HTML )
+  public String storeIE( @FormDataParam( "file" ) InputStream uploadedInputStream,
+                       @FormDataParam( "file" ) FormDataContentDisposition fileDetail,
+                       @FormDataParam( "path" ) String path ) throws JSONException {
+    // IE versions < 10 can't handle JSON as a response to a form submit
+    // the plugin used to upload files allows for a textarea tag encapsulating the JSON response to be returned instead
+    return "<textarea>" + store( uploadedInputStream, fileDetail, path ) + "</textarea>";
+  }
+
 
   @POST
   @Path( "/listFiles" )
@@ -715,6 +730,13 @@ public class CfrApi {
 
   protected boolean isUserAdmin() {
     return this.service.isCurrentUserAdmin();
+  }
+
+  protected String buildResponseJson( boolean status, String message ) throws JSONException {
+    JSONObject result = new JSONObject();
+    result.put( "result", status );
+    result.put( "message", message );
+    return result.toString();
   }
 
   private class MethodParams {
