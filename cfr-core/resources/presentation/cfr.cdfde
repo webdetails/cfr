@@ -1130,13 +1130,13 @@
       "type": "JavaScript"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -1188,13 +1188,13 @@
       "type": "JavaScript"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
+      "name": "priority",
+      "value": 5,
       "type": "Integer"
      },
      {
-      "name": "priority",
-      "value": 5,
+      "name": "refreshPeriod",
+      "value": "",
       "type": "Integer"
      },
      {
@@ -1256,28 +1256,13 @@
       "type": "JavaScript"
      },
      {
-      "name": "expandParameters",
-      "value": "[]",
-      "type": "ValuesArray"
-     },
-     {
-      "name": "colTypes",
-      "value": "[]",
-      "type": "colTypesCustom"
-     },
-     {
-      "name": "colHeaders",
-      "value": "[]",
-      "type": "Array"
-     },
-     {
       "name": "colFormats",
       "value": "[]",
       "type": "Array"
      },
      {
-      "name": "colWidths",
-      "value": "[\"300\",\"500\",\"150\"]",
+      "name": "colHeaders",
+      "value": "[]",
       "type": "Array"
      },
      {
@@ -1286,19 +1271,24 @@
       "type": "Array"
      },
      {
-      "name": "parameters",
-      "value": "[[\"userParam\",\"userParam\"]]",
+      "name": "colTypes",
+      "value": "[]",
+      "type": "colTypesCustom"
+     },
+     {
+      "name": "colWidths",
+      "value": "[\"300\",\"500\",\"150\"]",
+      "type": "Array"
+     },
+     {
+      "name": "expandParameters",
+      "value": "[]",
       "type": "ValuesArray"
      },
      {
-      "name": "sort",
-      "value": "false",
-      "type": "Boolean"
-     },
-     {
-      "name": "paginate",
-      "value": "true",
-      "type": "Boolean"
+      "name": "parameters",
+      "value": "[[\"userParam\",\"userParam\"]]",
+      "type": "ValuesArray"
      },
      {
       "name": "displayLength",
@@ -1306,8 +1296,8 @@
       "type": "Integer"
      },
      {
-      "name": "lengthChange",
-      "value": "true",
+      "name": "expandOnClick",
+      "value": "false",
       "type": "Boolean"
      },
      {
@@ -1321,14 +1311,19 @@
       "type": "Boolean"
      },
      {
-      "name": "expandOnClick",
-      "value": "false",
+      "name": "lengthChange",
+      "value": "true",
       "type": "Boolean"
      },
      {
-      "name": "drawCallback",
-      "value": "",
-      "type": "JavaScript"
+      "name": "paginate",
+      "value": "true",
+      "type": "Boolean"
+     },
+     {
+      "name": "sort",
+      "value": "false",
+      "type": "Boolean"
      },
      {
       "name": "colSearchable",
@@ -1336,14 +1331,14 @@
       "type": "Array"
      },
      {
+      "name": "drawCallback",
+      "value": "function f(){\n    // selected file css class\n    var selectedCssClass = 'selected';\n    var selectedFileParamName = 'selectedFileParam';\n    $.each( $('body tr'), function(i, e) {\n      $(e).removeClass(selectedCssClass);\n    });\n    Dashboards.fireChange(selectedFileParamName, \"\");\n    $('button#copyBtn').attr('disabled', 'disabled');\n    $('button#removeBtn').attr('disabled', 'disabled');\n    $('button#downloadBtn').attr('disabled', 'disabled');\n} ",
+      "type": "JavaScript"
+     },
+     {
       "name": "dataSource",
       "type": "Datasource",
       "value": "uploadsQuery"
-     },
-     {
-      "name": "sortBy",
-      "value": "[]",
-      "type": "SortByArray"
      },
      {
       "name": "sDom",
@@ -1351,9 +1346,9 @@
       "type": "JavaScript"
      },
      {
-      "name": "refreshPeriod",
-      "value": "",
-      "type": "Integer"
+      "name": "sortBy",
+      "value": "[]",
+      "type": "SortByArray"
      },
      {
       "name": "priority",
@@ -1361,9 +1356,9 @@
       "type": "Integer"
      },
      {
-      "name": "tableStyle",
-      "value": "bootstrap",
-      "type": "TableStyle"
+      "name": "refreshPeriod",
+      "value": "",
+      "type": "Integer"
      },
      {
       "name": "paginationType",
@@ -1371,18 +1366,23 @@
       "type": "PaginationType"
      },
      {
+      "name": "tableStyle",
+      "value": "bootstrap",
+      "type": "TableStyle"
+     },
+     {
       "name": "htmlObject",
       "value": "${p:uploadsTableObj}",
       "type": "HtmlObject"
      },
      {
-      "name": "paginateServerside",
-      "value": "false",
+      "name": "executeAtStart",
+      "value": "true",
       "type": "Boolean"
      },
      {
-      "name": "executeAtStart",
-      "value": "true",
+      "name": "paginateServerside",
+      "value": "false",
       "type": "Boolean"
      },
      {
@@ -1391,13 +1391,13 @@
       "type": "JavaScript"
      },
      {
-      "name": "postFetch",
-      "value": "function filterData(data) {\n    \n    $('button#copyBtn').attr('disabled', 'disabled');\n    $('button#removeBtn').attr('disabled', 'disabled');\n    $('button#downloadBtn').attr('disabled', 'disabled');\n\n    \n    if (data.resultset.length === 0)\n    {\n        $('table#uploadsTableObj').attr('disabled', 'disabled');\n    }\n    \n    if ($.inArray(\"Admin\", Dashboards.context.roles)>-1) {\n        return data;\n    }\n\n    var array = [];\n    var j = 0;\n    for ( i = 0; i < data.resultset.length; i++ ){\n        \n        if ( Dashboards.context.user == data.resultset[i][1] ){\n            array[j] = data.resultset[i];\n            j++;\n        }\n    }\n    \n    \n    \n    \n    data.queryInfo.totalRows = j;\n    data.resultset = array;\n    return data;\n}",
+      "name": "postExecution",
+      "value": "function f() {\n    \n    var $header = $('#' + this.htmlObject).find('thead');\n    $.each( $header.find(\"th.column0\"), function(i,d){ $(d).text(\"User\"); });\n    $.each( $header.find(\"th.column1\"), function(i,d){ $(d).text(\"File\"); });\n    $.each( $header.find(\"th.column2\"), function(i,d){ $(d).text(\"Date\"); });\n}\n\n\n ",
       "type": "JavaScript"
      },
      {
-      "name": "postExecution",
-      "value": "function f() {\n    \n    \n    var $ph = $('#' + this.htmlObject),\n        $header = $ph.find('thead');\n    \n    $.each( $header.find(\"th.column0\"), function(i,d){ $(d).text(\"User\"); });\n    $.each( $header.find(\"th.column1\"), function(i,d){ $(d).text(\"File\"); });\n    $.each( $header.find(\"th.column2\"), function(i,d){ $(d).text(\"Date\"); });\n    \n    // hook click event on each file row\n    var $pb = $('#' + this.htmlObject),\n        $body = $pb.find('tbody');\n        \n    // selected file css class\n    var selectedCssClass = 'selected';\n    var selectedFileParamName = 'selectedFileParam'\n    \n        \n    $.each( $body.find('tr'), function(index, element) {\n        $(element).click(function() {\n            // remove selected class from any other row\n            $.each( $body.find('tr'), function(i, e) {\n                if (!$(e).is(element)) $(e).removeClass(selectedCssClass);\n            });\n            \n            // toggle state for\n            $(element).toggleClass(selectedCssClass);\n            \n            if ($(element).hasClass(selectedCssClass)) {\n                Dashboards.fireChange(selectedFileParamName, $(element).find('.column0').text());\n            } \n            else {\n                Dashboards.fireChange(selectedFileParamName, \"\");\n            }\n        });\n    });\n    \n    \n}\n\n\n",
+      "name": "postFetch",
+      "value": "function filterData(data) {\n    \n    $('button#copyBtn').attr('disabled', 'disabled');\n    $('button#removeBtn').attr('disabled', 'disabled');\n    $('button#downloadBtn').attr('disabled', 'disabled');\n\n    \n    if (data.resultset.length === 0)\n    {\n        $('table#uploadsTableObj').attr('disabled', 'disabled');\n    }\n    \n    if ($.inArray(\"Admin\", Dashboards.context.roles)>-1) {\n        return data;\n    }\n\n    var array = [];\n    var j = 0;\n    for ( i = 0; i < data.resultset.length; i++ ){\n        \n        if ( Dashboards.context.user == data.resultset[i][1] ){\n            array[j] = data.resultset[i];\n            j++;\n        }\n    }\n    \n    \n    \n    \n    data.queryInfo.totalRows = j;\n    data.resultset = array;\n    return data;\n} ",
       "type": "JavaScript"
      },
      {
@@ -1411,18 +1411,18 @@
       "type": "JavaScript"
      },
      {
-      "name": "tooltip",
-      "value": "",
-      "type": "Html"
-     },
-     {
       "name": "extraOptions",
       "value": "[]",
       "type": "OptionArray"
      },
      {
+      "name": "tooltip",
+      "value": "",
+      "type": "Html"
+     },
+     {
       "name": "clickAction",
-      "value": "function click()\n{\n   if (selectedFileParam)\n   {\n        $('button#copyBtn').removeAttr('disabled', 'disabled');\n        $('button#removeBtn').removeAttr('disabled', 'disabled');\n        $('button#downloadBtn').removeAttr('disabled', 'disabled');\n   }\n   else\n   {\n        $('button#copyBtn').attr('disabled', 'disabled');\n        $('button#removeBtn').attr('disabled', 'disabled');\n        $('button#downloadBtn').attr('disabled', 'disabled');\n   }\n}",
+      "value": "function click(element)\n{\n    var $elem;\n    \n    if (element.target.attr(\"role\") === \"row\") {\n        $elem = element.target;\n    } else {\n        $elem = element.target.parent();\n    }\n    \n     // selected file css class\n    var selectedCssClass = 'selected';\n    var selectedFileParamName = 'selectedFileParam'\n\n    // remove selected class from any other row\n    $.each( $('body tr'), function(i, e) {\n                    if (!$(e).is($elem)) $(e).removeClass(selectedCssClass);\n                });\n    // toggle state for\n    $elem.toggleClass(selectedCssClass);\n    \n    if ($elem.hasClass(selectedCssClass)) {\n        Dashboards.fireChange(selectedFileParamName, $elem.find('.column0').text());\n    } else {\n        Dashboards.fireChange(selectedFileParamName, \"\");\n    }\n    \n    \n   if (selectedFileParam)\n   {\n        $('button#copyBtn').removeAttr('disabled', 'disabled');\n        $('button#removeBtn').removeAttr('disabled', 'disabled');\n        $('button#downloadBtn').removeAttr('disabled', 'disabled');\n   }\n   else\n   {\n        $('button#copyBtn').attr('disabled', 'disabled');\n        $('button#removeBtn').attr('disabled', 'disabled');\n        $('button#downloadBtn').attr('disabled', 'disabled');\n   }\n} ",
       "type": "JavaScript"
      }
     ]
@@ -1641,13 +1641,13 @@
       "type": "Id"
      },
      {
-      "name": "language",
-      "value": "beanshell",
+      "name": "initscript",
+      "value": "",
       "type": "String"
      },
      {
-      "name": "initscript",
-      "value": "",
+      "name": "language",
+      "value": "beanshell",
       "type": "String"
      },
      {
@@ -1666,9 +1666,9 @@
       "type": "CdaParameters"
      },
      {
-      "name": "outputMode",
-      "value": "include",
-      "type": "OutputMode"
+      "name": "cdacalculatedcolumns",
+      "value": "[]",
+      "type": "CdaCalculatedColumnsArray"
      },
      {
       "name": "cdacolumns",
@@ -1676,14 +1676,19 @@
       "type": "CdaColumnsArray"
      },
      {
-      "name": "cdacalculatedcolumns",
-      "value": "[]",
-      "type": "CdaCalculatedColumnsArray"
-     },
-     {
       "name": "output",
       "value": "[\"0\",\"1\",\"2\"]",
       "type": "IndexArray"
+     },
+     {
+      "name": "outputMode",
+      "value": "include",
+      "type": "OutputMode"
+     },
+     {
+      "name": "cacheKeys",
+      "value": "[]",
+      "type": "CacheKeysValues"
      },
      {
       "name": "cacheDuration",
