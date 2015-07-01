@@ -12,7 +12,7 @@ var Endpoints = {
   getListFiles: function () {
     return this.getWebappBasePath() + "/content/cfr/listFiles";
   },
-  getStore: function() {
-    return this.getWebappBasePath() + "/content/cfr/store";
+  getStore: function(suffix) {
+    return this.getWebappBasePath() + "/content/cfr/store" + (suffix ? suffix : "");
   }
 };
