@@ -2,9 +2,9 @@
 
 var FileUploaderComponent = BaseComponent.extend({
   update: function() {
-    var myself = this,
-      $ph = $("#" + this.htmlObject),
-      root = this.rootFolder.charAt(this.rootFolder.length - 1) === "/" ? this.rootFolder.substring(0, this.rootFolder.length - 1) : this.rootFolder;
+    var $ph = $("#" + this.htmlObject),
+      root = this.rootFolder.charAt(this.rootFolder.length - 1) === "/" ?
+        this.rootFolder.substring(0, this.rootFolder.length - 1) : this.rootFolder;
 
     var $fileSelect = $('<div></div>').addClass('fileSelect');
     $ph.empty();
@@ -75,8 +75,13 @@ var FileUploaderComponent = BaseComponent.extend({
     $fileSelect.append($selectFile)
       .append($fileObj).append($cancelButtonDiv);
 
-    var $fileSelectTitle = $('<div></div>').text('Select File').addClass('select');
-    var $uploadForm = $('<form action="' + Endpoints.getStore() + '" method="post" enctype="multipart/form-data"></form>');
+    var myNav = navigator.userAgent.toLowerCase();
+    // will need to know if is IE < 10
+    var isIEBelow10 = (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) < 10 : false;
+    // IE < 10 can't handle json response type in forms, a special endpoint which returns html was created
+    // for this situation. The jquery.form plugin then extracts the json from a textarea element before
+    // returning it to the success handler
+    var $uploadForm = $('<form id="uploadForm" action="' + Endpoints.getStore(isIEBelow10 ? "IE" : "") + '" method="post" enctype="multipart/form-data"></form>');
     var resetUploadForm = function() {
       $cancelButton.click();
     };
@@ -104,7 +109,7 @@ var FileUploaderComponent = BaseComponent.extend({
 
     var fileUploadErrorCallback = function(message) {
       // update alert
-      $uploadAlerts.attr('class', 'alert error').text('Error uploading file' + 
+      $uploadAlerts.attr('class', 'alert error').text('Error uploading file' +
         (typeof message === "string" ? " - " + message : ""));
       // activate upload dialog OK button
       $uploadDialogDismissButton.enable();
@@ -139,18 +144,12 @@ var FileUploaderComponent = BaseComponent.extend({
       uploadProgress: fileUploadProgressCallback
     });
 
-    $selectFile.append($fileSelectTitle);
     $selectFile.append($uploadForm);
 
-    var $label = $('<label>').addClass('cabinet'),
-      $fileInput = $('<input type="file" class="file" name="file"/>'),
+    var $label = $('<label>').text('Select File').addClass('select'),
+      $fileInput = $('<input type="file" class="file" name="file"/>').css({ position: "absolute", left: "-9999em" }),
       $pathInput = $('<input type="hidden" name="path" value="' + root + '"/>'),
       $submitInput = $('<button type="submit" class="submitBtn hide">Upload File</button>');
-
-    // bind click event of file name div to input file selector
-    $fileSelectTitle.click(function() {
-      $fileInput.click();
-    });
 
     $uploadForm.append($label).append($pathInput).append($submitInput);
     $label.append($fileInput);
@@ -159,7 +158,6 @@ var FileUploaderComponent = BaseComponent.extend({
       if ($fileInput.val() !== "") {
         $selectFile.addClass('zeroHeight');
         $label.addClass('hide');
-        $fileSelectTitle.addClass('hide');
         $fileObj.removeClass('hide');
         $submitInput.removeClass('hide');
         $cancelButton.removeClass('hide');
@@ -175,7 +173,6 @@ var FileUploaderComponent = BaseComponent.extend({
     $cancelButton.click(function() {
       $selectFile.removeClass('zeroHeight');
       $label.removeClass('hide');
-      $fileSelectTitle.removeClass('hide');
       $fileObj.addClass('hide');
       $fileObj.html('');
       $submitInput.addClass('hide');
