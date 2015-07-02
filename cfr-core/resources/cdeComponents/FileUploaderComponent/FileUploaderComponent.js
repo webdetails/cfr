@@ -1,6 +1,16 @@
 'use strict';
 
 var FileUploaderComponent = BaseComponent.extend({
+
+  // success callback for the upload
+  successCallback: undefined,
+
+  // error callback for the upload
+  errorCallback: undefined,
+
+  // function to call prior to upload, returning false here will cancel the upload
+  beforeSubmitCallback: undefined,
+
   update: function() {
     var $ph = $("#" + this.htmlObject),
       root = this.rootFolder.charAt(this.rootFolder.length - 1) === "/" ?
@@ -138,9 +148,9 @@ var FileUploaderComponent = BaseComponent.extend({
     // configure file upload form
     $uploadForm.ajaxForm({
       dataType: 'json',
-      beforeSubmit: fileUploadBeforeSubmitCallback,
-      success: fileUploadedCallback,
-      error: fileUploadErrorCallback,
+      beforeSubmit: this.beforeSubmitCallback || fileUploadBeforeSubmitCallback,
+      success: this.successCallback || fileUploadedCallback,
+      error: this.errorCallback || fileUploadErrorCallback,
       uploadProgress: fileUploadProgressCallback
     });
 
