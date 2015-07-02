@@ -19,6 +19,9 @@
       		<Property>tooltip</Property>
       		<Property>listeners</Property>
           <Property>parameters</Property>
+          <Property>successCallback</Property>
+          <Property>errorCallback</Property>
+          <Property>beforeSubmitCallback</Property>
      	</Model>
     <Implementation>
       	<Code src="FileUploaderComponent.js"/>
@@ -58,7 +61,49 @@
               <Version>1.0</Version>
             </Header>
           </DesignerProperty>
-        </CustomProperties>        	
+          <DesignerProperty>
+            <Header>
+              <Name>successCallback</Name>
+              <Parent>BaseProperty</Parent>
+              <DefaultValue></DefaultValue>
+              <Description>Success Callback</Description>
+              <Tooltip>Function to be executed on success</Tooltip>
+              <InputType>JavaScript</InputType>
+              <Advanced>true</Advanced>
+              <OutputType>Function</OutputType>
+              <Order>31</Order>
+              <Version>1.0</Version>
+            </Header>
+          </DesignerProperty>
+          <DesignerProperty>
+            <Header>
+              <Name>errorCallback</Name>
+              <Parent>BaseProperty</Parent>
+              <DefaultValue></DefaultValue>
+              <Description>Error Callback</Description>
+              <Tooltip>Function to be executed on error</Tooltip>
+              <InputType>JavaScript</InputType>
+              <Advanced>true</Advanced>
+              <OutputType>Function</OutputType>
+              <Order>32</Order>
+              <Version>1.0</Version>
+            </Header>
+          </DesignerProperty>
+          <DesignerProperty>
+            <Header>
+              <Name>beforeSubmitCallback</Name>
+              <Parent>BaseProperty</Parent>
+              <DefaultValue></DefaultValue>
+              <Description>Before Submit Callback</Description>
+              <Tooltip>Function to be executed before the actual submit, returning false will cancel the upload</Tooltip>
+              <InputType>JavaScript</InputType>
+              <Advanced>true</Advanced>
+              <OutputType>Function</OutputType>
+              <Order>34</Order>
+              <Version>1.0</Version>
+            </Header>
+          </DesignerProperty>
+        </CustomProperties>
     </Implementation>
   	</Contents>
 </DesignerComponent>
