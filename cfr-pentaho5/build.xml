@@ -63,20 +63,14 @@
   </path>
 
 
-  <!-- Build the project.revision property -->
-  <condition property="distribution.version" value="${project.stage}-${DSTAMP}" else="${project.stage}-${project.version}">
-    <equals arg1="${project.version}" arg2="SNAPSHOT"/>
-  </condition>
-
-  <echo>distribution.version = ${distribution.version}</echo>
 
   <target name="dist" depends="clean,resolve,jar,cobertura, dist-plugin"/>
   <target name="dist-compile" depends="jar,dist-plugin"/>
 
   <property name="plugin.artifact.id" value="${plugin.name}"/>
-  <property name="plugin.zipfile" value="${plugin.artifact.id}-${distribution.version}.zip"/>
-  <property name="plugin.samples.zipfile" value="${plugin.artifact.id}-samples-${distribution.version}.zip"/>
-  <property name="plugin.solution.zipfile" value="${plugin.artifact.id}-solution-${distribution.version}.zip"/>
+  <property name="plugin.zipfile" value="${plugin.artifact.id}-${project.revision}.zip"/>
+  <property name="plugin.samples.zipfile" value="${plugin.artifact.id}-samples-${project.revision}.zip"/>
+  <property name="plugin.solution.zipfile" value="${plugin.artifact.id}-solution-${project.revision}.zip"/>
 
 
   <!--=======================================================================
@@ -133,7 +127,7 @@
     </copy>
 
     <!-- create the version file -->
-    <echo file="${stage.dir}/${plugin.name}/VERSION.txt">${distribution.version}</echo>
+    <echo file="${stage.dir}/${plugin.name}/VERSION.txt">${project.revision}</echo>
         <echo file="${stage.dir}/${plugin.name}/version.xml" message="&lt;version branch='${project.stage}'  buildId='${sequential.build.id}'>${project.revision}&lt;/version>"/>
 
 
