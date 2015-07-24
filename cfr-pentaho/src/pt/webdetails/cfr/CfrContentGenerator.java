@@ -182,7 +182,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     String parentFolder = extractParentFolder( path );
     if ( !mr.isCurrentUserAllowed( FilePermissionEnum.WRITE, parentFolder ) ) {
       logger.error( "user has no write permission on folder '" + parentFolder + "'" );
-      writeOut( out,  buildResponseJson( false, DEFAULT_CREATE_ERROR_MESSAGE ) );
+      writeOut( out, buildResponseJson( false, DEFAULT_CREATE_ERROR_MESSAGE ) );
     }
 
     boolean createResult = service.getRepository().createFolder( path );
@@ -276,7 +276,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     if ( service.getRepository().fileExists( checkRelativePathSanity( fullPath ) ) ) {
       return buildResponseJson( false, "File " + fileName + " already exists!" );
     }
-    return fileStorer.storeFile( fileName, savePath , contents, service.getCurrentUserName() ).toString();
+    return fileStorer.storeFile( fileName, savePath, contents, service.getCurrentUserName() ).toString();
   }
 
   protected String buildResponseJson( boolean status, String message ) throws JSONException {
@@ -380,15 +380,15 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   public void listUploads( OutputStream out ) throws IOException, JSONException {
     String path = checkRelativePathSanity( getRequestParameters().getStringParameter( "fileName", "" ) );
     writeOut( out, mr.listFiles( path, getRequestParameters().getStringParameter( "user", "" ), getRequestParameters()
-      .getStringParameter( "startDate", "" ), getRequestParameters().getStringParameter( "endDate", "" ) ) );
+        .getStringParameter( "startDate", "" ), getRequestParameters().getStringParameter( "endDate", "" ) ) );
   }
 
   @Exposed( accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON )
   public void listUploadsFlat( OutputStream out ) throws IOException, JSONException {
     String path = checkRelativePathSanity( getRequestParameters().getStringParameter( "fileName", "" ) );
     writeOut( out, mr.listFilesFlat( path, getRequestParameters().getStringParameter( "user", "" ),
-      getRequestParameters().getStringParameter( "startDate", "" ),
-      getRequestParameters().getStringParameter( "endDate", "" ) ).toString( 2 ) );
+        getRequestParameters().getStringParameter( "startDate", "" ),
+        getRequestParameters().getStringParameter( "endDate", "" ) ).toString( 2 ) );
   }
 
   private static String toJQueryFileTree( String baseDir, IFile[] files, String[] extensions ) {
@@ -463,7 +463,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       getRequestParameters().getStringArrayParameter( pathParameterPermission,
         new String[] { FilePermissionEnum.READ.getId() } );
     boolean recursive = Boolean.parseBoolean(
-      getRequestParameters().getStringParameter( pathParameterRecursive, "false" ) );
+        getRequestParameters().getStringParameter( pathParameterRecursive, "false" ) );
     boolean errorSetting = false;
 
     JSONObject result = new JSONObject();
@@ -487,21 +487,21 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       }
       JSONArray permissionAddResultArray = new JSONArray();
 
-      for (String file : files) {
+      for ( String file : files ) {
         CfrFile f = getRepository().getFile( file );
         if ( getRepository().getFile( path ).isDirectory() && f.isFile() ) {
           continue;
         }
         for ( String id : userOrGroupId ) {
           boolean storeResult =
-            FileStorer.storeFilePermissions( new FilePermissionMetadata( file, id, validPermissions ) );
+              FileStorer.storeFilePermissions( new FilePermissionMetadata( file, id, validPermissions ) );
           if ( storeResult ) {
-            permissionAddResultArray.put(  new JSONObject()
-              .put( "status", String.format( "Added permission for path %s and user/role %s", path, id ) ) );
+            permissionAddResultArray.put( new JSONObject()
+                .put( "status", String.format( "Added permission for path %s and user/role %s", path, id ) ) );
           } else {
             if ( this.service.isCurrentUserAdmin() ) {
               permissionAddResultArray.put( new JSONObject()
-                .put( "status", String.format( "Failed to add permission for path %s and user/role %s", path, id ) ) );
+                  .put( "status", String.format( "Failed to add permission for path %s and user/role %s", path, id ) ) );
             } else {
               errorSetting = true;
             }
@@ -512,7 +512,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       result.put( "status", "Operation finished. Check statusArray for details." );
       if ( errorSetting ) {
         permissionAddResultArray.put( new JSONObject().put( "status", "Some permissions could not be set" ) );
-       }
+      }
       result.put( "statusArray", permissionAddResultArray );
     } else {
       result.put( "status", "Path or user group parameters not found" );
@@ -532,7 +532,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     String[] userOrGroupId =
       getRequestParameters().getStringArrayParameter( pathParameterGroupOrUserId, new String[] {} );
     boolean recursive = Boolean.parseBoolean(
-      getRequestParameters().getStringParameter( pathParameterRecursive, "false" ) );
+        getRequestParameters().getStringParameter( pathParameterRecursive, "false" ) );
     boolean errorDeleting = false;
     JSONObject result = new JSONObject();
 
