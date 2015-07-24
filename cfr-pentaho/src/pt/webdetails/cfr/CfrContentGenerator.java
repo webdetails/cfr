@@ -72,6 +72,9 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
   private static final String UI_PATH = "cfr/presentation/";
   private static final String DEFAULT_STORE_ERROR_MESSAGE = "Something went wrong when trying to upload the file";
+  private static final String DEFAULT_REMOVE_ERROR_MESSAGE = "Something went wrong when trying to remove the file";
+  private static final String DEFAULT_CREATE_ERROR_MESSAGE = "Something went wrong when trying to create the folder";
+  private static final String ROOT = ".";
 
   static {
     // to keep case-insensitive methods
@@ -176,9 +179,23 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       throw new Exception( "path is null or empty" );
     }
 
+    String parentFolder = extractParentFolder( path );
+    if ( !mr.isCurrentUserAllowed( FilePermissionEnum.WRITE, parentFolder ) ) {
+      logger.error( "user has no write permission on folder '" + parentFolder + "'" );
+      writeOut( out, buildResponseJson( false, DEFAULT_CREATE_ERROR_MESSAGE ) );
+    }
+
     boolean createResult = service.getRepository().createFolder( path );
 
     writeOut( out, new JSONObject().put( "result", createResult ).toString() );
+  }
+
+  private String extractParentFolder( String path ) {
+    if ( path.contains( "/" ) ) {
+      return path.substring( 0, path.lastIndexOf( "/" ) );
+    } else {
+      return ROOT;
+    }
   }
 
   @Exposed( accessLevel = AccessLevel.PUBLIC )
@@ -187,6 +204,11 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
     if ( fullFileName == null || StringUtils.isBlank( fullFileName ) ) {
       throw new Exception( "fileName is null or empty" );
+    }
+
+    if ( !mr.isCurrentUserAllowed( FilePermissionEnum.DELETE, fullFileName ) ) {
+      logger.error( "user has no delete permission on file '" + fullFileName + "'" );
+      writeOut( out, buildResponseJson( false, DEFAULT_REMOVE_ERROR_MESSAGE ) );
     }
 
     boolean removeResult = service.getRepository().deleteFile( fullFileName );
@@ -244,13 +266,17 @@ public class CfrContentGenerator extends SimpleContentGenerator {
       logger.error( "File content must not be null" );
       return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
     }
+    if ( !mr.isCurrentUserAllowed( FilePermissionEnum.WRITE, StringUtils.isEmpty( savePath ) ? ROOT : savePath ) ) {
+      logger.error( "user has no write permission on path '" + savePath + "'" );
+      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
+    }
 
     FileStorer fileStorer = new FileStorer( service.getRepository() );
     String fullPath = FilenameUtils.normalize( savePath + "/" + fileName );
     if ( service.getRepository().fileExists( checkRelativePathSanity( fullPath ) ) ) {
       return buildResponseJson( false, "File " + fileName + " already exists!" );
     }
-    return fileStorer.storeFile( fileName, savePath , contents, service.getCurrentUserName() ).toString();
+    return fileStorer.storeFile( fileName, savePath, contents, service.getCurrentUserName() ).toString();
   }
 
   protected String buildResponseJson( boolean status, String message ) throws JSONException {
@@ -425,15 +451,32 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
   @Exposed( accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON )
   public void setPermissions( OutputStream out ) throws JSONException, IOException {
-    String path = checkRelativePathSanity( getRequestParameters().getStringParameter( pathParameterPath, null ) );
+    String path = getRequestParameters().getStringParameter( pathParameterPath, null );
+    boolean isRoot = false;
+    if ( ROOT.equals( path ) ) {
+      isRoot = true;
+    }
+    path = checkRelativePathSanity( path );
     String[] userOrGroupId =
       getRequestParameters().getStringArrayParameter( pathParameterGroupOrUserId, new String[] {} );
     String[] _permissions =
       getRequestParameters().getStringArrayParameter( pathParameterPermission,
         new String[] { FilePermissionEnum.READ.getId() } );
+    boolean recursive = Boolean.parseBoolean(
+        getRequestParameters().getStringParameter( pathParameterRecursive, "false" ) );
+    boolean errorSetting = false;
 
     JSONObject result = new JSONObject();
     if ( path != null && userOrGroupId.length > 0 && _permissions.length > 0 ) {
+      List<String> files = new ArrayList<String>();
+      if ( recursive ) {
+        files = getFileNameTree( path );
+      } else {
+        files.add( path );
+      }
+      if ( isRoot ) {
+        files.add( ROOT );
+      }
       // build valid permissions set
       Set<FilePermissionEnum> validPermissions = new TreeSet<FilePermissionEnum>();
       for ( String permission : _permissions ) {
@@ -443,19 +486,33 @@ public class CfrContentGenerator extends SimpleContentGenerator {
         }
       }
       JSONArray permissionAddResultArray = new JSONArray();
-      for ( String id : userOrGroupId ) {
-        JSONObject individualResult = new JSONObject();
-        boolean storeResult =
-            FileStorer.storeFilePermissions( new FilePermissionMetadata( path, id, validPermissions ) );
-        if ( storeResult ) {
-          individualResult.put( "status", String.format( "Added permission for path %s and user/role %s", path, id ) );
-        } else {
-          individualResult.put( "status", String.format( "Failed to add permission for path %s and user/role %s", path,
-              id ) );
+
+      for ( String file : files ) {
+        CfrFile f = getRepository().getFile( file );
+        if ( getRepository().getFile( path ).isDirectory() && f.isFile() ) {
+          continue;
         }
-        permissionAddResultArray.put( individualResult );
+        for ( String id : userOrGroupId ) {
+          boolean storeResult =
+              FileStorer.storeFilePermissions( new FilePermissionMetadata( file, id, validPermissions ) );
+          if ( storeResult ) {
+            permissionAddResultArray.put( new JSONObject()
+                .put( "status", String.format( "Added permission for path %s and user/role %s", path, id ) ) );
+          } else {
+            if ( this.service.isCurrentUserAdmin() ) {
+              permissionAddResultArray.put( new JSONObject()
+                  .put( "status", String.format( "Failed to add permission for path %s and user/role %s", path, id ) ) );
+            } else {
+              errorSetting = true;
+            }
+          }
+        }
       }
+
       result.put( "status", "Operation finished. Check statusArray for details." );
+      if ( errorSetting ) {
+        permissionAddResultArray.put( new JSONObject().put( "status", "Some permissions could not be set" ) );
+      }
       result.put( "statusArray", permissionAddResultArray );
     } else {
       result.put( "status", "Path or user group parameters not found" );
@@ -466,32 +523,62 @@ public class CfrContentGenerator extends SimpleContentGenerator {
 
   @Exposed( accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON )
   public void deletePermissions( OutputStream out ) throws JSONException, IOException {
-    String path = checkRelativePathSanity( getRequestParameters().getStringParameter( pathParameterPath, null ) );
+    String path = getRequestParameters().getStringParameter( pathParameterPath, null );
+    boolean isRoot = false;
+    if ( ROOT.equals( path ) ) {
+      isRoot = true;
+    }
+    path = checkRelativePathSanity( path );
     String[] userOrGroupId =
       getRequestParameters().getStringArrayParameter( pathParameterGroupOrUserId, new String[] {} );
-
+    boolean recursive = Boolean.parseBoolean(
+        getRequestParameters().getStringParameter( pathParameterRecursive, "false" ) );
+    boolean errorDeleting = false;
     JSONObject result = new JSONObject();
 
     if ( path != null || ( userOrGroupId != null && userOrGroupId.length > 0 ) ) {
-      if ( userOrGroupId == null || userOrGroupId.length == 0 ) {
-        if ( FileStorer.deletePermissions( path, null ) ) {
-          result.put( "status", "Permissions deleted" );
-        } else {
-          result.put( "status", "Error deleting permissions" );
-        }
+      List<String> files = new ArrayList<String>();
+      if ( isRoot ) {
+        files.add( ROOT );
+      }
+      if ( recursive ) {
+        files = getFileNameTree( path );
       } else {
-        JSONArray permissionDeleteResultArray = new JSONArray();
-        for ( String id : userOrGroupId ) {
-          JSONObject individualResult = new JSONObject();
-          boolean deleteResult = FileStorer.deletePermissions( path, id );
-          if ( deleteResult ) {
-            individualResult.put( "status", String.format( "Permission for %s and path %s deleted.", id, path ) );
+        files.add( path );
+      }
+      JSONArray permissionDeleteResultArray = new JSONArray();
+      if ( userOrGroupId == null || userOrGroupId.length == 0 ) {
+        for ( String f : files ) {
+          if ( FileStorer.deletePermissions( f, null ) ) {
+            permissionDeleteResultArray.put( new JSONObject().put( "status", "Permissions for " + f + " deleted" ) );
           } else {
-            individualResult
-              .put( "status", String.format( "Failed to delete permission for %s and path %s.", id, path ) );
+            if ( this.service.isCurrentUserAdmin() ) {
+              permissionDeleteResultArray
+                .put( new JSONObject().put( "status", "Error deleting permissions for " + f ) );
+            } else {
+              errorDeleting = true;
+            }
           }
+        }
+        result.put( "status", "Multiple permission deletion. Check Status array" );
+        if ( errorDeleting ) {
+          permissionDeleteResultArray.put( new JSONObject().put( "status", "Some permissions could not be removed" ) );
+        }
+        result.put( "statusArray", permissionDeleteResultArray );
+      } else {
+        for ( String id : userOrGroupId ) {
+          for ( String f : files ) {
+            JSONObject individualResult = new JSONObject();
+            boolean deleteResult = FileStorer.deletePermissions( f, id );
+            if ( deleteResult ) {
+              individualResult.put( "status", String.format( "Permission for %s and path %s deleted.", id, f ) );
+            } else {
+              individualResult
+                .put( "status", String.format( "Failed to delete permission for %s and path %s.", id, f ) );
+            }
 
-          permissionDeleteResultArray.put( individualResult );
+            permissionDeleteResultArray.put( individualResult );
+          }
         }
         result.put( "status", "Multiple permission deletion. Check Status array" );
         result.put( "statusArray", permissionDeleteResultArray );
@@ -499,9 +586,7 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     } else {
       result.put( "status", "Required arguments user/role and path not found" );
     }
-
     writeOut( out, result.toString( 2 ) );
-
   }
 
   @Exposed( accessLevel = AccessLevel.PUBLIC, outputType = MimeType.JSON )
@@ -533,6 +618,8 @@ public class CfrContentGenerator extends SimpleContentGenerator {
   private static final String pathParameterPath = "path";
 
   private static final String pathParameterPermission = "permission";
+
+  private static final String pathParameterRecursive = "recursive";
 
   @Exposed( accessLevel = AccessLevel.PUBLIC )
   public void checkVersion( OutputStream out ) throws IOException, JSONException {
@@ -615,6 +702,46 @@ public class CfrContentGenerator extends SimpleContentGenerator {
     String root = wrapper.getScheme() + "://" + wrapper.getServerName() + ":" + wrapper.getServerPort();
 
     return root;
+  }
+
+  protected List<String> getFileNameTree( String path ) {
+    List<String> files = new ArrayList<String>();
+    if ( !StringUtils.isEmpty( path ) ) {
+      files.add( path );
+    }
+
+    files.addAll( buildFileNameTree( path, getFileNames( getRepository().listFiles( path ) ) ) );
+    List<String> treatedFileNames = new ArrayList<String>();
+    for ( String file : files ) {
+      if ( file.startsWith( "/" ) ) {
+        treatedFileNames.add( file.replaceFirst( "/", "" ) );
+      } else {
+        treatedFileNames.add( file );
+      }
+    }
+    return treatedFileNames;
+  }
+
+  protected IFileRepository getRepository() {
+    return service.getRepository();
+  }
+
+  private List<String> getFileNames( IFile[] files ) {
+    List<String> names = new ArrayList<String>();
+    for ( IFile file : files ) {
+      names.add( file.getName() );
+    }
+    return names;
+  }
+
+  private List<String> buildFileNameTree( String basePath, List<String> children ) {
+    List<String> result = new ArrayList<String>();
+    for ( String child : children ) {
+      String newEntry = basePath + "/" + child;
+      result.add( newEntry );
+      result.addAll( buildFileNameTree( newEntry, getFileNames( getRepository().listFiles( newEntry ) ) ) );
+    }
+    return result;
   }
 
 }
