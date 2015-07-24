@@ -161,6 +161,7 @@ public class CfrApi {
     boolean createResult = getRepository().createFolder( path );
     return new JSONObject().put( "result", createResult ).toString();
   }
+
   private String extractParentFolder( String path ) {
     if ( path.contains( "/" ) ) {
       return path.substring( 0, path.lastIndexOf( "/" ) );
@@ -240,13 +241,14 @@ public class CfrApi {
     }
     return fileStorer.storeFile( fileName, savePath, contents, service.getCurrentUserName() ).toString();
   }
+
   @POST
   @Path( "/storeIE" )
   @Consumes( "multipart/form-data" )
   @Produces( MimeTypes.HTML )
   public String storeIE( @FormDataParam( "file" ) InputStream uploadedInputStream,
-                       @FormDataParam( "file" ) FormDataContentDisposition fileDetail,
-                       @FormDataParam( "path" ) String path ) throws JSONException {
+                         @FormDataParam( "file" ) FormDataContentDisposition fileDetail,
+                         @FormDataParam( "path" ) String path ) throws JSONException {
     // IE versions < 10 can't handle JSON as a response to a form submit
     // the plugin used to upload files allows for a textarea tag encapsulating the JSON response to be returned instead
     return "<textarea>" + store( uploadedInputStream, fileDetail, path ) + "</textarea>";
@@ -495,13 +497,13 @@ public class CfrApi {
 
     if ( path != null || ( userOrGroupId != null && userOrGroupId.length > 0 ) ) {
       List<String> files = new ArrayList<String>();
-      if ( isRoot ) {
-        files.add( ROOT );
-      }
       if ( recursive ) {
         files = getFileNameTree( path );
       } else {
         files.add( path );
+      }
+      if ( isRoot ) {
+        files.add( ROOT );
       }
       JSONArray permissionDeleteResultArray = new JSONArray();
       if ( userOrGroupId == null || userOrGroupId.length == 0 ) {
