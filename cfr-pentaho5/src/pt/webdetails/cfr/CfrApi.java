@@ -457,7 +457,7 @@ public class CfrApi {
             if ( isUserAdmin() ) {
               permissionAddResultArray.put( new JSONObject()
                   .put( "status", String.format( "Failed to add permission for path %s and user/role %s", file,
-                  id ) ) );
+                    id ) ) );
             } else {
               errorSetting = true;
             }
@@ -495,13 +495,13 @@ public class CfrApi {
 
     if ( path != null || ( userOrGroupId != null && userOrGroupId.length > 0 ) ) {
       List<String> files = new ArrayList<String>();
-      if ( isRoot ) {
-        files.add( ROOT );
-      }
       if ( recursive ) {
         files = getFileNameTree( path );
       } else {
         files.add( path );
+      }
+      if ( isRoot ) {
+        files.add( ROOT );
       }
       JSONArray permissionDeleteResultArray = new JSONArray();
       if ( userOrGroupId == null || userOrGroupId.length == 0 ) {
