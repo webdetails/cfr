@@ -169,10 +169,21 @@ public class CfrApi {
     }
   }
 
+  @GET
+  @Path( "/remove" )
+  @Produces( MimeTypes.JSON )
+  public String removePost( @QueryParam( MethodParams.FILENAME ) String filename ) throws Exception {
+    return remove( filename );
+  }
+
   @POST
   @Path( "/remove" )
   @Produces( MimeTypes.JSON )
-  public String remove( @QueryParam( MethodParams.FILENAME ) String filename ) throws Exception {
+  public String removeGet( @FormParam( MethodParams.FILENAME ) String filename ) throws Exception {
+    return remove( filename );
+  }
+
+  public String remove( String filename ) throws Exception {
     String fullFileName = checkRelativePathSanity( filename );
 
     if ( fullFileName == null || StringUtils.isBlank( fullFileName ) ) {
@@ -188,7 +199,6 @@ public class CfrApi {
       deletePermissions( fullFileName, null );
       result = FileStorer.removeFile( fullFileName, null );
     }
-
     return new JSONObject().put( "result", result ).toString();
   }
 
