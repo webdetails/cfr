@@ -15,6 +15,7 @@ package pt.webdetails.cfr.file;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 
 import junit.framework.Assert;
 
@@ -26,12 +27,18 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import org.pentaho.platform.api.engine.ISecurityHelper;
+import org.pentaho.platform.engine.security.SecurityHelper;
 import pt.webdetails.cfr.CfrEnvironmentForTests;
 import pt.webdetails.cfr.persistence.PersistenceEngineForTests;
 import pt.webdetails.cfr.repository.DefaultFileRepositoryForTests;
 import pt.webdetails.cpf.PluginEnvironment;
 import pt.webdetails.cpf.persistence.PersistenceEngine;
 import pt.webdetails.cpf.utils.MimeTypes;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class FileStorerTest {
 
@@ -51,6 +58,9 @@ public class FileStorerTest {
   @BeforeClass
   public static void setUp() throws Exception {
     PluginEnvironment.init( new CfrEnvironmentForTests() );
+    ISecurityHelper mockedSecurityHelper = mock( ISecurityHelper.class );
+    when( mockedSecurityHelper.runAsSystem( any( Callable.class ) ) ).thenReturn( true );
+    SecurityHelper.setMockInstance( mockedSecurityHelper );
     PersistenceEngineForTests.getInstance().startOrient();
   }
 
