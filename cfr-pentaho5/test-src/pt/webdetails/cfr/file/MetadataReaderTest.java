@@ -18,6 +18,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import junit.framework.Assert;
 
@@ -30,6 +31,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import org.pentaho.platform.api.engine.ISecurityHelper;
+import org.pentaho.platform.engine.security.SecurityHelper;
 import pt.webdetails.cfr.CfrEnvironmentForTests;
 import pt.webdetails.cfr.CfrService;
 import pt.webdetails.cfr.auth.FilePermissionEnum;
@@ -79,6 +82,9 @@ public class MetadataReaderTest {
   @BeforeClass
   public static void setUp() throws Exception {
     PluginEnvironment.init( new CfrEnvironmentForTests() );
+    ISecurityHelper mockedSecurityHelper = mock( ISecurityHelper.class );
+    when( mockedSecurityHelper.runAsSystem( any( Callable.class ) ) ).thenReturn( true );
+    SecurityHelper.setMockInstance( mockedSecurityHelper );
     PersistenceEngineForTests.getInstance().startOrient();
     PersistenceEngineForTests.getInstance().dropClass( FileStorer.FILE_METADATA_STORE_CLASS );
     PersistenceEngineForTests.getInstance().dropClass( FileStorer.FILE_PERMISSIONS_METADATA_STORE_CLASS );
