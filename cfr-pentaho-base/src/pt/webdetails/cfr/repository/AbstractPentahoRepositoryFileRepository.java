@@ -118,6 +118,10 @@ public abstract class AbstractPentahoRepositoryFileRepository implements IFileRe
     }
     InputStream is = null;
     try {
+      if ( !getReadAccess().fileExists( fullName ) ) {
+        logger.error( "file not found: " + fullName );
+        return null;
+      }
       is = getReadAccess().fetchFile( fullName ).getContents();
     } catch ( FileNotFoundException fnfe ) {
       logger.error( "file not found: " + fullName, fnfe );
