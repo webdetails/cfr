@@ -79,6 +79,9 @@ public class CfrApi {
 
   private static final String UI_PATH = "cfr/presentation/";
   private static final String DEFAULT_STORE_ERROR_MESSAGE = "Something went wrong when trying to upload the file";
+  private static final String DEFAULT_REMOVE_ERROR_MESSAGE = "Something went wrong when trying to remove the file";
+  private static final String DEFAULT_CREATE_ERROR_MESSAGE = "Something went wrong when trying to create the folder";
+  private static final String ROOT = ".";
 
   static String checkRelativePathSanity( String path ) {
     String result = path;
@@ -150,28 +153,52 @@ public class CfrApi {
     if ( path == null || StringUtils.isBlank( path ) ) {
       throw new Exception( "path is null or empty" );
     }
-
+    String parentFolder = extractParentFolder( path );
+    if ( !mr.isCurrentUserAllowed( FilePermissionEnum.WRITE, parentFolder ) ) {
+      logger.error( "user has no write permission on folder '" + parentFolder + "'" );
+      return buildResponseJson( false, DEFAULT_CREATE_ERROR_MESSAGE );
+    }
     boolean createResult = getRepository().createFolder( path );
     return new JSONObject().put( "result", createResult ).toString();
+  }
+  private String extractParentFolder( String path ) {
+    if ( path.contains( "/" ) ) {
+      return path.substring( 0, path.lastIndexOf( "/" ) );
+    } else {
+      return ROOT;
+    }
+  }
+
+  @GET
+  @Path( "/remove" )
+  @Produces( MimeTypes.JSON )
+  public String removePost( @QueryParam( MethodParams.FILENAME ) String filename ) throws Exception {
+    return remove( filename );
   }
 
   @POST
   @Path( "/remove" )
   @Produces( MimeTypes.JSON )
-  public String remove( @QueryParam( MethodParams.FILENAME ) String filename ) throws Exception {
+  public String removeGet( @FormParam( MethodParams.FILENAME ) String filename ) throws Exception {
+    return remove( filename );
+  }
+
+  public String remove( String filename ) throws Exception {
     String fullFileName = checkRelativePathSanity( filename );
 
     if ( fullFileName == null || StringUtils.isBlank( fullFileName ) ) {
       throw new Exception( "fileName is null or empty" );
     }
-
+    if ( !mr.isCurrentUserAllowed( FilePermissionEnum.DELETE, fullFileName ) ) {
+      logger.error( "user has no delete permission on file '" + fullFileName + "'" );
+      return buildResponseJson( false, DEFAULT_REMOVE_ERROR_MESSAGE );
+    }
     boolean removeResult = getRepository().deleteFile( fullFileName );
     boolean result = false;
     if ( removeResult ) {
       deletePermissions( fullFileName, null );
       result = FileStorer.removeFile( fullFileName, null );
     }
-
     return new JSONObject().put( "result", result ).toString();
   }
 
@@ -183,7 +210,22 @@ public class CfrApi {
                        @FormDataParam( "file" ) FormDataContentDisposition fileDetail,
                        @FormDataParam( "path" ) String path ) throws JSONException {
 
-    String fileName = checkRelativePathSanity( fileDetail.getFileName() ), savePath = checkRelativePathSanity( path );
+    String fileName = checkRelativePathSanity( fileDetail.getFileName() ),
+        savePath = checkRelativePathSanity( path );
+
+    if ( fileName == null ) {
+      logger.error( "parameter fileName must not be null" );
+      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
+    }
+    if ( savePath == null ) {
+      logger.error( "parameter path must not be null" );
+      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
+    }
+    if ( !mr.isCurrentUserAllowed( FilePermissionEnum.WRITE, StringUtils.isEmpty( savePath ) ? ROOT : savePath ) ) {
+      logger.error( "user has no write permission on path '" + savePath + "'" );
+      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
+    }
+
     ByteArrayOutputStream oStream = new ByteArrayOutputStream();
     byte[] contents;
     try {
@@ -196,14 +238,6 @@ public class CfrApi {
       return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
     }
 
-    if ( fileName == null ) {
-      logger.error( "parameter fileName must not be null" );
-      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
-    }
-    if ( savePath == null ) {
-      logger.error( "parameter path must not be null" );
-      return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
-    }
     if ( contents == null ) {
       logger.error( "File content must not be null" );
       return buildResponseJson( false, DEFAULT_STORE_ERROR_MESSAGE );
@@ -391,11 +425,13 @@ public class CfrApi {
                                 @QueryParam( MethodParams.PERMISSION ) @DefaultValue( "" ) List<String> permissions,
                                 @QueryParam( MethodParams.RECURSIVE ) @DefaultValue( "false" ) Boolean recursive )
     throws JSONException {
+    boolean isRoot = false;
+    if ( ROOT.equals( path ) ) {
+      isRoot = true;
+    }
     path = checkRelativePathSanity( path );
     String[] userOrGroupId = ids.toArray( new String[ ids.size() ] );
     String[] _permissions = permissions.toArray( new String[ permissions.size() ] );
-    boolean isDir;
-    boolean admin = isUserAdmin();
     boolean errorSetting = false;
     JSONObject result = new JSONObject();
     if ( path != null && userOrGroupId.length > 0 && _permissions.length > 0 ) {
@@ -405,7 +441,6 @@ public class CfrApi {
       } else {
         files.add( path );
       }
-      isDir = getRepository().getFile( path ).isDirectory();
       // build valid permissions set
       Set<FilePermissionEnum> validPermissions = new TreeSet<FilePermissionEnum>();
       for ( String permission : _permissions ) {
@@ -414,10 +449,13 @@ public class CfrApi {
           validPermissions.add( perm );
         }
       }
+      if ( isRoot ) {
+        files.add( ROOT );
+      }
       JSONArray permissionAddResultArray = new JSONArray();
       for ( String file : files ) {
         CfrFile f = getRepository().getFile( file );
-        if ( isDir && f.isFile() ) {
+        if ( getRepository().getFile( path ).isDirectory() && f.isFile() ) {
           continue;
         }
         for ( String id : userOrGroupId ) {
@@ -426,10 +464,10 @@ public class CfrApi {
             permissionAddResultArray.put( new JSONObject()
                 .put( "status", String.format( "Added permission for path %s and user/role %s", file, id ) ) );
           } else {
-            if ( admin ) {
+            if ( isUserAdmin() ) {
               permissionAddResultArray.put( new JSONObject()
                   .put( "status", String.format( "Failed to add permission for path %s and user/role %s", file,
-                  id ) ) );
+                    id ) ) );
             } else {
               errorSetting = true;
             }
@@ -451,10 +489,14 @@ public class CfrApi {
   @GET
   @Path( "/deletePermissions" )
   @Produces( MimeTypes.JSON )
-  public String deletePermissions( @QueryParam( MethodParams.PATH ) String path,
+  public String deletePermissions( @QueryParam( MethodParams.PATH ) @DefaultValue( "" ) String path,
                                    @QueryParam( MethodParams.ID ) @DefaultValue( "" ) List<String> ids,
                                    @QueryParam( MethodParams.RECURSIVE ) @DefaultValue( "false" ) Boolean recursive )
     throws JSONException, IOException {
+    boolean isRoot = false;
+    if ( ROOT.equals( path ) ) {
+      isRoot = true;
+    }
     path = checkRelativePathSanity( path );
     String[] userOrGroupId = ids.toArray( new String[ ids.size() ] );
     JSONObject result = new JSONObject();
@@ -467,6 +509,9 @@ public class CfrApi {
         files = getFileNameTree( path );
       } else {
         files.add( path );
+      }
+      if ( isRoot ) {
+        files.add( ROOT );
       }
       JSONArray permissionDeleteResultArray = new JSONArray();
       if ( userOrGroupId == null || userOrGroupId.length == 0 ) {
