@@ -41,7 +41,7 @@
      
     <!--  internal dependencies -->           
     <dependency org="pentaho" name="cpf-core"     rev="${dependency.pentaho-cpf-plugin.revision}" transitive="false" changing="true" conf='runtime,test->default'/>
-    <dependency org="pentaho" name="cpf-pentaho" rev="${dependency.pentaho-cpf-plugin.revision}" transitive="false" changing="true" conf='runtime,test->default'/>
+    <dependency org="pentaho" name="cpf-pentaho5" rev="${dependency.pentaho-cpf-plugin.revision}" transitive="false" changing="true" conf='runtime,test->default'/>
     <dependency org="pentaho" name="cfr-core"     rev="${project.revision}"                       transitive="false" changing="true" conf='runtime,test->default'/>
 
     <dependency org="org.codehaus.jackson"          name="jackson-mapper-asl"  rev="1.9.12" transitive="false" conf='runtime->default'/>
