@@ -7,7 +7,6 @@
     	<Category>CFRCOMPONENTS</Category>
     	<CatDescription>CFR</CatDescription>
     	<Type>PalleteEntry</Type>
-    	<Order>30</Order>
     	<Version>1.0</Version>
   	</Header>
   	<Contents>
@@ -25,16 +24,15 @@
       		<Property>tooltip</Property>
       		<Property>listeners</Property>
      	</Model>
-    <Implementation>
-      	<Code src="FileBrowserComponent.js"/>
+      <Implementation supportsLegacy="true" supportsAMD="true">
+      	<Code src="legacy/FileBrowserComponent.js"/>
       	<Styles>
-        	
-          <Style version="1.0" src="lib/jqueryFileTree/jqueryFileTree.css">jqueryFileTree</Style>
+          <Style version="1.0" src="legacy/lib/jqueryFileTree/jqueryFileTree.css">jqueryFileTree</Style>
           <Style version="1.0" src="component.css">FileBrowserComponent</Style>
       	</Styles>
       	<Dependencies>
-          <Dependency src="lib/jqueryFileTree/jqueryFileTree.js" version="1.0">jqueryFileTree</Dependency>
-          <Dependency src="../js/cfr-base.js" version="1.0">cfr-base</Dependency>
+          <Dependency src="legacy/lib/jqueryFileTree/jqueryFileTree.js" version="1.0">jqueryFileTree</Dependency>
+          <Dependency src="legacy/js/cfr-base.js" version="1.0">cfr-base</Dependency>
       	</Dependencies>
       	<CustomProperties>
           <DesignerProperty>
