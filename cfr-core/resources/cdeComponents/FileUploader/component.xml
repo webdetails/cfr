@@ -7,7 +7,6 @@
     	<Category>CFRCOMPONENTS</Category>
     	<CatDescription>CFR</CatDescription>
     	<Type>PalleteEntry</Type>
-    	<Order>31</Order>    	
     	<Version>1.0</Version>
   	</Header>
   	<Contents>
@@ -24,16 +23,16 @@
           <Property>errorCallback</Property>
           <Property>beforeSubmitCallback</Property>
      	</Model>
-    <Implementation>
-      	<Code src="FileUploaderComponent.js"/>
+    <Implementation supportsLegacy="true" supportsAMD="true">
+      	<Code src="legacy/FileUploaderComponent.js"/>
       	<Styles>
           <Style version="1.0" src="css/component.css">FileUploaderCss</Style>
       	</Styles>
       	<Dependencies>
-          <Dependency src="lib/jquery.ie.cors.js" version="1.0">jquery.ie.cors</Dependency>
-          <Dependency src="lib/jQuery.XDomainRequest.js" version="1.0">jQuery.XDomainRequest</Dependency>
-          <Dependency src="lib/jquery.form.js" version="1.0">jquery.form</Dependency>
-          <Dependency src="../js/cfr-base.js" version="1.0">cfr-base</Dependency>
+          <Dependency src="legacy/lib/jquery.ie.cors.js" version="1.0">jquery.ie.cors</Dependency>
+          <Dependency src="legacy/lib/jQuery.XDomainRequest.js" version="1.0">jQuery.XDomainRequest</Dependency>
+          <Dependency src="legacy/lib/jquery.form.js" version="1.0">jquery.form</Dependency>
+          <Dependency src="legacy/js/cfr-base.js" version="1.0">cfr-base</Dependency>
       	</Dependencies>
       	<CustomProperties>
           <DesignerProperty>

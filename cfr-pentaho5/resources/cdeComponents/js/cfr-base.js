@@ -1,19 +1,27 @@
-var Endpoints = {
+//define('cdf/Dashboard.Bootstrap',function(Dashboard){
 
-  //The webAppPath is defined at the start of Dashboards.js
-  getWebappBasePath: function () {
-    return webAppPath;
-  },
+ // var dashboard = new Dashboard;
+define(function(){
+  var Endpoints = {
 
-  getFile: function () {
-    return this.getWebappBasePath() + "/plugin/cfr/api/getFile";
-  },
+    //The webAppPath is defined at the start of Dashboards.js
+    getWebappBasePath: function () {
+      return CONTEXT_PATH;
+    },
 
-  getListFiles: function () {
-    return this.getWebappBasePath() + "/plugin/cfr/api/listFiles";
-  },
+    getFile: function () {
+     // return dashboard.getWebAppPath() + "/plugin/cfr/api/getFile";
+      return this.getWebappBasePath() + "plugin/cfr/api/getFile";
+    },
 
-  getStore: function(suffix) {
-    return this.getWebappBasePath() + "/plugin/cfr/api/store" + (suffix ? suffix : "");
-  }
-};
+    getListFiles: function () {
+      return this.getWebappBasePath() + "plugin/cfr/api/listFiles";
+    },
+
+    getStore: function(suffix) {
+      return this.getWebappBasePath() + "plugin/cfr/api/store" + (suffix ? suffix : "");
+    }
+  };
+
+  return Endpoints;
+});

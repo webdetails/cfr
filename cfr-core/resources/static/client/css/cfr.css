@@ -1272,7 +1272,7 @@ textarea#code {
 }
 
 .cfrLogo {
-    background: url('../images/cfr_logo.png') no-repeat right bottom;
+    background: url('../images/logo_small.png') no-repeat right bottom;
     height: 15px;
     margin-top: 50px;
 }
@@ -1296,7 +1296,7 @@ div.cfrVersion {
 }
 
 div.cfrBig {
-    background: url("../images/cfr_logo.png") no-repeat scroll left bottom transparent;
+    background: url("../images/logo_small.png") no-repeat scroll left bottom transparent;
     float: right;
     height: 15px;
     padding-top: 55px;
