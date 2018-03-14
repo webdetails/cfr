@@ -338,7 +338,7 @@
           depends="init-test-reports,install-cobertura,compile,compile-tests,cobertura.instrument-classes">
     <mkdir dir="${instrumented.classes.dir}" />
     <path id="cobertura.classpath">
-      <fileset dir="${subfloor.resources.dir}/cobertura">
+      <fileset dir="${subfloor.resources.dir}/cobertura-1.9.4.1">
         <include name="*.jar" />
       </fileset>
     </path>

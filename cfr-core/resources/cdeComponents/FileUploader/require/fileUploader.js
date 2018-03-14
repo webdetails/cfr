@@ -1,5 +1,5 @@
 
-define(['cdf/lib/jquery','./js/cfr-base','cdf/components/BaseComponent','cde/components/PopupComponent','amd!cfr/components/FileUploader/require/lib/jquery.form'],function($,Endpoints,BaseComponent,PopupComponent){
+define(['cdf/lib/jquery','../../js/cfr-base','cdf/components/BaseComponent','cde/components/PopupComponent','amd!cfr/components/FileUploader/require/lib/jquery.form'],function($,Endpoints,BaseComponent,PopupComponent){
 'use strict';
 
   var FileUploaderComponent = BaseComponent.extend({

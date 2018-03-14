@@ -1,5 +1,5 @@
 
-define(['cdf/lib/jquery','./js/cfr-base','cdf/components/BaseComponent','amd!cfr/components/FileBrowser/require/lib/jqueryFileTree/jqueryFileTree'],function($,Endpoints,BaseComponent){
+define(['cdf/lib/jquery','../../js/cfr-base','cdf/components/BaseComponent','amd!cfr/components/FileBrowser/require/lib/jqueryFileTree/jqueryFileTree'],function($,Endpoints,BaseComponent){
 
 
   var FileBrowserComponent = BaseComponent.extend({
