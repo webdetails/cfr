@@ -17,5 +17,8 @@
   <content-types />
 
   <menu-items/>
+    <external-resources>
+        <file context="requirejs">content/cfr/static/cfr-require-js-cfg.js</file>
+  </external-resources>
 
 </plugin>

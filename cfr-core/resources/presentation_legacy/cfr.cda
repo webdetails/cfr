@@ -2,13 +2,13 @@
 <CDADescriptor>
    <DataSources>
       <Connection id="uploadsQuery" type="scripting.scripting">
-         <Initscript/>
+         <Initscript></Initscript>
          <Language>beanshell</Language>
       </Connection>
    </DataSources>
-   <DataAccess access="public" connection="uploadsQuery" id="uploadsQuery" type="scriptable">
-      <Name>uploadsQuery</Name>
-      <Cache duration="10" enabled="false"/>
+   <DataAccess access="public" cache="false" cacheDuration="10" connection="uploadsQuery"
+               id="uploadsQuery"
+               type="scriptable">
       <Columns>
          <Column idx="0">
             <Name>File</Name>
@@ -22,7 +22,7 @@
       </Columns>
       <Output indexes="0,1,2" mode="include"/>
       <Parameters/>
-      <Query><![CDATA[import org.pentaho.reporting.engine.classic.core.util.TypedTableModel;
+      <Query>import org.pentaho.reporting.engine.classic.core.util.TypedTableModel;
 import pt.webdetails.cda.utils.InterPluginUtils;
 
 HashMap params = new HashMap();
@@ -31,6 +31,6 @@ params.put("columns", new String[]{
 });
 
 TypedTableModel model = InterPluginUtils.getTableModelFromJsonPluginCall("cfr", "listUploadsFlat", params);
-return model;]]></Query>
+return model;</Query>
    </DataAccess>
 </CDADescriptor>
