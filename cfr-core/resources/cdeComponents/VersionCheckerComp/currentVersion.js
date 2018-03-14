@@ -1,4 +1,4 @@
 
-define(["./versionCheckerComp/require/currentVersion"], function(currentVersion){
+define(["./VersionCheckerComp/require/currentVersion"], function(currentVersion){
   return currentVersion;
 });
