@@ -35,7 +35,7 @@ public class InterPluginBroker {
       Object value = params.get( key );
       parameters.put( key, value.toString() );
     }
-    IPluginCall pluginCall = PluginEnvironment.env().getPluginCall( CorePlugin.CDE.getId(), "renderer", "render" );
+    IPluginCall pluginCall = PluginEnvironment.env().getPluginCall( CorePlugin.CDE.getId(), "renderApi", "render" );
     String returnVal = pluginCall.call( parameters.getParameters() );
     IOUtils.write( returnVal, out );
     out.flush();

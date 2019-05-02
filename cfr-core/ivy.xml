@@ -34,10 +34,10 @@
                 
     <dependency org="pentaho" name="cpf-core"    rev="${dependency.pentaho-cpf-plugin.revision}" transitive="false" changing="true" conf='runtime,test->default'/>
 
-    <dependency org="org.codehaus.jackson"       name="jackson-mapper-asl"  rev="1.9.12" transitive="false" conf='runtime->default'/>
-    <dependency org="com.fasterxml.jackson.core" name="jackson-core"        rev="2.2.2"  transitive="false" conf='runtime->default'/>
-    <dependency org="com.fasterxml.jackson.core" name="jackson-databind"    rev="2.2.2"  transitive="false" conf='runtime->default'/>
-    <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.2.2"  transitive="false" conf='runtime->default'/>
+    <dependency org="org.codehaus.jackson"       name="jackson-mapper-asl"  rev="1.9.13" transitive="false" conf='runtime->default'/>
+    <dependency org="com.fasterxml.jackson.core" name="jackson-core"        rev="2.9.5"  transitive="false" conf='runtime->default'/>
+    <dependency org="com.fasterxml.jackson.core" name="jackson-databind"    rev="2.9.5"  transitive="false" conf='runtime->default'/>
+    <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.9.5"  transitive="false" conf='runtime->default'/>
                 
 
     <!-- orient db (persistence) -->
