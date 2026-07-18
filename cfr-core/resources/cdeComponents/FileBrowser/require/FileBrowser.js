@@ -1,3 +1,14 @@
+/*! ******************************************************************************
+ *
+ * Pentaho
+ *
+ * Copyright (C) 2026 by Pentaho Canada Inc. : http://www.pentaho.com
+ *
+ * Use of this software is governed by the Business Source License included
+ * in the LICENSE.TXT file.
+ *
+ * Change Date: 2030-06-15
+ ******************************************************************************/
 
 define(['cdf/lib/jquery','../../js/cfr-base','cdf/components/BaseComponent','amd!cfr/components/FileBrowser/require/lib/jqueryFileTree/jqueryFileTree'],function($,Endpoints,BaseComponent){
 
